@@ -54,7 +54,7 @@ function Banner() {
         </Box>
       </Box>
 
-      <Card sx={imageCss}>
+      <Card sx={imageCss} elevation={12}>
         <CardMedia component="img" height="100%" image={data[0]} />
       </Card>
     </Box>
