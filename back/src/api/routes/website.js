@@ -1,35 +1,25 @@
 import { Router } from "express";
-import db from '../../models/index.js';
+import WebsiteService from "../../services/website.js";
 const router = Router();
+
+const WebsiteServiceInstance = new WebsiteService();
 
 // 전체 유저 or 특정 유저(user_id)의 전체 website 가져오기
 router.get('/', async (req, res) => {
     const user_id = req.query.user_id;
 
-    if(user_id === undefined){
-        const user_websites = await db.Website.findAll();
-        // 유저 website 데이터가 하나도 없다면 빈 배열 반환
-        // 기본적인 api라 따로 404 처리는 해주지 않음.
-        res.status(200).json(user_websites);
-    }
-    else {
-        const user_websites = await db.Website.findAll({where : { user_id : user_id }});
-        if(user_websites === null){
-            // 실제 있는 사용자인지 확인
-            const user = await db.User.findOne({where: {id : user_id}});
-            if(user === null){
-                // 유저 id에 해당하는 유저 자체가 없음
-                res.status(404).send('Not Found User');
-            }
-            else {
-                // 유저 id에 해당하는 유저는 있지만 websites 데이터는 없음 -> 빈 리스트 반환
-                res.status(200).json([]);
-            }
+    try{
+        if(user_id === undefined){ // 전체 website
+            const websites = await WebsiteServiceInstance.getAllWebsites();
+            res.status(200).json(websites);
         }
         else {
-            // user profile 데이터 반환
-            res.status(200).json(user_websites);
+            const websites = await WebsiteServiceInstance.getUserWebsites(user_id);
+            res.status(200).json(websites);
         }
+    }
+    catch(err){
+        res.status(404).json(err.toString());
     }
 
 })
@@ -38,12 +28,15 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
     const {user_site, user_id} = req.query;
 
-    const user_website = await db.Website.create({
-        site: user_site,
-        user_id: user_id
-    })
+    try{
+        const user_websites = await WebsiteServiceInstance.postUserWebsite(user_id, user_site);
+        res.status(201).json(user_websites);
 
-    res.status(201).json(user_website);
+    }
+    catch(err) {
+        res.status(404).json(err.toString());
+    }
+
 })
 
 // 특정 website 수정하기(유저의 website 맞는지 확인)
@@ -51,17 +44,12 @@ router.put('/:website_id', async(req, res) => {
     const website_id = req.params.website_id;
     const {user_site, user_id} = req.query;
 
-    const user_website = await db.Website.findOne({
-        where : { id: website_id, user_id: user_id}
-    });
-
-    if(user_website === null) {
-        res.status(404).send('Not Found User Website');
-    }
-    else {
-        await user_website.update({site: user_site});
-        await user_website.save();
+    try{
+        const user_website = await WebsiteServiceInstance.putUserWebsite(user_id, user_site, website_id);
         res.status(201).json(user_website);
+    }
+    catch(err){
+        res.status(404).json(err.toString());
     }
 
 })
@@ -71,17 +59,12 @@ router.delete('/:website_id', async(req, res) => {
     const website_id = req.params.website_id;
     const {user_id} = req.query;
 
-    const user_website = await db.Website.findOne({
-        where : { id: website_id, user_id: user_id}
-    });
-
-    if(user_website === null) {
-        res.status(404).send('Not Found User Website');
+    try{
+        const user_website = await WebsiteServiceInstance.deleteUserWebsite(user_id, website_id);
+        res.status(201).json(user_website);
     }
-    else {
-        await user_website.destroy();
-        await user_website.save();
-        res.status(201).json(user_website); // 삭제한 website 객체 반환
+    catch(err) {
+        res.status(404).json(err.toString());
     }
 
 })
