@@ -1,5 +1,13 @@
+import Carousel from './Carousel';
+import List from './List/index';
+
 function index() {
-  return <div>Enter</div>;
+  return (
+    <>
+      <Carousel />
+      <List />
+    </>
+  );
 }
 
 export default index;
