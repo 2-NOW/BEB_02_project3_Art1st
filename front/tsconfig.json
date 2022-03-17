@@ -17,6 +17,7 @@
     "sourceMap": true,
     "outDir": "dist",
     "baseUrl": ".",
+    "jsxImportSource": "@emotion/react",
     "paths": {
       "@/api/*": ["src/api/*"],
       "@/components/*": ["src/components/*"],
