@@ -1,11 +1,10 @@
-import Main from "@/container/Main/index";
 import Navbar from "@/components/Layout/Navbar";
 
-export default function Home() {
+export default function Discover() {
   return (
     <>
       <Navbar />
-      <Main />
+      Discover
     </>
   );
 }
