@@ -26,12 +26,11 @@ function index() {
   };
 
   const arrowCss = {
-    m: '0 ',
     width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
     position: 'absolute',
-    top: '4.5rem',
+    top: '8.5rem',
   };
 
   const [isEnd, setIsEnd] = useState(false);
@@ -47,10 +46,12 @@ function index() {
     setIsEnd(true);
   }, []);
 
-  const handleDisableArrow = () => {};
-
   return (
-    <>
+    <Box sx={{ position: 'relative' }}>
+      <Typography sx={{ m: '3rem auto 2rem 16vw' }} variant="h3">
+        Top Creators
+      </Typography>
+
       <Box sx={{ m: '2rem auto', width: '70vw' }}>
         <Slider ref={slickRef} {...initialSettings}>
           {testData.map((item, index) => {
@@ -71,6 +72,7 @@ function index() {
           })}
         </Slider>
       </Box>
+
       <Box sx={arrowCss}>
         <IconButton
           sx={{ ml: '12vw' }}
@@ -87,7 +89,7 @@ function index() {
           <ArrowForwardIosIcon />
         </IconButton>
       </Box>
-    </>
+    </Box>
   );
 }
 
