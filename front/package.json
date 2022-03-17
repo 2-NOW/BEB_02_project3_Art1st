@@ -11,16 +11,19 @@
   "dependencies": {
     "@emotion/react": "^11.8.1",
     "@emotion/styled": "^11.8.1",
+    "@mui/icons-material": "^5.5.1",
     "@mui/material": "^5.5.0",
     "@next-auth/prisma-adapter": "^1.0.1",
     "@prisma/client": "^3.10.0",
+    "@types/react-slick": "^0.23.8",
     "next": "12.1.0",
     "next-auth": "^4.2.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-material-ui-carousel": "^2.3.8-mui5",
     "react-query": "^3.34.16",
-    "recoil": "^0.6.1"
+    "react-slick": "^0.28.1",
+    "recoil": "^0.6.1",
+    "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
     "@emotion/babel-plugin": "^11.7.2",
