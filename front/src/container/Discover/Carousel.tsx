@@ -1,10 +1,10 @@
-import { useRef, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import Slider from 'react-slick';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import data from '@/data/index';
@@ -34,9 +34,20 @@ function index() {
     top: '4.5rem',
   };
 
+  const [isEnd, setIsEnd] = useState(false);
   const slickRef = useRef<Slider>(null);
-  const previous = useCallback(() => slickRef?.current?.slickPrev(), []);
-  const next = useCallback(() => slickRef?.current?.slickNext(), []);
+
+  const previous = useCallback(() => {
+    slickRef?.current?.slickPrev();
+    setIsEnd(false);
+  }, []);
+
+  const next = useCallback(() => {
+    slickRef?.current?.slickNext();
+    setIsEnd(true);
+  }, []);
+
+  const handleDisableArrow = () => {};
 
   return (
     <>
@@ -61,10 +72,18 @@ function index() {
         </Slider>
       </Box>
       <Box sx={arrowCss}>
-        <IconButton sx={{ ml: '12vw' }} onClick={previous}>
-          <ArrowBackIosIcon />
+        <IconButton
+          sx={{ ml: '12vw' }}
+          onClick={previous}
+          disabled={isEnd ? false : true}
+        >
+          <ArrowBackIosNewIcon />
         </IconButton>
-        <IconButton sx={{ mr: '12vw' }} onClick={next}>
+        <IconButton
+          sx={{ mr: '12vw' }}
+          onClick={next}
+          disabled={isEnd ? true : false}
+        >
           <ArrowForwardIosIcon />
         </IconButton>
       </Box>
