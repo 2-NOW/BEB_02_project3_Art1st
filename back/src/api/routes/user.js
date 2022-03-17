@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
         res.status(200).json(users);
     }
     catch(err){
-        res.status(404).json(err.toString());
+        res.status(400).json(err.toString());
     }
 });
 
@@ -28,13 +28,28 @@ router.get('/:user_id', async(req, res) => {
     }
 });
 
+// 특정 user 정보 수정
+router.put('/:user_id', async(req, res) => {
+    const user_id = req.params.user_id;
+    const {user_name, user_email, user_password} = req.body;
+
+    try{
+        const user = await UserServiceInstance.putOneUser(user_id, user_name, user_email, user_password);
+        res.status(201).json(user);
+        
+    }
+    catch(err){
+        res.status(404).json(err.toString());
+    }
+})
+
 // 특정 user의 username 가져오기
 router.get('/:user_id/username', async (req, res) => {
     const user_id = req.params.user_id;
 
     try{
         const user_name = await UserServiceInstance.getOneUserName(user_id);
-        res.status(200).json(user_name);
+        res.status(200).json({user_name});
 
     }
     catch(err) {
@@ -50,7 +65,7 @@ router.put('/:user_id/username', async(req, res) => {
 
     try{
         const updated_user = await UserServiceInstance.putOneUserName(user_id, new_user_name);
-        res.status(200).json(updated_user);
+        res.status(201).json(updated_user);
     }
     catch(err) {
         res.status(404).json(err.toString());

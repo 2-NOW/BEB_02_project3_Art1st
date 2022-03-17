@@ -18,7 +18,7 @@ class ProfileService {
         }
     }
 
-    // 특정 유저 profil 가져오기
+    // 특정 유저 profile 가져오기
     async getUserProfile(user_id) {
         try{
             const user_profile = await this.Profile.findOne({where : { user_id : user_id }});
@@ -68,6 +68,20 @@ class ProfileService {
         try{
             const user_profile = await this.getUserProfile(user_id);
             return user_profile.description;
+        }
+        catch(err){
+            throw Error (err.toString());
+        }
+    }
+
+    // 프로필 - 유저 정보 업데이트
+    async putUserProfile(user_id, user_desc, user_pic) {
+        try{
+            const user_profile = await this.getUserProfile(user_id);
+            await user_profile.update({description: user_desc, picture: user_pic});
+            await user_profile.save();
+
+            return user_profile;
         }
         catch(err){
             throw Error (err.toString());

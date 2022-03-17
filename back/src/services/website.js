@@ -62,7 +62,7 @@ class WebsiteService {
             return user_website;
         }
         catch(err){
-            throw Error(err.toString());
+           throw Error(err.toString());
         }
     }
 
@@ -80,6 +80,19 @@ class WebsiteService {
         }
     }
     
+    async deleteUserAllWebsites(user_id) {
+        try {
+            const user_websites = await this.getUserWebsites(user_id);
+            await this.Website.destroy({ where : { user_id: user_id}});
+
+            return user_websites;
+
+        }
+        catch (err) { 
+            throw Error(err.toString());
+        }
+    }
+
     async deleteUserWebsite(user_id, website_id){
         try{
             const user_website = await this.getUserOneWebsite(user_id, website_id);

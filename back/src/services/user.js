@@ -55,6 +55,20 @@ class UserService {
         }
     }
 
+    // 일단은 username만
+    async putOneUser(user_id, user_name, user_email, user_pw) {
+        try{
+            const user = await this.getOneUser(user_id);
+            await user.update({name: user_name, email: user_email, password: user_pw});
+            await user.save();
+
+            return user;
+        }
+        catch(err){
+            throw Error(err.toString());
+        }
+    }
+
     // 특정 유저 name 가져오기
     async getOneUserName(user_id){
         try {
@@ -67,10 +81,10 @@ class UserService {
     }
 
     // 특정 유저 name 수정하기
-    async putOneUserName(user_id, new_user_name){
+    async putOneUserName(user_id, user_name){
         try {
             const user = await this.getOneUser(user_id);
-            await user.update({name: new_user_name});
+            await user.update({name: user_name});
             await user.save();
 
             return user;
