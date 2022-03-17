@@ -61,10 +61,10 @@ router.get('/:user_id/username', async (req, res) => {
 // 특정 user의 username 수정하기
 router.put('/:user_id/username', async(req, res) => {
     const user_id = req.params.user_id;
-    const {new_user_name} = req.query;
+    const {user_name} = req.body;
 
     try{
-        const updated_user = await UserServiceInstance.putOneUserName(user_id, new_user_name);
+        const updated_user = await UserServiceInstance.putOneUserName(user_id, user_name);
         res.status(201).json(updated_user);
     }
     catch(err) {
