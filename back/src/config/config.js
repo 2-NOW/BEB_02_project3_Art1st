@@ -9,8 +9,14 @@ const development = {
   database: env.MYSQL_NAME,
   host: env.MYSQL_HOST,
   dialect: "mysql",
+  dialectOptions: {
+    useUTC: false,
+    charset: "utf8mb4",
+    dateStrings: true,
+    typeCast: true
+  },
   port: env.MYSQL_PORT,
-  //timezone: "+09:00",
+  timezone: "+09:00",
   //logging: true
 };
 
