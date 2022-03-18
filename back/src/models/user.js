@@ -7,35 +7,43 @@ export default (Sequelize, DataTypes) => {
         },
         name: {
             type: DataTypes.STRING(30),
-            allowNull: false
+            allowNull: false,
+            defaultValue: ''
         },
         email: {
             type: DataTypes.STRING(30),
-            allowNull: false
+            allowNull: false,
+            defaultValue: ''
         },
         password: {
             type: DataTypes.STRING(30),
-            allowNull: false
+            allowNull: false,
+            defaultValue: ''
         },
         balance: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            defaultValue: 0,
         },
         donation_balance: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            defaultValue: 0,
         },
         address: {
-            type: DataTypes.STRING(40),
-            allowNull: false
+            type: DataTypes.STRING(256),
+            allowNull: false,
+            defaultValue: ''
         },
         private_key: {
-            type: DataTypes.STRING(40),
+            type: DataTypes.STRING(256),
             allowNull: false,
+            defaultValue: ''
         },
         total_sales: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            defaultValue: 0,
         },
     })
 }
