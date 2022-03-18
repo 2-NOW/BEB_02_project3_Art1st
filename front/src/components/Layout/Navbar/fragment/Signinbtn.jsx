@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+import Link from "next/link";
 import { Typography, Button } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import UploadIcon from "@mui/icons-material/Upload";
@@ -44,14 +45,16 @@ export default function Signinbtn() {
     <div css={wrapper}>
       {isLogin ? (
         <div css={{ display: "flex" }}>
-          <Button variant="contained" sx={UploadCss} onClick={handleClick}>
-            <UploadIcon />
-            <Typography
-              sx={{ textAlign: "center", textTransform: "capitalize" }}
-            >
-              Upload
-            </Typography>
-          </Button>
+          <Link href="/upload">
+            <Button variant="contained" sx={UploadCss} onClick={handleClick}>
+              <UploadIcon />
+              <Typography
+                sx={{ textAlign: "center", textTransform: "capitalize" }}
+              >
+                Upload
+              </Typography>
+            </Button>
+          </Link>
           <AccountCircleIcon
             fontSize="large"
             sx={{ float: "right", marginTop: "0.9rem" }}
