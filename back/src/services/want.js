@@ -1,0 +1,99 @@
+import db from '../models/index.js';
+
+// +------------+----------+------+-----+---------+----------------+
+// | Field      | Type     | Null | Key | Default | Extra          |
+// +------------+----------+------+-----+---------+----------------+
+// | id         | int      | NO   | PRI | NULL    | auto_increment |
+// | createdAt  | datetime | NO   |     | NULL    |                |
+// | updatedAt  | datetime | NO   |     | NULL    |                |
+// | user_id    | int      | YES  | MUL | NULL    |                |
+// | artwork_id | int      | YES  | MUL | NULL    |                |
+// +------------+----------+------+-----+---------+----------------+
+
+class WantService {
+    constructor() {
+        this.Want = db.Want;
+    }
+
+    // user_id가 artwork_id에 좋아요를 누른 적이 있는지 확인
+    async isWant(artwork_id, user_id){
+        try{
+            const isWant = await this.Want.findOne({where: {artwork_id: artwork_id, user_id: user_id}});
+            if(isWant){// null이 아니면
+                return true;
+            }
+            else{ // null이면
+                return false;
+            }
+        }
+        catch(err) {
+            throw Error(err.toString());
+        }
+    }
+
+    // user_id가 artwork_id에 좋아요를 누른 기록 조회
+    async getUserArtworkWant(artwork_id, user_id) {
+        try{
+            const want = await this.Want.findOne({where: {artwork_id: artwork_id, user_id: user_id}});
+            return want;
+        }
+        catch(err){
+            throw Error(err.toString());
+        }
+    }
+
+    // artwork_id의 좋아요 조회
+    async getArtworkWant(artwork_id) {
+        try{
+            const wants = await this.Want.findAll({where: {artwork_id: artwork_id}});
+            return wants;
+        }
+        catch(err){
+            throw Error(err.toString());
+        }
+    }
+
+    // artwork_id에 좋아요 누르기
+    async postArtworkWant(artwork_id, user_id) {
+        try{
+            // 이전에 좋아요를 누른 적이 있는지 확인
+            if(await this.isWant(artwork_id, user_id)){
+                // 이전에 누른 적이 있음
+                throw Error('Already pressed want');
+            }
+            else {
+                // 이전에 누른 적 없음
+                const want = await this.Want.create({
+                    user_id: user_id,
+                    artwork_id: artwork_id
+                });
+                return want;
+            }
+        }
+        catch(err){
+            throw Error(err.toString());
+        }
+    }
+
+    // artwork_id에 좋아요 취소
+    async deleteArtworkWant(artwork_id, user_id) {
+        try{
+            // 이전에 좋아요를 누른 적이 있는지 확인
+            if(await this.isWant(artwork_id, user_id)){
+                // 이전에 좋아요를 누른 적이 있음
+                const want = await this.getUserArtworkWant(artwork_id, user_id);
+                want.destroy();
+                return want;
+            }
+            else{
+                // 이전에 누른 적 없음
+                throw Error('Have never pressed want before');
+            }
+        }
+        catch(err) {
+            throw Error(err.toString());
+        }
+    }
+}
+
+export default WantService;
