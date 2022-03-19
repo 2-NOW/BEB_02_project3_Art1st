@@ -32,9 +32,9 @@ function ItemList() {
   };
   return (
     <Grid container>
-      {testData.map((src) => {
+      {testData.map((src, index) => {
         return (
-          <Grid item xl={6} xs={12}>
+          <Grid key={index} item xl={6} xs={12}>
             <Card elevation={12} sx={imageCss}>
               <CardMedia
                 sx={{ position: 'absolute' }}

@@ -23,7 +23,7 @@ export default function TabMenu() {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Box>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -31,12 +31,12 @@ export default function TabMenu() {
         >
           <Tab
             sx={{ p: '0 3rem 0 3rem' }}
-            label={<Typography variant="h5">Created</Typography>}
+            label={<Typography variant="h5">Collect</Typography>}
             {...tabProps(0)}
           />
           <Tab
             sx={{ p: '0 3rem 0 3rem' }}
-            label={<Typography variant="h5">Created</Typography>}
+            label={<Typography variant="h5">Create</Typography>}
             {...tabProps(1)}
           />
         </Tabs>
