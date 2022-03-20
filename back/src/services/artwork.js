@@ -15,7 +15,7 @@ import db from '../models/index.js'
 // | owner_id   | int        | YES  | MUL | NULL    |                |
 // +------------+------------+------+-----+---------+----------------+
 
-class ArtworkCalss {
+class ArtworkService {
     constructor() {
         this.Artwork = db.Artwork;
         this.User = db.User;
@@ -37,17 +37,17 @@ class ArtworkCalss {
 
     }
 
-    async putOneArtwork(artwork_id, new_artwork_data){
+    async putOneArtwork(artwork_id, is_selling, price, owner_id){
         try{
             const artwork = await this.getOneArtwork(artwork_id);
-            await artwork_profile.update({
-                is_selling: new_artwork_data.is_selling,
-                price: new_artwork_data.price,
-                owner_id: new_artwork_data.owner_id
+            await artwork.update({
+                is_selling: is_selling,
+                price: price,
+                owner_id: owner_id
             });
-            await artwork_profile.save();
+            await artwork.save();
 
-            return artwork_profile;
+            return artwork;
 
         }
         catch(err){
@@ -57,6 +57,10 @@ class ArtworkCalss {
 
     async getCreatorInfo(artwork_id){
         try{
+            // artwork가 존재하는지 확인
+            await this.getOneArtwork(artwork_id); 
+
+            // query 호출
             const query = `
                 select users.id, name, email, picture, description
                 from users
@@ -68,11 +72,19 @@ class ArtworkCalss {
             const creator_info = await db.sequelize.query(
                 query,
                 {
-                    raw: true
+                    raw: true,
+                    type: db.Sequelize.QueryTypes.SELECT 
                 }
             )
+            
+            // QueryTypes.SELECT 추가 -> 객체에 동일한 data가 두 번씩 조회되는 버그 위해 추가
+            // The first object is the result object, the second is the metadata object (containing affected rows etc)
+            // but in mysql, those two are equal.
+            // Passing { type: Sequelize.QueryTypes.SELECT } as the second argument will give you a single result object 
+            // (metadata object omitted)
+            // -> 참고 : https://stackoverflow.com/questions/33232147/sequelize-query-returns-same-result-twice
 
-            console.log(creator_info);
+            return creator_info;
 
         }
         catch(err){
@@ -82,4 +94,4 @@ class ArtworkCalss {
 
 }
 
-export default ArtworkCalss;
+export default ArtworkService;

@@ -15,7 +15,7 @@ class WantService {
         this.Want = db.Want;
     }
 
-    // user_id가 artwork_id에 좋아요를 누른 적이 있는지 확인
+    // user_id가 artwork_id에 사고싶어요를 누른 적이 있는지 확인
     async isWant(artwork_id, user_id){
         try{
             const isWant = await this.Want.findOne({where: {artwork_id: artwork_id, user_id: user_id}});
@@ -31,7 +31,7 @@ class WantService {
         }
     }
 
-    // user_id가 artwork_id에 좋아요를 누른 기록 조회
+    // user_id가 artwork_id에 사고싶어요를 누른 기록 조회
     async getUserArtworkWant(artwork_id, user_id) {
         try{
             const want = await this.Want.findOne({where: {artwork_id: artwork_id, user_id: user_id}});
@@ -42,21 +42,22 @@ class WantService {
         }
     }
 
-    // artwork_id의 좋아요 조회
+    // artwork_id의 사고싶어요 조회
     async getArtworkWant(artwork_id) {
         try{
             const wants = await this.Want.findAll({where: {artwork_id: artwork_id}});
-            return wants;
+            const count = wants.length;
+            return {wants, count};
         }
         catch(err){
             throw Error(err.toString());
         }
     }
 
-    // artwork_id에 좋아요 누르기
+    // artwork_id에 사고싶어요 누르기
     async postArtworkWant(artwork_id, user_id) {
         try{
-            // 이전에 좋아요를 누른 적이 있는지 확인
+            // 이전에 사고싶어요를 누른 적이 있는지 확인
             if(await this.isWant(artwork_id, user_id)){
                 // 이전에 누른 적이 있음
                 throw Error('Already pressed want');
@@ -75,14 +76,14 @@ class WantService {
         }
     }
 
-    // artwork_id에 좋아요 취소
+    // artwork_id에 사고싶어요 취소
     async deleteArtworkWant(artwork_id, user_id) {
         try{
-            // 이전에 좋아요를 누른 적이 있는지 확인
+            // 이전에 사고싶어요를 누른 적이 있는지 확인
             if(await this.isWant(artwork_id, user_id)){
-                // 이전에 좋아요를 누른 적이 있음
+                // 이전에 사고싶어요를 누른 적이 있음
                 const want = await this.getUserArtworkWant(artwork_id, user_id);
-                want.destroy();
+                this.Want.destroy({where:{artwork_id:artwork_id, user_id: user_id}});
                 return want;
             }
             else{

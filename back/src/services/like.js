@@ -46,7 +46,8 @@ class LikeService {
     async getArtworkLike(artwork_id) {
         try{
             const likes = await this.Like.findAll({where: {artwork_id: artwork_id}});
-            return likes;
+            const count = likes.length;
+            return {likes, count};
         }
         catch(err){
             throw Error(err.toString());
@@ -82,7 +83,7 @@ class LikeService {
             if(await this.isLike(artwork_id, user_id)){
                 // 이전에 좋아요를 누른 적이 있음
                 const like = await this.getUserArtworkLike(artwork_id, user_id);
-                like.destroy();
+                this.Like.destroy({where:{artwork_id:artwork_id, user_id: user_id}});
                 return like;
             }
             else{

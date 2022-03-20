@@ -31,17 +31,22 @@ class HashtagService {
     // artwork_id의 hashtag 조회
     async getArtworkTag(artwork_id){
         try{
-            const hashtags = await this.Hashtag.findAll({
+            let hashtags = await this.Hashtag.findAll({
                 attributes: ['hashtag'],
                 include: [{
+                    attributes: [],
                     model: this.ArtworkHashtag,
                     where: {
                         artwork_id : artwork_id,
                     }
                 }]
             });
-            console.log(hashtags);
 
+            hashtags = hashtags.map((tag)=> {
+                return tag.hashtag;
+            })
+
+            console.log(hashtags); 
             return hashtags;
         }
         catch(err){
