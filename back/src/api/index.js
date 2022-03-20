@@ -6,7 +6,7 @@ import artwork from './routes/artwork.js';
 import like from './routes/like.js';
 import want from './routes/want.js';
 import hashtag from './routes/hashtag.js'
-import comment from '../models/comment.js';
+import comment from './routes/comment.js';
 
 const router = express.Router();
 
