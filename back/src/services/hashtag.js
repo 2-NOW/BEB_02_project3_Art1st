@@ -30,25 +30,18 @@ class HashtagService {
     
     // artwork_id의 hashtag 조회
     async getArtworkTag(artwork_id){
-        // select hashtag
-        // from hashtags
-        // join artwork_hashtags
-        //     on hashtags.id = artwork_hashtags.hashtag_id
-        // where artwork_id = 1
-
         try{
-            const hashtags = this.Hashtag.findAll({
+            const hashtags = await this.Hashtag.findAll({
                 attributes: ['hashtag'],
-                include: {
+                include: [{
                     model: this.ArtworkHashtag,
                     where: {
-                        id: this.ArtworkHashtag.hashtag_id
+                        artwork_id : artwork_id,
                     }
-                },
-                where: {
-                    artwork_id: artwork_id
-                }
+                }]
             });
+            console.log(hashtags);
+
             return hashtags;
         }
         catch(err){
@@ -56,5 +49,7 @@ class HashtagService {
         }
     }
 }
+
+
 
 export default HashtagService;

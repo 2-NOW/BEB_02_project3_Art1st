@@ -5,7 +5,7 @@ import website from './routes/website.js';
 import artwork from './routes/artwork.js';
 import like from './routes/like.js';
 import want from './routes/want.js';
-import tag from './routes/tag.js'
+import hashtag from './routes/hashtag.js'
 import comment from '../models/comment.js';
 
 const router = express.Router();
@@ -33,9 +33,9 @@ router.use('/artwork/:artwork_id/want', (req, res) => {
     req.artwork_id = req.params.artwork_id;
     want(req, res);
 });
-router.use('/artwork/:artwork_id/tag', (req, res) => {
+router.use('/artwork/:artwork_id/hashtag', (req, res) => {
     req.artwork_id = req.params.artwork_id;
-    tag(req, res);
+    hashtag(req, res);
 });
 router.use('/artwork/:artwork_id/comment', (req, res) => {
     req.artwork_id = req.params.artwork_id;
