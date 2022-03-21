@@ -29,9 +29,9 @@ const colorcss = {
 };
 
 export default function Inputdata() {
-  const [onsale, setOnsale] = useState(false);
+  const [forsale, setForsale] = useState(false);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setOnsale(event.target.checked);
+    setForsale(event.target.checked);
   };
 
   return (
@@ -56,9 +56,13 @@ export default function Inputdata() {
       <div css={{ display: "flex" }}>
         <FormControlLabel
           control={
-            <Checkbox checked={onsale} onChange={handleChange} css={colorcss} />
+            <Checkbox
+              checked={forsale}
+              onChange={handleChange}
+              css={colorcss}
+            />
           }
-          label="On Sale"
+          label="For Sale"
           labelPlacement="start"
           sx={{ margin: "0" }}
         />
@@ -70,7 +74,7 @@ export default function Inputdata() {
               <InputAdornment position="start">♦️</InputAdornment>
             }
             label="Price"
-            disabled={!onsale}
+            disabled={!forsale}
           />
         </FormControl>
       </div>
