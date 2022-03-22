@@ -38,6 +38,7 @@ function index() {
       </Box>
 
       <Tags />
+
       <ItemList />
     </>
   );
