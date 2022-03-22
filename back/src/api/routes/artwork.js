@@ -1,6 +1,6 @@
 import { Router } from "express";
 import db from "../../models/index.js";
-import UserService from "../../services/user.js";
+import ArtworkService from "../../services/artwork.js";
 import web3 from "web3";
 import bytecode721 from "../abi/bytecodeErc721.js";
 import erc721abi from "../abi/erc721abi.js"; 
@@ -8,7 +8,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 const env = process.env;
 const router = Router();
-const UserServiceInstance = new UserService();
+const ArtworkServiceInstance = new ArtworkService();
 
 async function deployToken() { //erc721컨트랙트배포함수 서버계정으로 배포
   try {
@@ -48,6 +48,7 @@ async function addNewErc721Token (contractAddr) {
   }
 };
 
+//nft민팅
 router.post('/upload', async (req, res) => {
     if (!req.session.userId) {// 세션ID 없으면 에러400
         res.status(400).send('bad requset'); 
@@ -75,3 +76,46 @@ router.post('/upload', async (req, res) => {
       }       
     }
 });
+
+
+// nft 1의 정보 조회
+router.get('/:artwork_id', async (req, res) => {
+    const artwork_id = req.params.artwork_id;
+    try{
+        const artwork = await ArtworkServiceInstance.getOneArtwork(artwork_id);
+        res.status(200).json(artwork);
+    }
+    catch(err){
+        res.status(404).json(err.toString());
+    }
+});
+
+// nft 1의 정보 수정
+router.put('/:artwork_id', async (req, res) => {
+    const artwork_id = req.params.artwork_id;
+    const {is_selling, price, owner_id} = req.body;
+    
+    try{
+        const artwork = await ArtworkServiceInstance.putOneArtwork(artwork_id, is_selling, price, owner_id);
+        res.status(201).json(artwork);
+    }
+    catch(err){
+        res.status(404).json(err.toString());
+    }
+})
+
+// 해당 artwork_id의 작가 정보(artwork 상세 페이지 용)
+router.get('/:artwork_id/creator', async (req, res) => { 
+    const artwork_id = req.params.artwork_id;
+
+    try{
+        const creator_info = await ArtworkServiceInstance.getCreatorInfo(artwork_id);
+        res.status(200).json(creator_info);
+    }
+    catch(err) {
+        res.status(404).json(err.toString());
+    }
+
+});
+
+export default router;
