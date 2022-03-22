@@ -37,12 +37,8 @@ export default function Uploadimage() {
     const images = e.target.files;
     const imageUrl = URL.createObjectURL(images[0]);
 
-    setImage(images[0]);
-    // console.log(images[0]);
-    // console.log(typeof images[0]); //object
-    setPreview(imageUrl);
-    // console.log(imageUrl);
-    // console.log(typeof imageUrl); //string
+    setImage(images[0]); //object
+    setPreview(imageUrl); //string
   };
 
   useEffect(() => {

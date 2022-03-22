@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "@emotion/styled";
 
 import Uploadimage from "./fragment/UploadImage";
@@ -12,16 +12,16 @@ const UploadPage = styled.div`
   margin: 2rem auto 0 4rem;
 `;
 
-// export interface Uploadprops {
-//   image: object;
-//   title: string;
-//   description: string;
-//   is_selling: boolean;
-//   price: number;
-// }
+interface Uploadprops {
+  image: object;
+  title: string;
+  description: string;
+  is_selling: boolean;
+  price: number;
+}
 
 function Index() {
-  const [data, setData] = useState({
+  const [data, setData] = useState<Uploadprops>({
     image: {},
     title: "",
     description: "",
@@ -33,9 +33,7 @@ function Index() {
     <UploadPage>
       <Uploadimage />
       <div>
-        <React.Fragment>
-          <Inputdata />
-        </React.Fragment>
+        <Inputdata setData={setData} />
         <Tag />
         <Uploadbtn />
       </div>

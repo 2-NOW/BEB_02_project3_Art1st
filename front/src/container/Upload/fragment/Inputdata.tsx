@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import styled from "@emotion/styled";
 import {
   TextField,
@@ -10,7 +10,6 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
-import { css } from "@emotion/react";
 
 const InputWrapper = styled.div`
   width: 30vw;
@@ -28,7 +27,11 @@ const colorcss = {
   },
 };
 
-export default function Inputdata() {
+interface InputdataProps {
+  setData: Function;
+}
+
+export default function Inputdata({ setData }: InputdataProps) {
   const [forsale, setForsale] = useState(false);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setForsale(event.target.checked);
@@ -42,6 +45,7 @@ export default function Inputdata() {
         id="standard-required"
         variant="standard"
         size="small"
+        onChange={() => {}}
         style={{ marginBottom: "1rem", width: "20vw" }}
       />
       <Typography>Description</Typography>
