@@ -1,0 +1,22 @@
+import { Typography } from "@mui/material";
+
+const artwork = {
+  title: "Title",
+  creator_id: "Name",
+  views: "1,234",
+  created_at: "2022.03.22",
+};
+
+export default function Title() {
+  return (
+    <>
+      <div css={{ fontSize: "2em", fontWeight: "500", marginBottom: "0.2em" }}>
+        {artwork.title}
+      </div>
+      <Typography component="div" variant="body2" color="text.secondary">
+        created by {artwork.creator_id} | {artwork.created_at} | views{" "}
+        {artwork.views}
+      </Typography>
+    </>
+  );
+}
