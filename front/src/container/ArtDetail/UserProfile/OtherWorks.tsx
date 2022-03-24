@@ -12,10 +12,10 @@ export default function OtherWorks() {
 
   return (
     <>
-      <Typography variant="h6" fontWeight={300}>
+      <Typography variant="h5" sx={{ mt: "2rem" }}>
         More from this Artist
       </Typography>
-      <Box sx={{ width: "100%", mt: "1rem" }}>
+      <Box sx={{ width: "100%", m: "1rem auto 4rem" }}>
         <Grid container>
           {testData.map((src) => {
             return (
