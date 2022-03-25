@@ -49,7 +49,7 @@ function index() {
   return (
     <Box sx={{ position: 'relative' }}>
       <Typography sx={{ m: '3rem auto 2rem 16vw' }} variant="h3">
-        Top Creators
+        Top Artists
       </Typography>
 
       <Box sx={{ m: '2rem auto', width: '70vw' }}>
