@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, Typography } from "@mui/material";
-// import axios from "axios";
+import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 // import jQuery from "jquery";
 // window.$ = window.jQuery = jQuery;
@@ -24,22 +24,22 @@ export default function NewComment(/*{ artwork_id }*/) {
   };
 
   const save = async () => {
-    //   if (comment && user_id) {
-    //     await axios
-    //       .post(`http://localhost:8888/artwork/:${artwork_id}/comment`, {
-    //         artwork_id,
-    //         content,
-    //         user_id,
-    //       })
-    //       .then((res) => {
-    //         console.log(res.data);
-    //         alert(res.data.message);
-    //         reward();
-    //         reloadDivArea();
-    //         navigate("/");
-    //       });
-    //   } else if (!user_id) alert("Please log in to leave a comment");
-    //   else alert("You haven't entered a content");
+    if (comment && user_id) {
+      await axios
+        .post(`http://localhost:8888/artwork/:${artwork_id}/comment`, {
+          artwork_id,
+          content,
+          user_id,
+        })
+        .then((res) => {
+          console.log(res.data);
+          alert(res.data.message);
+          reward();
+          reloadDivArea();
+          navigate("/");
+        });
+    } else if (!user_id) alert("Please log in to leave a comment");
+    else alert("You haven't entered a content");
   };
 
   return (

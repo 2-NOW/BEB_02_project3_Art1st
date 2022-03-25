@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { List, ListItem, ListItemText, Typography } from "@mui/material";
-// import axios from "axios";
+import axios from "axios";
 
 export default function CommentsList(/*{ artwork_id }*/) {
   const [comments, setComments] = useState([
@@ -17,22 +17,22 @@ export default function CommentsList(/*{ artwork_id }*/) {
     },
   ]);
 
-  // useEffect(() => {
-  //   async function reqData() {
-  //     await axios
-  //       .get(`http://localhost:8888/artwork/:${artwork_id}`)
-  //       .then((res) => {
-  //         let _comments = res.data.map((comment) => ({
-  //           writtenby: comment.user_id,
-  //           comment: comment.content,
-  //           createdat: comment.created_at,
-  //         }));
-  //         setComments(comments.concat(_comments));
-  //       })
-  //       .catch((e) => console.log(e));
-  //   }
-  //   reqData();
-  // }, []);
+  useEffect(() => {
+    async function reqData() {
+      await axios
+        .get(`http://localhost:8888/artwork/:${artwork_id}`)
+        .then((res) => {
+          let _comments = res.data.map((comment) => ({
+            writtenby: comment.user_id,
+            comment: comment.content,
+            createdat: comment.created_at,
+          }));
+          setComments(comments.concat(_comments));
+        })
+        .catch((e) => console.log(e));
+    }
+    reqData();
+  }, []);
 
   return (
     <List sx={{ width: "100%", bgcolor: "background.paper" }}>
