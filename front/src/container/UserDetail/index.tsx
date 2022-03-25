@@ -1,3 +1,4 @@
+import Layout from '@/components/Layout/index';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
@@ -6,7 +7,7 @@ import Profile from './Profile/index';
 
 function index() {
   return (
-    <>
+    <Layout>
       <Grid container>
         <Grid item xs={12} xl={4}>
           <Box
@@ -26,7 +27,7 @@ function index() {
           </Box>
         </Grid>
       </Grid>
-    </>
+    </Layout>
   );
 }
 
