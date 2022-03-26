@@ -14,7 +14,7 @@ export default (Sequelize, DataTypes) => {
           allowNull: false
         },
         transaction_hash: {
-          type: DataTypes.STRING(40),
+          type: DataTypes.STRING,
           allowNull: false
         },
         status: {
