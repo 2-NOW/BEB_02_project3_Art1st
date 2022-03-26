@@ -1,19 +1,29 @@
-import { ReactNode } from 'react';
+import { css } from '@emotion/react';
 
-import Navbar from '@/components/Layout/Navbar/index';
-import Footer from '@/components/Layout/Footer';
+import Navbar from './Navbar/index';
+import Footer from './Footer';
 
 interface LayoutProps {
-  children: ReactNode;
+  children?: React.ReactNode;
 }
+
+const wrapper = css`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  .children {
+    flex: 1;
+  }
+`;
 
 function Layout({ children }: LayoutProps) {
   return (
-    <>
+    <div css={wrapper}>
       <Navbar />
-      {children}
+      <div className="children">{children}</div>
       <Footer />
-    </>
+    </div>
   );
 }
 

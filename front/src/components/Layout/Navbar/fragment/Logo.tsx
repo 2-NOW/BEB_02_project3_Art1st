@@ -1,26 +1,30 @@
-import Image from "next/image";
-import Link from "next/link";
-import styled from "@emotion/styled";
+import Image from 'next/image';
+import Link from 'next/link';
+import Box from '@mui/material/Box';
+import { css } from '@emotion/react';
 
-const Logodiv = styled.div`
-  display: flex;
-  position: relative;
-  width: 6rem;
-  height: 1.5rem;
-`;
+const wrapper = {
+  display: 'flex',
+  position: 'relative',
+  width: '5rem',
+  height: '2rem',
+};
 
-export default function Logo() {
+function Logo() {
   return (
-    <Logodiv>
-      <Link href="/" passHref>
-        <Image
-          src="/logo.png"
-          alt="logo icon"
-          layout="fill"
-          objectFit="contain"
-          quality={100}
-        />
+    <Box sx={wrapper}>
+      <Link href="/">
+        <a>
+          <Image
+            src="/logo.png"
+            layout="fill"
+            objectFit="contain"
+            quality={100}
+          />
+        </a>
       </Link>
-    </Logodiv>
+    </Box>
   );
 }
+
+export default Logo;
