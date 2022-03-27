@@ -45,5 +45,10 @@ export default (Sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: 0,
         },
+        contractAddr: {
+            type: DataTypes.STRING(256),
+            allowNull: false,
+            defaultValue: ''
+        }
     })
 }

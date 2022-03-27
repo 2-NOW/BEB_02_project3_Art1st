@@ -20,7 +20,8 @@
     "nodemon": "^2.0.15",
     "sequelize": "^6.17.0",
     "sequelize-cli": "^6.4.1",
-    "web3": "^1.7.1"
+    "web3": "^1.7.1",
+    "web3-eth-contract": "^1.7.1"
   },
   "type": "module"
 }
