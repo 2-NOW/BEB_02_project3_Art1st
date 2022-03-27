@@ -84,7 +84,7 @@ class ArtworkService {
             // (metadata object omitted)
             // -> 참고 : https://stackoverflow.com/questions/33232147/sequelize-query-returns-same-result-twice
 
-            return creator_info;
+            return creator_info[0];
 
         }
         catch(err){
