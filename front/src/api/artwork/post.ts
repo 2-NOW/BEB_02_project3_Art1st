@@ -3,9 +3,11 @@ import axios from 'axios';
 
 // POST like => like + 1
 export const postArtworkLike = async (id: number) => {
-  const { data } = await axios.post(HOST_ADDRESS + '/artwork/' + id + '/like', {
-    withCredentials: true,
-  });
+  const { data } = await axios.post(
+    HOST_ADDRESS + '/artwork/' + id + '/like',
+    null,
+    { withCredentials: true }
+  );
   return data;
 };
 
@@ -13,17 +15,18 @@ export const postArtworkLike = async (id: number) => {
 export const postArtworkComment = async (id: number) => {
   const { data } = await axios.post(
     HOST_ADDRESS + '/artwork/' + id + '/comment',
-    {
-      withCredentials: true,
-    }
+    null,
+    { withCredentials: true }
   );
   return data;
 };
 
 // POST comment
 export const postArtworkWant = async (id: number) => {
-  const { data } = await axios.post(HOST_ADDRESS + '/artwork/' + id + '/want', {
-    withCredentials: true,
-  });
+  const { data } = await axios.post(
+    HOST_ADDRESS + '/artwork/' + id + '/want',
+    null,
+    { withCredentials: true }
+  );
   return data;
 };
