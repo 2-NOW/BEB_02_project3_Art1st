@@ -4,20 +4,6 @@ dotenv.config();
 import db from '../models/index.js';
 import UserService from './user.js';
 
-// +------------------+-------------------------------------+------+-----+---------+----------------+
-// | Field            | Type                                | Null | Key | Default | Extra          |
-// +------------------+-------------------------------------+------+-----+---------+----------------+
-// | id               | int                                 | NO   | PRI | NULL    | auto_increment |
-// | action           | enum('donate','compensate')         | NO   |     | NULL    |                |
-// | amount           | int                                 | NO   |     | NULL    |                |
-// | transaction_hash | varchar(40)                         | NO   |     | NULL    |                |
-// | status           | enum('before','pending','complete') | NO   |     | NULL    |                |
-// | createdAt        | datetime                            | NO   |     | NULL    |                |
-// | updatedAt        | datetime                            | NO   |     | NULL    |                |
-// | from_id          | int                                 | YES  | MUL | NULL    |                |
-// | to_id            | int                                 | YES  | MUL | NULL    |                |
-// +------------------+-------------------------------------+------+-----+---------+----------------+
-
 class OrderService {
     constructor() {
         this.Orderbook = db.Orderbook;

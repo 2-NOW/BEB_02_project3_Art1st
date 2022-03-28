@@ -9,14 +9,6 @@ export default (Sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        // creator_id: {
-        //     type: DataTypes.INTEGER,
-        //     allowNull: false
-        // },
-        // owner_id: {
-        //     type: DataTypes.INTEGER,
-        //     allowNull: false
-        // },
         views: {
             type: DataTypes.INTEGER,
             allowNull: false

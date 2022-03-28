@@ -1,20 +1,5 @@
 import db from '../models/index.js'
 
-// mysql> desc artworks;
-// +------------+------------+------+-----+---------+----------------+
-// | Field      | Type       | Null | Key | Default | Extra          |
-// +------------+------------+------+-----+---------+----------------+
-// | id         | int        | NO   | PRI | NULL    | auto_increment |
-// | token_id   | int        | NO   |     | NULL    |                |
-// | views      | int        | NO   |     | NULL    |                |
-// | is_selling | tinyint(1) | NO   |     | NULL    |                |
-// | price      | int        | NO   |     | NULL    |                |
-// | createdAt  | datetime   | NO   |     | NULL    |                |
-// | updatedAt  | datetime   | NO   |     | NULL    |                |
-// | creator_id | int        | YES  | MUL | NULL    |                |
-// | owner_id   | int        | YES  | MUL | NULL    |                |
-// +------------+------------+------+-----+---------+----------------+
-
 class ArtworkService {
     constructor() {
         this.Artwork = db.Artwork;

@@ -21,13 +21,5 @@ export default (Sequelize, DataTypes) => {
           type: DataTypes.ENUM('before', 'pending', 'complete'),
           allowNull: false
         },
-        // from_id: {
-        //   type: DataTypes.INTEGER,
-        //   allowNull: false
-        // },
-        // to_id: {
-        //   type: DataTypes.INTEGER,
-        //   allowNull: false
-        // }
     });
 }

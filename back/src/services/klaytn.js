@@ -31,20 +31,20 @@ class KlaytnService {
         this.#BatcherAbi = BatcherAbi;
 
         if(process.env.ERC20_ADDRESS != ''){ // 이미 배포한 erc20 contract가 있음
-            console.log('erc20 이미 배포');
+            console.log('erc20 컨트랙트 배포 완료');
             this.setMyErc20Contract(process.env.ERC20_ADDRESS);
         }
         else {
-            console.log('Erc20 배포 안됨')
+            console.log('Erc20 컨트랙트 배포 필요')
             this.#myErc20Contract = new this.caver.klay.Contract(this.#Erc20Abi);
         }
 
         if(process.env.BATCHER_ADDRESS != '') { // 이미 배포한 batcher contract가 있음
-            console.log('batcher 이미 배포');
+            console.log('Batcher 컨트랙트 배포 완료');
             this.setMyBatcherContract(process.env.BATCHER_ADDRESS);
         }
         else{
-            console.log('batcher 배포 안됨')
+            console.log('Batcher 컨트랙트 배포 필요')
             this.#myBatcherContract = new this.caver.klay.Contract(this.#BatcherAbi);
         }
 
@@ -78,7 +78,7 @@ class KlaytnService {
         }
     }
 
-    async getServerKlay() { // 완료
+    async getServerKlay() { 
         try{
             var balance = await this.caver.klay.getBalance(this.#server.address);
             balance = (Number(balance)/1000000000000000000).toString();
@@ -89,7 +89,7 @@ class KlaytnService {
         }
     }
 
-    async deployErc20() { // 완료
+    async deployErc20() { 
         try{
             if(process.env.ERC20_ADDRESS != ''){
                 throw Error('ERC20 contract already deployed');
@@ -123,7 +123,7 @@ class KlaytnService {
 
     }
 
-    async deployBatcher() { // 완료
+    async deployBatcher() { 
         try{
             if(process.env.BATCHER_ADDRESS != ''){
                 throw Error('BATCHER contract already deployed');

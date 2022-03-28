@@ -77,9 +77,12 @@ const startTask = async() => {
             });       
         
         }
+        else {
+            console.log('There is no Orders.')
+        } 
         
         if(flag){
-            console.log('OrderBook end!');
+            console.log('Sending Tx end!');
             break;
         }
 

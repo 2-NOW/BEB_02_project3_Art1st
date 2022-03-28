@@ -5,10 +5,6 @@ export default (Sequelize, DataTypes) => {
             autoIncrement: true,
             primaryKey: true
         },
-        // user_id: {
-        //     type: DataTypes.INTEGER,
-        //     allowNull: false
-        // },
         picture: {
             type: DataTypes.STRING(50),
             allowNull: false

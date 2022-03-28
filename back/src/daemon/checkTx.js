@@ -23,7 +23,6 @@ const startTask = async() => {
         })
         
         const pendingSet = [ ... new Set(pendings)]; // Tx hash만 있는 set 배열
-        // console.log(pendingSet);
     
         for (let pending of pendingSet) {
             const txInfo = await caver.klay.getTransaction(pending);
@@ -47,7 +46,7 @@ const startTask = async() => {
         console.log('There is no pending Txs.')
     } 
    
-    console.log('checking end!')
+    console.log('Checking Tx end!')
 }
 
 startTask();
