@@ -31,20 +31,6 @@ router.delete('/logout', (req, res) => {
   }
 });
 
-router.get('/loginCheck', (req, res) => {
-  try {
-    const IsLogin = UserServiceInstance.loginCheck(req.session);
-    if(IsLogin){
-      res.send({loggedIn : true, loginData: req.session.userId});
-    } else {
-      res.status(404).json({loggedIn : false, loginData: null});
-    }
-  }
-  catch(err){
-    res.status(404).json(err.toString());
-  }
-});
-
 // Artworks Page Top Creator 15명 Users 정보 가져오기 
 router.get('/topCreator', async (req, res) => {
   try{

@@ -128,7 +128,7 @@ class ArtworkService {
                     {where: {is_selling: 1}}
                 )
                 return FilteredArtworks;
-            } else { // 요청한 태그에 해당되면서 판매중인 작품들 조회
+            } else {    // 요청한 태그에 해당되면서 판매중인 작품들 조회
                 let FilteredArtworks = [];
                 const FilteredHashtagId = await this.Hashtag.findAll( 
                     {where: {hashtag: tagName}}

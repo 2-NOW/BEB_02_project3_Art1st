@@ -188,21 +188,6 @@ class UserService {
         }
     }
 
-    // 유저 로그인 상태 체크  
-    async loginCheck(session){
-        try {
-            console.log(session);
-            if (session.userId) { 
-                return true;
-            } else {
-                throw Error('bad requset');
-            }
-        }
-        catch(err) {
-            throw Error(err.toString());
-        }
-
-    }
 
     // 유저 로그아웃 세션 삭제
     async logout(session){

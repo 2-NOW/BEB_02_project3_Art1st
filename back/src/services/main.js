@@ -7,4 +7,4 @@ class MainService {
         this.UserServiceInterface = new UserService();
     }
 
-    
+}

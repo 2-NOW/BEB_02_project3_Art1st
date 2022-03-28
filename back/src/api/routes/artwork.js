@@ -45,16 +45,19 @@ router.post('/upload', async (req, res) => {//nft민팅
 
         ipfs.add(buffer, (err, ipfsHash) => { // 전달받은 이미지 buffer로 ipfs에 이미지를 업로드한후 ipfs url 을 생성합니다 . 
             try{
-                addNewErc721Token(userInfo.account, `https://ipfs.io/ipfs/${ipfsHash[0].hash}`).then((result) => {
-                    const artwork = db.Artwork.create({
-                        token_id: result,
-                        views: 0,
-                        is_selling, is_selling,
-                        price: price,
-                        creator_id: userInfo.dataValues.id,
-                        owner_id: userInfo.dataValues.id
-                    })
-                    res.status(200).send({deta : artwork, msg : "minting success"});//컬렉션 생성하고 배포한 컨트랙트주소값 반환
+                addNewErc721Token(userInfo.address, `https://ipfs.io/ipfs/${ipfsHash[0].hash}`).then((result) => {
+                        const artwork = await db.Artwork.create({
+                            token_id: result,
+                            views: 0,
+                            is_selling, is_selling,
+                            price: price,
+                            ipfsURI: `https://ipfs.io/ipfs/${ipfsHash[0].hash}`,
+                            title : nftname, 
+                            desc : nftdesc,
+                            creator_id: userInfo.id,
+                            owner_id: userInfo.id
+                        })
+                        res.status(200).send({deta : artwork, msg : "minting success"});
                     })
             } 
             catch (error) {
@@ -62,6 +65,20 @@ router.post('/upload', async (req, res) => {//nft민팅
               }
         })
     }
+    // const artwork = await db.Artwork.create({
+    //     token_id: 5,
+    //     views: 55,
+    //     is_selling, is_selling,
+    //     price: price,
+    //     ipfsURI: 'uri',
+    //     title : "name", 
+    //     desc : "desc",
+    //     creator_id: 5,
+    //     owner_id: 5
+    // })
+    // res.status(200).send({deta : artwork, msg : "minting success"});
+
+  
 });
 
 

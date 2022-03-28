@@ -2,18 +2,18 @@ import { Router } from "express";
 const router = Router();
 import db from "../../models/index.js";
 
-router.get("/bannerArtWork", async (req, res) => { 
+router.get("/bannerArtWork", async (req, res) => { // 배너에 띄울 가장 views가 높은 작품 요청
   await db.Artwork.findAll({
     order: [["views", "DESC"]],
   }).then((Artworks) => {
     console.log(Artworks[0]);
-    res.status(200).json({ data: Artworks[0].dataValues.token_id, message: 'done' }); //  db 이미지url 컬럼추가 ipfs 바로전달해주게 수정할것
+    res.status(200).json({ data: Artworks[0].dataValues.ipfsURI, message: 'done' }); //  db 이미지url 컬럼추가 ipfs 바로전달해주게 수정할것
   }).catch(err => {
     res.status(404).send({ data: null, message: err });
   });
 })
 
-router.get("/randomCreators", async (req, res) => {
+router.get("/randomCreators", async (req, res) => { // userdata 랜덤으로 16개 요청 
   const count = await db.User.count();
   const randomCreators = [];
   const addedCreators = [];
@@ -38,7 +38,7 @@ router.get("/randomCreators", async (req, res) => {
       result.push(user);
     
     }
-    res.status(201).json(result);
+    res.status(200).json(result);
     //console.log(result);
   } else {
     res.status(404).send({ data: null, message: 'Not found' });
