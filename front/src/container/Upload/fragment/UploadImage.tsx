@@ -48,8 +48,8 @@ function UploadImage() {
   }, []);
 
   return (
-    <FormControl sx={{ mb: '3vh' }}>
-      <Card sx={{ minWidth: '100%', minHeight: '30vh' }} elevation={4}>
+    <FormControl sx={{ mt: '7vh' }}>
+      <Card sx={{ minWidth: '100%', minHeight: '40vh' }} elevation={4}>
         <LightTooltip
           TransitionComponent={Fade}
           TransitionProps={{ timeout: 300 }}
@@ -64,7 +64,7 @@ function UploadImage() {
                 onChange={handleImageUpload}
                 style={{ display: 'none' }}
               />
-              <Box sx={{ minWidth: '100%', height: '100%', minHeight: '30vh' }}>
+              <Box sx={{ minWidth: '100%', height: '100%', minHeight: '40vh' }}>
                 {imageUrl ? (
                   <CardMedia
                     sx={{ width: '100%', height: '100%', objectFit: 'contain' }}
@@ -74,7 +74,7 @@ function UploadImage() {
                 ) : (
                   <AddPhotoAlternateIcon
                     color="disabled"
-                    sx={{ width: '100%', height: '12vh', mt: '8vh' }}
+                    sx={{ width: '100%', height: '12vh', mt: '13vh' }}
                   />
                 )}
               </Box>
