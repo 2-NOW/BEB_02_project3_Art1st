@@ -15,21 +15,6 @@ router.post('/login', async (req, res) => {
   catch(err){
     res.status(404).send({ data: null, message: 'not authorized' });
   }
-  // const userInfo = await db.User.findOne({ // DB 아이디 비번일치확인
-  //   where: { email : req.body.user_id, password: req.body.user_pw }
-  // }).catch(err => {
-  //   console.error(err);
-  // });
-
-  // if (!userInfo) { // 없으면 400
-  //   res.status(400).send({ data: null, message: 'not authorized' });
-  // } else { // 있으면 세션ID 생성 
-  //   req.session.userId = req.body.userId;
-  //   req.session.save(function () { 
-  //     res.status(200).json({ message: 'ok' }); 
-  //   });   
-  //   console.log(req.session);
-  // }
 })  
 
 router.delete('/logout', (req, res) => {

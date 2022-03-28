@@ -1,4 +1,5 @@
 import express from 'express';
+import main from './routes/main.js';
 import user from './routes/user.js'
 import profile from './routes/profile.js';
 import website from './routes/website.js';
@@ -14,6 +15,7 @@ router.get('/', (req, res) => {
     res.send("🚀 API Server is running...");
 })
 
+router.use('/main', main);
 router.use('/user', user);
 router.use('/user/:user_id/profile', (req, res) => {
     req.user_id = req.params.user_id;
