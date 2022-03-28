@@ -33,7 +33,7 @@ function InputTags() {
         {tags.map((text, index) => {
           return (
             <Chip
-              sx={{ m: '0.5rem 0.5rem auto 0', fontSize: '1rem' }}
+              sx={{ m: '0.4rem 0.3rem auto 0', fontSize: '1rem' }}
               key={index}
               label={text}
               variant="outlined"
@@ -43,7 +43,7 @@ function InputTags() {
         })}
         {tags.length < 10 && (
           <TextField
-            sx={{ mt: '0.6rem' }}
+            sx={{ ml: '0.3rem', mt: '0.5rem' }}
             variant="standard"
             value={tagText}
             onChange={handleOnChange}
@@ -58,7 +58,9 @@ function InputTags() {
           />
         )}
       </Box>
-      <Divider sx={{ mt: '0.5rem' }} />
+      <Divider
+        sx={{ mt: '0.3rem', backgroundColor: 'rgba(144, 144, 144, 1)' }}
+      />
       {tags.length === 10 && (
         <FormHelperText id="input-tags" error>
           Max number of tags is 10
