@@ -1,28 +1,17 @@
 import { Router } from "express";
-import ContractService from "../../services/contract.js"
+import KlaytnService from "../../services/klaytn.js"
 const router = Router();
 
-const ContractServiceInterface = new ContractService();
+const KlaytnServiceInterface = new KlaytnService();
 
-router.get('/', (req, res) => {
-    res.send('test OK');
-})
 
-// 서버 계정에 1Eth 보내기(ganache용)
-router.post('/faucetGanacheEth', async (req, res) => {
-    try{
-        const receipt = await ContractServiceInterface.faucetGanacheEther();
-        res.status(201).json(receipt);
-    }
-    catch(err) {
-        res.status(500).json(err.toString());
-    }
-})
+// 서버 계정에 klay 충전하기
+// https://baobab.wallet.klaytn.com/faucet 통해 진행
 
 // 서버 계정의 Eth 잔액 가져오기
-router.get('/getServerEth', async (req, res) => {
+router.get('/getServerKlay', async (req, res) => {
     try{
-        const balance = await ContractServiceInterface.getServerEth();
+        const balance = await KlaytnServiceInterface.getServerKlay();
         res.status(200).json(balance);
     }
     catch(err){
@@ -33,7 +22,7 @@ router.get('/getServerEth', async (req, res) => {
 // erc20 컨트랙트 배포하기
 router.post('/erc20', async (req, res)=> {
     try{
-        const data = await ContractServiceInterface.deployErc20();
+        const data = await KlaytnServiceInterface.deployErc20();
         res.status(201).json(data);
     }
     catch(err) {
@@ -44,7 +33,7 @@ router.post('/erc20', async (req, res)=> {
 // batcher 컨트랙트 배포하기
 router.post('/batcher', async (req, res)=> {
     try{
-        const data = await ContractServiceInterface.deployBatcher();
+        const data = await KlaytnServiceInterface.deployBatcher();
         res.status(201).json(data);
     }
     catch(err) {
@@ -56,7 +45,7 @@ router.get('/balance', async (req, res)=> {
     const {user_id} = req.query;
 
     try{
-        const data = await ContractServiceInterface.getBalance(user_id);
+        const data = await KlaytnServiceInterface.getBalance(user_id);
         res.status(200).json(data);
     }
     catch(err){

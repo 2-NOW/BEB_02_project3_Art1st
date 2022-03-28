@@ -1,10 +1,10 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import Web3 from 'web3';
+import Caver from 'caver-js';
 import db from '../models/index.js';
 import BatcherAbi from '../api/abi/batcherAbi.js';
 
-const web3 = new Web3(process.env.WEB3_NETWORK);
+const caver = new Caver(process.env.BAOBA_NETWORK);
 
 const startTask = async() => {
     let pendings = await db.Orderbook.findAll({
@@ -26,7 +26,7 @@ const startTask = async() => {
         // console.log(pendingSet);
     
         for (let pending of pendingSet) {
-            const txInfo = await web3.eth.getTransaction(pending);
+            const txInfo = await caver.klay.getTransaction(pending);
             if(txInfo.blockNumber){
                 await db.Orderbook.update(
                     {status: 'complete'},
