@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon src/app.js",
-    "sendTx": "pm2 start --watch --cron \"*/10 * * * * *\" src/daemon/sendTx.js"
+    "sendTx": "pm2 start --watch --cron \"*/10 * * * * *\" src/daemon/sendTx.js",
+    "checkTx":  "pm2 start --watch --cron \"*/10 * * * * *\" src/daemon/checkTx.js"
   },
   "author": "",
   "license": "ISC",
