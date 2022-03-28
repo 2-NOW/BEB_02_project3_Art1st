@@ -45,6 +45,17 @@ router.get('/loginCheck', (req, res) => {
   }
 });
 
+// Artworks Page Top Creator 15명 Users 정보 가져오기 
+router.get('/topCreator', async (req, res) => {
+  try{
+      const TopUsers = await UserServiceInstance.getTopUsers();
+      res.status(200).json(TopUsers);
+  }
+  catch(err){
+      res.status(404).json(err.toString());
+  }
+});
+
 
 // 전체 user 정보 가져오기
 router.get('/', async (req, res) => {

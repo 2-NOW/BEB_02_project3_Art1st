@@ -2,7 +2,7 @@ import { Router } from "express";
 const router = Router();
 import db from "../../models/index.js";
 
-router.get("/bannerArtWork", async (req, res) => {
+router.get("/bannerArtWork", async (req, res) => { 
   await db.Artwork.findAll({
     order: [["views", "DESC"]],
   }).then((Artworks) => {

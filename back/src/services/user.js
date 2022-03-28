@@ -96,6 +96,33 @@ class UserService {
         }
 
     }
+    //// Artworks Page Top Creator 16명 Users 정보 가져오기 
+    async getTopUsers(){
+        try{ 
+            const topUsers = [];  
+            const profile = [];
+            const users = await db.User.findAll({ // 판매량순으로 유저 정렬
+                order: [["total_sales", "DESC"]],
+            })
+            for(let i = 0; i < 16; i ++){
+                profile[i] = await db.Profile.findOne({ // 판매량순으로 정렬된 유저데이터로 프로필 테이블 조회 
+                    where : { user_id : users[i].id}
+                });
+                topUsers[i] = { name : users[i].name, ProfileImg : profile[i].picture};
+            }        
+   
+            return topUsers;
+        }
+        catch(err){
+            throw Error(err.toString());
+        }
+    }
+
+ 
+
+
+
+
     // 유저 회원가입
     async signUp(user_id, user_pw, user_name){
         try {
@@ -109,7 +136,6 @@ class UserService {
                 }
               })
               .then(([userInfo, created]) => {
-                console.log('done!!!!!')
                 if (!created) {
                   // 있으면 있다고 응답
                   throw Error("User exists");
