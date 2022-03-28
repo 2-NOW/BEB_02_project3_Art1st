@@ -8,6 +8,8 @@ import like from './routes/like.js';
 import want from './routes/want.js';
 import hashtag from './routes/hashtag.js'
 import comment from './routes/comment.js';
+import order from './routes/order.js';
+import contract from './routes/contract.js';
 
 const router = express.Router();
 
@@ -45,6 +47,8 @@ router.use('/artwork/:artwork_id/comment', (req, res) => {
     comment(req, res);
 });
 
+router.use('/order', order);
+router.use('/contract', contract);
 router.use('/profile', profile);
 router.use('/website', website);
 

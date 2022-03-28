@@ -1,4 +1,5 @@
 import db from '../models/index.js';
+import ArtworkService from './artwork.js';
 
 // +------------+----------+------+-----+---------+----------------+
 // | Field      | Type     | Null | Key | Default | Extra          |
@@ -13,6 +14,7 @@ import db from '../models/index.js';
 class WantService {
     constructor() {
         this.Want = db.Want;
+        this.ArtworkServiceInterface = new ArtworkService();
     }
 
     // user_id가 artwork_id에 사고싶어요를 누른 적이 있는지 확인
@@ -45,6 +47,7 @@ class WantService {
     // artwork_id의 사고싶어요 조회
     async getArtworkWant(artwork_id) {
         try{
+            await this.ArtworkServiceInterface.getOneArtwork(artwork_id);
             const wants = await this.Want.findAll({where: {artwork_id: artwork_id}});
             const count = wants.length;
             return {wants, count};
@@ -57,6 +60,7 @@ class WantService {
     // artwork_id에 사고싶어요 누르기
     async postArtworkWant(artwork_id, user_id) {
         try{
+            await this.ArtworkServiceInterface.getOneArtwork(artwork_id);
             // 이전에 사고싶어요를 누른 적이 있는지 확인
             if(await this.isWant(artwork_id, user_id)){
                 // 이전에 누른 적이 있음
@@ -79,6 +83,7 @@ class WantService {
     // artwork_id에 사고싶어요 취소
     async deleteArtworkWant(artwork_id, user_id) {
         try{
+            await this.ArtworkServiceInterface.getOneArtwork(artwork_id);
             // 이전에 사고싶어요를 누른 적이 있는지 확인
             if(await this.isWant(artwork_id, user_id)){
                 // 이전에 사고싶어요를 누른 적이 있음
