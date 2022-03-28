@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 
 function UploadButton() {
   return (
-    <Box sx={{ m: '8vh auto' }}>
+    <Box sx={{ m: '6vh auto' }}>
       <Button sx={{ width: '7vw', minWidth: '7rem' }} variant="contained">
         CREATE
       </Button>

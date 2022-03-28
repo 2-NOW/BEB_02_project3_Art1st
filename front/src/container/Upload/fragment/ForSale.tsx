@@ -13,7 +13,7 @@ function ForSale() {
   const handleChecked = () => setIsChecked(!isChecked);
 
   return (
-    <FormControl sx={{ mt: '7vh' }}>
+    <FormControl sx={{ mt: '4vh' }}>
       <Box sx={{ display: 'flex' }}>
         <FormControlLabel
           sx={{ width: '8rem' }}
