@@ -28,11 +28,10 @@ function UploadImage() {
 
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (image) URL.revokeObjectURL(imageUrl);
-    if (image) console.log(typeof image);
 
     const images = e.target.files;
 
-    if (images) {
+    if (images?.length) {
       const newImageUrl = URL.createObjectURL(images[0]);
       setImage(images[0]); //object
       setImageUrl(newImageUrl); //string

@@ -17,13 +17,7 @@ function ForSale() {
       <Box sx={{ display: 'flex' }}>
         <FormControlLabel
           sx={{ width: '8rem' }}
-          control={
-            <Checkbox
-              checked={isChecked}
-              onChange={handleChecked}
-              defaultChecked
-            />
-          }
+          control={<Checkbox checked={isChecked} onChange={handleChecked} />}
           label="For sale"
         />
 
