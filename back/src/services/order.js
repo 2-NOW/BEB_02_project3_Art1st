@@ -62,11 +62,11 @@ class OrderService {
             await to.save();
 
             const donation_transaction = await this.DonationTransaction.create({
-                amount: amount,
+                // amount: amount,
                 message: msg,
-                transaction_hash: order.transaction_hash,
-                from_id: from_id,
-                to_id: to_id,
+                // transaction_hash: order.transaction_hash,
+                // from_id: from_id,
+                // to_id: to_id,
                 order_id: order.id
             });
 

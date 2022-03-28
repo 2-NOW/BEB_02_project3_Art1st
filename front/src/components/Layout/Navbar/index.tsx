@@ -1,41 +1,53 @@
-import styled from "@emotion/styled";
+import { css } from '@emotion/react';
+import Box from '@mui/material/Box';
 
-import Logo from "../Navbar/fragment/Logo";
-import Menu from "../Navbar/fragment/Menu";
-import Searchbar from "./fragment/Searchbar";
-import Signinbtn from "./fragment/Signinbtn";
+import Logo from './fragment/Logo';
+import NavLink from './fragment/NavLink';
+import LoginButton from './fragment/LoginButton';
+import Search from './fragment/Search';
+import User from './fragment/User';
 
-const Nav = styled.div`
-  position: sticky;
-  top: 0;
-  height: 7vh;
-  z-index: 10;
-  display: flex;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-  width: 100vw;
+const wrapper = {
+  position: 'sticky',
+  top: '0',
+  backgroundColor: 'rgba(255, 255, 255, 0.4)',
+  backdropFilter: 'blur(30px)',
 
-  .logo {
-    margin: 1.2rem 0 1.2rem 4rem;
-  }
-`;
+  zIndex: '10',
 
-const Logindiv = styled.div`
-  position: fixed;
-  right: 4rem;
-  display: flex;
-`;
+  display: 'flex',
+  justifyContent: 'space-between',
+  borderBottom: '1px solid rgba(0, 0, 0, 0.15)',
+  width: '100vw',
+  height: '4.8rem',
+};
 
-export default function Navbar() {
+const leftItemsCss = {
+  m: '1.5rem 0 1.2rem 4rem',
+  display: 'flex',
+  justifyContent: 'space-between',
+};
+
+const rightItemsCss = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  margin: '1.4rem 6rem auto',
+};
+
+function Navbar() {
   return (
-    <Nav>
-      <div className="logo">
+    <Box sx={wrapper}>
+      <Box sx={leftItemsCss}>
         <Logo />
-      </div>
-      <Menu />
-      <Logindiv>
-        <Searchbar />
-        <Signinbtn />
-      </Logindiv>
-    </Nav>
+        <NavLink text="Discover" />
+      </Box>
+      <Box sx={rightItemsCss}>
+        <Search />
+        <LoginButton />
+        {/* <User /> */}
+      </Box>
+    </Box>
   );
 }
+
+export default Navbar;

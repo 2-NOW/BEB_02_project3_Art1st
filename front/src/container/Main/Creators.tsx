@@ -22,10 +22,11 @@ function Creators() {
   return (
     <Box sx={{ width: '80vw', m: '8rem auto' }}>
       <Grid container rowSpacing={'4rem'}>
-        {testData.map((item) => {
+        {testData.map((item, index) => {
           return (
             <Grid
               item
+              key={index}
               sx={{ display: 'flex', justifyContent: 'center' }}
               xl={1.5}
               lg={2}
