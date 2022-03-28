@@ -46,7 +46,7 @@ router.post('/upload', async (req, res) => {//nft민팅
         ipfs.add(buffer, (err, ipfsHash) => { // 전달받은 이미지 buffer로 ipfs에 이미지를 업로드한후 ipfs url 을 생성합니다 . 
             try{
                 addNewErc721Token(userInfo.address, `https://ipfs.io/ipfs/${ipfsHash[0].hash}`).then((result) => {
-                        const artwork = await db.Artwork.create({
+                        const artwork = db.Artwork.create({
                             token_id: result,
                             views: 0,
                             is_selling, is_selling,
