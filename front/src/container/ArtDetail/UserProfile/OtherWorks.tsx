@@ -1,38 +1,33 @@
-import { Typography, Box, Grid, Card, CardMedia } from "@mui/material";
-import data from "@/data/index";
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
 
-const imageCss = {
-  position: "relative",
-  height: "15rem",
-  m: "1rem",
-};
+import data from '@/data/index';
 
-export default function OtherWorks() {
-  const testData = data.slice(5, 10);
+function OtherWorks() {
+  const testData = data.slice(5, 8);
 
   return (
-    <>
-      <Typography variant="h5" sx={{ mt: "2rem" }}>
+    <Box sx={{ mt: '10vh', mb: '18vh' }}>
+      <Typography sx={{ mb: '1rem' }} variant="h5">
         More from this Artist
       </Typography>
-      <Box sx={{ width: "100%", m: "1rem auto 4rem" }}>
-        <Grid container>
-          {testData.map((src) => {
-            return (
-              <Grid item xs={2.3}>
-                <Card sx={imageCss}>
-                  <CardMedia
-                    sx={{ position: "absolute" }}
-                    component="img"
-                    height="100%"
-                    image={src}
-                  />
-                </Card>
-              </Grid>
-            );
-          })}
-        </Grid>
-      </Box>
-    </>
+
+      <Grid container spacing="2rem">
+        {testData.map((src) => {
+          return (
+            <Grid item lg={4}>
+              <Card sx={{ height: '25vh' }}>
+                <CardMedia component="img" image={src} />
+              </Card>
+            </Grid>
+          );
+        })}
+      </Grid>
+    </Box>
   );
 }
+
+export default OtherWorks;
