@@ -11,7 +11,7 @@ function OtherWorks() {
 
   return (
     <Box sx={{ mt: '10vh', mb: '18vh' }}>
-      <Typography sx={{ mb: '1rem' }} variant="h5">
+      <Typography sx={{ mb: '4vh' }} variant="h4">
         More from this Artist
       </Typography>
 
@@ -19,8 +19,12 @@ function OtherWorks() {
         {testData.map((src) => {
           return (
             <Grid item lg={4}>
-              <Card sx={{ height: '25vh' }}>
-                <CardMedia component="img" image={src} />
+              <Card elevation={12}>
+                <CardMedia
+                  sx={{ height: '25vh' }}
+                  component="img"
+                  image={src}
+                />
               </Card>
             </Grid>
           );

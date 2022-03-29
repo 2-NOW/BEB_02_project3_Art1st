@@ -9,7 +9,7 @@ import data from '@/data/index';
 
 function CommentList() {
   const testComment =
-    'This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.';
+    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit natus nisi quos, dolorum corrupti voluptate! Hic dicta quo nihil eligendi? Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit natus nisi quos, dolorum corrupti voluptate! Hic dicta quo nihil eligendi?';
 
   const testCommentList = [
     {
@@ -36,11 +36,13 @@ function CommentList() {
           <Box sx={{ mt: '1rem' }} key={index}>
             <CardHeader
               avatar={<Avatar src={comment.writer.image} />}
-              title={comment.writer.name}
+              title={
+                <Typography variant="body1">{comment.writer.name}</Typography>
+              }
               subheader={comment.createdAt}
             />
-            <CardContent sx={{ mb: '1rem' }}>
-              <Typography variant="body2" color="textSecondary" component="p">
+            <CardContent sx={{ mt: '-1rem', mb: '1rem' }}>
+              <Typography variant="body1" component="p">
                 {comment.content}
               </Typography>
             </CardContent>
