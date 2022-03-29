@@ -37,7 +37,7 @@ router.post('/upload', async (req, res) => {//nft민팅
     if (req.session.userId) {// 세션객체 없으면 에러400
         res.status(404).send('not authorized'); 
     } else {
-        const userInfo = await db.User.findOne({ // 세션객체에 저장된 이메일로 artwork creator id, owner id 값으로 추가 할 유저 id 추출 컬렉션은 서버에서 생성하지만 creator id는 최초 민팅한 유저id로 고정해두고 NFT가 판매될때 owner id 만 바꿔주면 될 것 같습니다.  
+        const userInfo = await db.User.findOne({ // 세션객체에 저장된 아이디로 artwork creator id, owner id 값으로 추가 할 유저 id 추출 컬렉션은 서버에서 생성하지만 creator id는 최초 민팅한 유저id로 고정해두고 NFT가 판매될때 owner id 만 바꿔주면 될 것 같습니다.  
             where: { email : req.session.userId} 
         })
     
@@ -55,7 +55,7 @@ router.post('/upload', async (req, res) => {//nft민팅
                             title : nftname, 
                             desc : nftdesc,
                             creator_id: userInfo.id,
-                            owner_id: userInfo.id
+                            owner_id: userInfo.id   
                         })
                         res.status(200).send({deta : artwork, msg : "minting success"});
                     })
@@ -65,20 +65,6 @@ router.post('/upload', async (req, res) => {//nft민팅
               }
         })
     }
-    // const artwork = await db.Artwork.create({
-    //     token_id: 5,
-    //     views: 55,
-    //     is_selling, is_selling,
-    //     price: price,
-    //     ipfsURI: 'uri',
-    //     title : "name", 
-    //     desc : "desc",
-    //     creator_id: 5,
-    //     owner_id: 5
-    // })
-    // res.status(200).send({deta : artwork, msg : "minting success"});
-
-  
 });
 
 
@@ -108,13 +94,13 @@ router.get('/getFilteredArtworks', async (req, res) => {
 // 내가 구매한 작품들 조회
 router.get('/getCollectedArtworks', async (req, res) => { // 클라이언트에서 쿠키 전달받으면 cookie-parser 모듈로 req.cookie 객체 리턴해서 세션쿠키가 존재할경우에만 인메모리에 저장한 세션 ID로 조회하도록 구현해야함, 우선 클라이언트랑 연결 전 이여서 쿠키가 없어도 인메모리에 세션객체만 있으면 마이페이지 작품들 조회할 수 있게 했습니다.  (원래는 일정시간;로그인유효시간이 지나면 쿠키삭제되니까 세션쿠키가 요청시 없으면 권한이 없는거니까 세션객체가 있어도 404 리턴)
     try{
-        if (req.session.user_id) {   
-            const FilteredArtworks = await ArtworkServiceInstance.getCollectedArtworks(req.session.user_id);
-            res.status(200).json(FilteredArtworks);
-        } else {
-            res.status(404).send('not authorized');
+            if (req.session.user_id) {   
+                const FilteredArtworks = await ArtworkServiceInstance.getCollectedArtworks(req.session.user_id);
+                res.status(200).json(FilteredArtworks);
+            } else {
+                res.status(404).send('not authorized');
+            }
         }
-    }
     catch(err){
         res.status(404).json(err.toString());
     }

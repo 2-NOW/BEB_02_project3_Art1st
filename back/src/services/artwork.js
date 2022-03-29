@@ -19,6 +19,9 @@ class ArtworkService {
     constructor() {
         this.Artwork = db.Artwork;
         this.User = db.User;
+        this.Like = db.Like;
+        this.Hashtag = db.Hashtag;
+        this.ArtworkHashtag = db.ArtworkHashtag;
     }
 
     async getOneArtwork(artwork_id){
@@ -105,43 +108,42 @@ class ArtworkService {
     }
 
     async getFilteredArtworks(tagName, forSale){// 필터링된 작품들 조회 
+        console.log(tagName, forSale);
         try{
-            if(tagName === null){ // 태그에 해당되는 작품들 조회 
+            if(tagName !== null && forSale === 0){ // 태그에 해당되는 작품들 조회 
                 let FilteredArtworks = [];
-                const FilteredHashtagId = await this.Hashtag.findAll( 
+                let FilteredHashtagId = await this.Hashtag.findOne( 
                     {where: {hashtag: tagName}}
-                ).map((el) => {
-                    return el.id
-                });
-                for(let i=0; i < FilteredHashtagId.length; i++){
-                    const FilteredArtworksId = await this.ArtworkHashtag.findOne( 
-                        {where: {hashtag_id: FilteredHashtagId[i]}}
-                    ).artwork_id
+                )
+                FilteredHashtagId = FilteredHashtagId.id
 
+                const FilteredArtworksId = await this.ArtworkHashtag.findAll( 
+                    {where: {hashtag_id: FilteredHashtagId}}
+                )
+                for(let i=0; i < FilteredArtworksId.length; i++){
                     FilteredArtworks[i] = await this.Artwork.findOne({ // 
-                        where : { id : FilteredArtworksId}
+                        where : { id : FilteredArtworksId[i].artwork_id}
                     });
                 }
                 return FilteredArtworks;
-            } else if (forSale === 1){ // 판매중인 작품들 조회
+            } else if (forSale === 1 && tagName === null){ // 판매중인 작품들 조회
                 const FilteredArtworks =  await this.Artwork.findAll( 
                     {where: {is_selling: 1}}
                 )
                 return FilteredArtworks;
             } else {    // 요청한 태그에 해당되면서 판매중인 작품들 조회
                 let FilteredArtworks = [];
-                const FilteredHashtagId = await this.Hashtag.findAll( 
+                let FilteredHashtagId = await this.Hashtag.findOne( 
                     {where: {hashtag: tagName}}
-                ).map((el) => {
-                    return el.id
-                });
-                for(let i=0; i < FilteredHashtagId.length; i++){
-                    const FilteredArtworksId = await this.ArtworkHashtag.findOne( 
-                        {where: {hashtag_id: FilteredHashtagId[i]}}
-                    ).artwork_id
+                )
+                FilteredHashtagId = FilteredHashtagId.id
 
+                const FilteredArtworksId = await this.ArtworkHashtag.findAll( 
+                    {where: {hashtag_id: FilteredHashtagId}}
+                )
+                for(let i=0; i < FilteredArtworksId.length; i++){
                     FilteredArtworks[i] = await this.Artwork.findOne({ // 
-                        where : { id : FilteredArtworksId, is_selling : 1}
+                        where : { id : FilteredArtworksId[i].artwork_id, is_selling : 1}
                     });
                 }
                 return FilteredArtworks;
@@ -156,9 +158,10 @@ class ArtworkService {
     // 내가 구매한 작품들 조회
     async getCollectedArtworks (_email){
         try {  
-                const userId = await this.User.findOne({where: {email: _email}}).catch((err) => {
+                let userId = await this.User.findOne({where: { email: _email}}).catch((err) => {
                     console.log(err);
-                }).id
+                })
+                userId = userId.dataValues.id
                 const collectedArtworks =  await this.Artwork.findAll({where: {owner_id: userId}}).catch((err) => {
                     console.log(err);
                 })
@@ -173,9 +176,11 @@ class ArtworkService {
     // 내가 생성한 작품들 조회
     async getCreatedArtworks (_email){
         try {  
-                const userId = await this.User.findOne({where: {email: _email}}).catch((err) => {
+                let userId = await this.User.findOne({where: {email: _email}}).catch((err) => {
                     console.log(err);
-                }).id
+                })
+                userId = userId.dataValues.id
+
                 const CreatedArtworks =  await this.Artwork.findAll({where: {creator_id: userId}}).catch((err) => {
                     console.log(err);
                 })
@@ -191,16 +196,22 @@ class ArtworkService {
     async getFavoritedArtworks (_email){
         try{
             const FavoritedArtworks = [];
-            const userId = await this.User.findOne({where: {email: _email}}).catch((err) => { // 유저 id 추출
+            let userId = await this.User.findOne({where: {email: _email}}).catch((err) => { // 유저 id 추출
                 console.log(err);
-            }).id
-            const artworkId = await this.Like.findAll({where: {user_id: userId}}).map((el) => {// 내가 좋아요 누른 artworkid 추출
-                return el.artwork_id
-            });
+            })
+            userId = userId.dataValues.id
+
+            let artworkId = await this.Like.findAll({where: {user_id: userId}}) // 내가 좋아요 누른 artworkid 추출
+            
+            artworkId = artworkId.map((el) => {
+                return el.dataValues.artwork_id;
+            })
+            console.log(artworkId)
+            
             for(let i=0; i < artworkId.length; i++){
-                FavoritedArtworks[i] = await this.Artwork.findOne({where: {id: artworkId[i]}}).catch((err) => { // 추출한 artworkid로 작품조회 
+                FavoritedArtworks[i] = await  this.Artwork.findOne({where: {id: artworkId[i]}}).catch((err) => { // 추출한 artworkid로 작품조회 
                     console.log(err);
-                }).id
+                })
             }
             return FavoritedArtworks;
         }
@@ -210,12 +221,18 @@ class ArtworkService {
     }
 
     //  작품 구매 DB 소유권 업데이트 
-    async putBoughtArtworks (user_id, artwork_id){
+    async putBoughtArtworks (_email, artwork_id){
         try {
+
+            let userId = await this.User.findOne({where: {email: _email}}).catch((err) => { // 유저 id 추출
+                console.log(err);
+            })
+            userId = userId.dataValues.id
+
             const artwork = await this.getOneArtwork(artwork_id);
             await artwork.update({
                 is_selling: 0, // 구매하면 일단 판매 x?? 구매 후 판매 하려면 다시 판매등록 해야한다고 가정해서 판매x로 일단 했습니다. 
-                owner_id: user_id
+                owner_id: userId
             });
             await artwork.save();
             return artwork;
