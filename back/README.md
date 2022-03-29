@@ -98,7 +98,7 @@ BATCHER_ADDRESS = 트랜잭션 일괄 처리를 위한 컨트랙트. Batcher 컨
     ```
     서버 계정의 ETH 잔액은 다음의 api로 조회할 수 있습니다.
     ```
-    [GET] http://localhost:4000/contract/getServerEt
+    [GET] http://localhost:4000/contract/getServerEth
     ```
 2. ERC20 토큰 관련 컨트랙트를 먼저 배포합니다.
     ```
@@ -107,7 +107,7 @@ BATCHER_ADDRESS = 트랜잭션 일괄 처리를 위한 컨트랙트. Batcher 컨
     이후 contract 주소와 contract가 배포된 트랜잭션의 hash가 반환되는데, 이 중 contract 주소를 .env 파일에 작성합니다. 
 3. Batcher 관련 컨트랙트를 배포합니다. 
     ```
-    [POST] http://localhost:4000/batcher
+    [POST] http://localhost:4000/contract/batcher
     ```
     이 역시 contract 주소와 tx hash 값이 반환되는데, 이 중 contract 주소를 .env 파일에 작성해줍니다.
 4. 이때, .env 파일에 컨트랙트 주소가 작성되어 있다면 컨트랙트 배포를 다시 진행할 수 없게 구현해놨기 때문에 <br>
@@ -117,13 +117,25 @@ BATCHER_ADDRESS = 트랜잭션 일괄 처리를 위한 컨트랙트. Batcher 컨
 <br>
 
 ## daemon 관련
-daemon은 pm2를 통해 실행되며, 우선은 batch transaction을 생성하는 부분만 구현을 해 놓았습니다. <br>
+daemon은 pm2를 통해 실행되며, <br> 
+여러 order들을 모아 transaction을 보내는 서버와 pending된 transaction들이 블록에 포함되었는지 확인하는 서버가 있습니다. <br>
 터미널 창에서 아래 명령어를 이용하여 10초에 한 번씩 재실행 되는 daemon 서버를 실행할 수 있습니다. 
 ```
 npm run sendTx
+npm run checkTx
 ```
 만약, 10초 단위가 아니라 다른 단위로 실행시키고 싶으시다면 <br>
 package.json에서 아래 명령어 중 '--cron' 부분 원하시는 대로 수정하시면 됩니다. 
 ```
-"sendTx": "pm2 start --watch --cron \"*/10 * * * * *\" src/daemon/sendTx.js"
+"sendTx": "pm2 start --watch --cron \"*/10 * * * * *\" src/daemon/sendTx.js",
+"checkTx":  "pm2 start --watch --cron \"*/10 * * * * *\" src/daemon/checkTx.js"
 ```
+<br>
+즉, 서버 실행을 위해서는 총 3개의 서버를 띄워야 하는 것인데,
+
+```
+1. npm run start
+2. npm run sendTx
+3. npm run checkTx
+```
+이렇게 3가지 명령어를 각각 다른 터미널창(back 폴더로 이동해야 함)에서 실행시키면 됩니다.
