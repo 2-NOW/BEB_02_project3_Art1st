@@ -19,12 +19,14 @@
     "eth-lightwallet": "^4.0.0",
     "express": "^4.17.3",
     "express-session": "^1.17.2",
+    "ipfs-api": "^26.1.2",
     "mysql2": "^2.3.3",
     "nodemon": "^2.0.15",
     "path": "^0.12.7",
     "sequelize": "^6.17.0",
     "sequelize-cli": "^6.4.1",
-    "web3": "^1.7.1"
+    "web3": "^1.7.1",
+    "web3-eth-contract": "^1.7.1"
   },
   "type": "module",
   "devDependencies": {

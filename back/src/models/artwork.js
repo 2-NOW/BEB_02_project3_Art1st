@@ -21,5 +21,21 @@ export default (Sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
+        ipfsURI: {
+            type: DataTypes.STRING(256),
+            allowNull: false,
+            defaultValue: ''
+        },
+        title: {
+            type: DataTypes.STRING(256),
+            allowNull: false,
+            defaultValue: ''
+        },
+        desc: {
+            type: DataTypes.STRING(256),
+            allowNull: false,    
+            defaultValue: ''
+        }
+        
     })
 }
