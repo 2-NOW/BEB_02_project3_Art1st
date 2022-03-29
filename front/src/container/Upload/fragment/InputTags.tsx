@@ -58,9 +58,9 @@ function InputTags() {
           />
         )}
       </Box>
-      <Divider
+      {/* <Divider
         sx={{ mt: '0.3rem', backgroundColor: 'rgba(144, 144, 144, 1)' }}
-      />
+      /> */}
       {tags.length === 10 && (
         <FormHelperText id="input-tags" error>
           Max number of tags is 10
