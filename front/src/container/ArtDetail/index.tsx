@@ -1,15 +1,26 @@
-import Box from "@mui/material/Box";
+import Box from '@mui/material/Box';
 
-import ArtContent from "@/container/ArtDetail/Content/index";
-import ArtistProfile from "@/container/ArtDetail/UserProfile/index";
+import Layout from '@/components/Layout';
+import Content from './Content/index';
+import Comment from './Comment/index';
+import UserProfile from './UserProfile/index';
 
-export default function Artdetail() {
+const wrapperCss = {
+  display: 'flex',
+  flexDirection: 'column',
+  m: '6rem 20vw 0 20vw',
+};
+
+function index() {
   return (
-    <div css={{ width: "80%", margin: "2rem auto 0 auto" }}>
-      <Box sx={{ mb: "4rem" }}>
-        <ArtContent />
+    <Layout>
+      <Box sx={wrapperCss}>
+        <Content />
+        <Comment />
+        <UserProfile />
       </Box>
-      <ArtistProfile />
-    </div>
+    </Layout>
   );
 }
+
+export default index;

@@ -1,22 +1,21 @@
-import { Router } from "express";
-import db from "../../models/index.js";
-import ArtworkService from "../../services/artwork.js";
-import web3 from "web3";
-import bytecode721 from "../abi/bytecodeErc721.js";
-import erc721abi from "../abi/erc721abi.js"; 
 import dotenv from 'dotenv';
-import Contract from 'web3-eth-contract';
-import ipfsApi from "ipfs-api";
-
-const ipfs = ipfsApi("ipfs.infura.io", "5001", { protocol: "https" });
-Contract.setProvider('https://ropsten.infura.io/v3/ef9c534ba8bd4c47acf24ed4d6d24ccc'); // infura 연결
-
 dotenv.config();
-const env = process.env;
+
+import { Router } from "express";
+import ArtworkService from "../../services/artwork.js";
+import { create } from 'ipfs-http-client';
+
+const ipfsClient = create({
+    host: 'ipfs.infura.io',
+    port: 5001,
+    protocol: 'https',
+});
+
 const router = Router();
 const ArtworkServiceInstance = new ArtworkService();
 
 
+<<<<<<< HEAD
 async function addNewErc721Token (useraddr, ipfsLink) {
   const erc721TokenContract = await new web3.eth.Contract(erc721abi, env.CONTRACT_ADDR);
   const ERC721TokenId =  await erc721TokenContract.methods.mintNFT(useraddr, ipfsLink).send(
@@ -67,6 +66,42 @@ router.post('/upload', async (req, res) => {//nft민팅
     }
 });
 
+=======
+router.post('/upload', async (req, res) => {
+    try{
+        const { title, desc, isSelling, price, tags } = JSON.parse(req.body); // price 값 꼭 있어야 함. 정수형으로
+        const img = req.files.image;
+    
+        // 유저 찾기
+        if (!req.session.userId) {// 세션객체 없으면 에러400
+            return res.status(404).send('not authorized'); 
+        } 
+        // 우선 유저 추출 부분 service 단으로 뺏습니다. 필요하시면 다시 수정하셔도 되요.
+    
+        // 우선 image file을 ipfs로 변경
+        const {cid} = await ipfsClient.add(img);
+        const ipfsLink = 'https://ipfs.io/ipfs/'+cid;
+        console.log('new NFT IPFS link: ', ipfsLink);
+    
+        // example
+        // var title = "2번 제목 예시";
+        // var desc = "2번 설명 예시";
+        // var isSelling = false;
+        // var price = 0;
+        // var ipfsLink = '2nd NFT link';
+        // var userId = 'mingyun';
+    
+        // 이후 nft 민팅
+        const newArtwork = await ArtworkServiceInstance.mintNewArtwork(title, desc, price, isSelling, ipfsLink, req.session.user_id);
+        res.status(201).json(newArtwork);
+        
+    }
+    catch(err){
+        console.log(err.toString())
+        res.status(500).json(err.toString());
+    }
+})
+>>>>>>> 87fb46ffefe83b1b648518d64425678395cecd86
 
 // 모든 작품 정보 조회 
 router.get('/getAllArtworks', async (req, res) => {
@@ -107,7 +142,6 @@ router.get('/getCollectedArtworks', async (req, res) => { // 클라이언트에�
 });
 
 //내가 생성한 작품들 조회
-
 router.get('/getCreatedArtworks', async (req, res) => { // 클라이언트에서 쿠키 전달받으면 cookie-parser 모듈로 req.cookie 객체 리턴해서 세션쿠키가 존재할경우에만 인메모리에 저장한 세션 ID로 조회하도록 구현해야함, 우선 클라이언트랑 연결 전 이여서 쿠키가 없어도 인메모리에 세션객체만 있으면 마이페이지에서 작품들 조회할 수 있게 했습니다.  (원래는 일정시간;로그인유효시간이 지나면 쿠키삭제되니까 세션쿠키가 요청시 없으면 권한이 없는거니까 세션객체가 있어도 404 리턴)
     try{
         if (req.session.user_id) {   

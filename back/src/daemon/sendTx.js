@@ -1,18 +1,18 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import Web3 from 'web3';
+import Caver from 'caver-js';
 import db from '../models/index.js';
 import BatcherAbi from '../api/abi/batcherAbi.js';
 
-const web3 = new Web3(process.env.WEB3_NETWORK);
+const caver = new Caver(process.env.BAOBAB_NETWORK);
 
-const batcherContract = new web3.eth.Contract(BatcherAbi, process.env.BATCHER_ADDRESS, {
+const batcherContract = new caver.klay.Contract(BatcherAbi, process.env.BATCHER_ADDRESS, {
     from: process.env.SERVER_ADDRESS
 });
 
-const server = web3.eth.accounts.wallet.add(process.env.SERVER_PRIVATEKEY);
+const server = caver.klay.accounts.wallet.add(process.env.SERVER_PRIVATEKEY);
 
-const actionEnum = {'compensate': 1, 'donate': 2};
+const actionEnum = {'compensate': 1, 'donate': 2, 'purchace': 3};
 
 const startTask = async() => {
     let orders = await db.Orderbook.findAll({
@@ -24,12 +24,15 @@ const startTask = async() => {
         ]
     });
 
+    console.log(orders);
+
     while(true){
         var actions = [];
         var froms = [];
         var toes = [];
         var amounts = [];
         var ids = []
+        var tokens = []
         var flag = false; // 다 훑었으면 flag -> true로 변경
 
         for (let j = 0 ; j<20; j++){ // 20개씩 자름
@@ -40,6 +43,7 @@ const startTask = async() => {
             ids.push(orders[j].id);
             actions.push(actionEnum[orders[j].action]);
             amounts.push(orders[j].amount);
+            tokens.push(orders[j].token_id===null ? 0 : Number(orders[j].token_id));
 
             var {address} = await db.User.findOne({attributes: ['address'], where: {id: orders[j].from_id}});
             froms.push(address);
@@ -49,41 +53,48 @@ const startTask = async() => {
 
         }
 
-        // console.log(ids, actions, froms, toes, amounts);
+        console.log(ids, actions, froms, toes, amounts, tokens);
 
         if(ids.length != 0){
-            const gasLimit = await batcherContract.methods.batchTransactions(actions, froms, toes, amounts)
-            .estimateGas({from: server.address, to: process.env.BATCHER_ADDRESS})
+            try{
+                const gasLimit = await batcherContract.methods.batchTransactions(actions, froms, toes, amounts, tokens)
+                .estimateGas({from: server.address, to: process.env.BATCHER_ADDRESS})
 
-            console.log('estimated Gas Limit: ', gasLimit);
+                console.log('estimated Gas Limit: ', gasLimit);
+            }
+            catch(err){
+                console.log('Batcher Error: \n', err);
+                break;
+            }
 
             var txHash; 
-
-            batcherContract.methods.batchTransactions(actions, froms, toes, amounts)
-            .send({from: server.address, to: process.env.BATCHER_ADDRESS, gas: gasLimit+100000}, async (err, transactionHash) => {
-                if(err){
-                    console.log(err);
-                    throw Error(err.toString());
-                }
+            
+            batcherContract.methods.batchTransactions(actions, froms, toes, amounts, tokens)
+            .send({from: server.address, to: process.env.BATCHER_ADDRESS, gas: 100000000}, async (err, transactionHash) => {
+    
                 txHash = transactionHash;
                 console.log(txHash);
-
+        
                 for (let j = 0; j<ids.length; j++){
                     const order = await db.Orderbook.findOne({where: {id: ids[j]}});
                     await order.update({transaction_hash: transactionHash, status: 'pending' })
                     await order.save();
                     console.log(order);
                 }
-            });       
+                    
+            });  
         
         }
+        else {
+            console.log('There is no Orders.')
+        } 
         
         if(flag){
-            console.log('OrderBook end!');
             break;
         }
 
     }
+    console.log('Sending Tx end!');
     
 }
 
