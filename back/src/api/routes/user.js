@@ -79,9 +79,11 @@ router.get('/specificUser', async(req, res) => {
 // 특정 user 정보 수정
 router.put('/specificUser', async(req, res) => {
     const {edit_user_name, edit_user_id, edit_user_password} = req.body;
+    const { user_id } = req.session;
     try{
-        const user = await UserServiceInstance.putOneUser("wltnrms", edit_user_name, edit_user_id, edit_user_password);
-        res.status(201).json(user);
+      if(user_id === undefined) return res.status(400).json("Error: Bad Request");
+      const user = await UserServiceInstance.putOneUser(user_id, edit_user_name, edit_user_id, edit_user_password);
+      res.status(201).json(user);
         
     }
     catch(err){

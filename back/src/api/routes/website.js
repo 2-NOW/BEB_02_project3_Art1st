@@ -48,8 +48,8 @@ router.delete('/', async(req, res) => {
     const user_id = req.session.user_id;
 
     try{
-        if(user_id !== undefined) return res.status(400).json("Error: Bad Request");
-        const user_website = await WebsiteServiceInstance.deleteUserWebsite("wltnrms3", website_id);
+        if(user_id === undefined) return res.status(400).json("Error: Bad Request");
+        const user_website = await WebsiteServiceInstance.deleteUserWebsite(user_id, website_id);
         res.status(201).json(user_website);
     }   
     catch(err) {

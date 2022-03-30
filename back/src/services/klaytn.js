@@ -6,7 +6,7 @@ import Erc20Abi from '../api/abi/erc20Abi.js'
 import Erc20Bytecode from '../api/abi/erc20Bytecode.js'
 
 // ERC721
-import Erc721Abi from '../api/abi/erc721Abi.js'
+import Erc721Abi from '../api/abi/erc721abi.js'
 import Erc721Bytecode from '../api/abi/erc721Bytecode.js';
 
 // Batcher

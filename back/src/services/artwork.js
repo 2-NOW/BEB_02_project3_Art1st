@@ -4,7 +4,7 @@ dotenv.config();
 import Caver from 'caver-js';
 
 import db from '../models/index.js'
-import Erc721Abi from '../api/abi/erc721Abi.js'
+import Erc721Abi from '../api/abi/erc721abi.js'
 
 class ArtworkService {
     #myErc721Contract;
