@@ -1,18 +1,26 @@
 import Box from "@mui/material/Box";
 
-import Layout from "@/components/Layout/index";
-import Content from "@/container/EntryDetail/Content/index";
-import ArtistProfile from "@/container/EntryDetail/ArtistProfile/index";
+import Layout from "@/components/Layout";
+import Content from "./Content/index";
+import Comment from "./Comment";
+import UserProfile from "./UserProfile";
 
-export default function Entrydetail() {
+const wrapperCss = {
+  display: "flex",
+  flexDirection: "column",
+  m: "6rem 20vw 0 20vw",
+};
+
+function index() {
   return (
     <Layout>
-      <div css={{ width: "80%", margin: "2rem auto 0 auto" }}>
-        <Box sx={{ mb: "4rem" }}>
-          <Content />
-        </Box>
-        <ArtistProfile />
-      </div>
+      <Box sx={wrapperCss}>
+        <Content />
+        <Comment />
+        <UserProfile />
+      </Box>
     </Layout>
   );
 }
+
+export default index;
