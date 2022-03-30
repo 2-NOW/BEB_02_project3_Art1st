@@ -30,6 +30,16 @@ router.post('/erc20', async (req, res)=> {
     }
 })
 
+router.post('/erc721', async (req, res) => {
+    try{
+        const data = await KlaytnServiceInterface.deployErc721();
+        res.status(201).json(data);
+    }
+    catch(err) {
+        res.status(500).json(err.toString());
+    }
+})
+
 // batcher 컨트랙트 배포하기
 router.post('/batcher', async (req, res)=> {
     try{
@@ -41,11 +51,11 @@ router.post('/batcher', async (req, res)=> {
     }
 })
 
-router.get('/balance', async (req, res)=> {
+router.get('/tokenBalance', async (req, res)=> {
     const {user_id} = req.query;
 
     try{
-        const data = await KlaytnServiceInterface.getBalance(user_id);
+        const data = await KlaytnServiceInterface.getTokenBalance(user_id);
         res.status(200).json(data);
     }
     catch(err){
@@ -53,4 +63,15 @@ router.get('/balance', async (req, res)=> {
     }
 })
 
+router.get('/nftBalance', async (req, res) => {
+    const {user_id} = req.query;
+
+    try{
+        const data = await KlaytnServiceInterface.getNftBalance(user_id);
+        res.status(200).json(data);
+    }
+    catch(err) {
+        res.status(500).json(err.toString());
+    }
+})
 export default router;
