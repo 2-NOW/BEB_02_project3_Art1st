@@ -1,4 +1,4 @@
-import ArtdetailContainer from "@/container/ArtDetail/index";
+import ArtdetailContainer from '@/container/ArtDetail/index';
 
 export default function Artdetail() {
   return (

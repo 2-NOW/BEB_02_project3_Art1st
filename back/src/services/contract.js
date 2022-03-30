@@ -101,7 +101,7 @@ class ContractService {
     async getServerEth() {
         try{
             var balance = await this.web3.eth.getBalance(this.#server.address);
-            balance = (BigInt(balance)/1000000000000000000n).toString();
+            balance = (Number(balance)/1000000000000000000).toString();
             return balance;
         }
         catch(err){

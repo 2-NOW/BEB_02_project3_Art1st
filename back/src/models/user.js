@@ -45,5 +45,11 @@ export default (Sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: 0,
         },
+        // 서버계정으로 컬렉션생성후 민팅한 nft 소유주만 전환시켜주는 방법으로 해야 수수료 문제가 해결될 것 같아서 우선 이 컬럼은 주석처리 해놨습니다.
+        // contractAddr: { 
+        //     type: DataTypes.STRING(256),
+        //     allowNull: false,
+        //     defaultValue: ''
+        // }
     })
 }
