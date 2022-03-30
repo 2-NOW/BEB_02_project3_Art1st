@@ -55,25 +55,32 @@ router.get('/', async (req, res) => {
 });
 
 // 특정 user 정보 가져오기
-router.get('/:user_id', async(req, res) => {
-    const user_id = req.params.user_id;
-
-    try{
+router.get('/specificUser', async(req, res) => {
+  const {user_id} = req.body;
+  if(user_id){
+      try{
         const user = await UserServiceInstance.getOneUser(user_id);
         res.status(200).json(user);
     }
     catch(err){
         res.status(404).json(err.toString());
     }
+  } else {
+    try{
+      const user = await UserServiceInstance.getOneUser(req.session.user_id);
+      res.status(200).json(user);
+    }
+    catch(err){
+        res.status(404).json(err.toString());
+    }
+  }
 });
 
 // 특정 user 정보 수정
-router.put('/:user_id', async(req, res) => {
-    const user_id = req.params.user_id;
-    const {user_name, user_email, user_password} = req.body;
-
+router.put('/specificUser', async(req, res) => {
+    const {edit_user_name, edit_user_id, edit_user_password} = req.body;
     try{
-        const user = await UserServiceInstance.putOneUser(user_id, user_name, user_email, user_password);
+        const user = await UserServiceInstance.putOneUser("wltnrms", edit_user_name, edit_user_id, edit_user_password);
         res.status(201).json(user);
         
     }
@@ -114,9 +121,9 @@ router.put('/:user_id/username', async(req, res) => {
 
 router.post('/signup', async(req,res) => {
   // 포스트맨에서 userName, password를 넣으면
-  const { user_id, user_pw, user_name } = req.body
+  const { user_id, user_pw } = req.body
   try {
-    const address = await UserServiceInstance.signUp( user_id, user_pw, user_name);
+    const address = await UserServiceInstance.signUp( user_id, user_pw);
     console.log(address);
     res.status(201).json(address);
   }

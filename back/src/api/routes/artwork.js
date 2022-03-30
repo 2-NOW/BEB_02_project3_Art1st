@@ -38,7 +38,7 @@ router.post('/upload', async (req, res) => {//nft민팅
         res.status(404).send('not authorized'); 
     } else {
         const userInfo = await db.User.findOne({ // 세션객체에 저장된 아이디로 artwork creator id, owner id 값으로 추가 할 유저 id 추출 컬렉션은 서버에서 생성하지만 creator id는 최초 민팅한 유저id로 고정해두고 NFT가 판매될때 owner id 만 바꿔주면 될 것 같습니다.  
-            where: { email : req.session.userId} 
+            where: { user_id : req.session.user_id} 
         })
     
         console.log(userInfo)

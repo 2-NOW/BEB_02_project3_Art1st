@@ -65,7 +65,7 @@ class ArtworkService {
 
             // query 호출
             const query = `
-                select users.id, name, email, picture, description
+                select users.id, name, user_id, picture, description
                 from users
                 join artworks
                 on (users.id = artworks.creator_id and artworks.id = ${artwork_id})
@@ -156,12 +156,12 @@ class ArtworkService {
     }
 
     // 내가 구매한 작품들 조회
-    async getCollectedArtworks (_email){
+    async getCollectedArtworks (user_id){
         try {  
-                let userId = await this.User.findOne({where: { email: _email}}).catch((err) => {
+                let userId = await this.User.findOne({where: { user_id: user_id}}).catch((err) => {
                     console.log(err);
                 })
-                userId = userId.dataValues.id
+                userId = user_id.dataValues.id
                 const collectedArtworks =  await this.Artwork.findAll({where: {owner_id: userId}}).catch((err) => {
                     console.log(err);
                 })
@@ -174,9 +174,9 @@ class ArtworkService {
     }
 
     // 내가 생성한 작품들 조회
-    async getCreatedArtworks (_email){
+    async getCreatedArtworks (user_id){
         try {  
-                let userId = await this.User.findOne({where: {email: _email}}).catch((err) => {
+                let userId = await this.User.findOne({where: {user_id: user_id}}).catch((err) => {
                     console.log(err);
                 })
                 userId = userId.dataValues.id
@@ -193,10 +193,10 @@ class ArtworkService {
     }
 
     // 내가 좋아요 누른 작품들 조회
-    async getFavoritedArtworks (_email){
+    async getFavoritedArtworks (user_id){
         try{
             const FavoritedArtworks = [];
-            let userId = await this.User.findOne({where: {email: _email}}).catch((err) => { // 유저 id 추출
+            let userId = await this.User.findOne({where: {user_id: user_id}}).catch((err) => { // 유저 id 추출
                 console.log(err);
             })
             userId = userId.dataValues.id
@@ -221,10 +221,10 @@ class ArtworkService {
     }
 
     //  작품 구매 DB 소유권 업데이트 
-    async putBoughtArtworks (_email, artwork_id){
+    async putBoughtArtworks (user_id, artwork_id){
         try {
 
-            let userId = await this.User.findOne({where: {email: _email}}).catch((err) => { // 유저 id 추출
+            let userId = await this.User.findOne({where: {user_id: user_id}}).catch((err) => { // 유저 id 추출
                 console.log(err);
             })
             userId = userId.dataValues.id
