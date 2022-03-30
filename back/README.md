@@ -64,7 +64,16 @@ BATCHER_ADDRESS = 트랜잭션 일괄 처리를 위한 컨트랙트. Batcher 컨
         3. 이후 sequelize migration 진행
             sequelize db:migrate --env development
         ```
-    
+    * NFT 구매 기능을 구현하면서, orderbooks 테이블에도 변경 사항이 있습니다.<br>
+      이전에는 ERC20 과 관련된 후원 기능과 보상 기능만이 존재했기 때문에 action 컬럼에 들어 갈 수 있는 부분이 compensate(보상), donate(후원) 뿐이었는데,<br>
+      NFT 구매 기능을 추가하면서 purchase(구매) 까지 들어갈 수 있게 수정했고, Nft 구매 시에 필요한 tokenId 값도 컬럼으로 추가했습니다.
+      tokenId 값은 Null 값도 가능하며, 보상 기능과 후원 기능일 때에는 Null 값으로 테이블에 들어갑니다.
+      ```
+      1. mysql 상에서 orderbooks를 삭제한 후 서버 재실행
+        mysql> DROP TABLE orderbooks;
+      2. 혹은, orderbooks 테이블에 이미 저장된 값이 있어서 drop 하기 애매하다면 migration 사용
+        sequelize db:migrate --env development
+      ```
 <br>
 <br>
 
