@@ -15,58 +15,6 @@ const router = Router();
 const ArtworkServiceInstance = new ArtworkService();
 
 
-<<<<<<< HEAD
-async function addNewErc721Token (useraddr, ipfsLink) {
-  const erc721TokenContract = await new web3.eth.Contract(erc721abi, env.CONTRACT_ADDR);
-  const ERC721TokenId =  await erc721TokenContract.methods.mintNFT(useraddr, ipfsLink).send(
-    {from: env.CONTRACT_ADDR, to: useraddr, gasPrice: 100, gas: 2000000},
-    )   
-    .on('error', (error) => {
-    error = error.toString();
-    const msg = 'Failed to mint new ERC721 Token.';
-    res.status(500).send({error, msg});
-    });
-
-    return ERC721TokenId
-};
-
-router.post('/upload', async (req, res) => {//nft민팅
-    const { buffer, nftname, nftdesc, price, is_selling } = req.body;
-    console.log(buffer, nftname, nftdesc, price, is_selling);
-    if (req.session.userId) {// 세션객체 없으면 에러400
-        res.status(404).send('not authorized'); 
-    } else {
-        const userInfo = await db.User.findOne({ // 세션객체에 저장된 아이디로 artwork creator id, owner id 값으로 추가 할 유저 id 추출 컬렉션은 서버에서 생성하지만 creator id는 최초 민팅한 유저id로 고정해두고 NFT가 판매될때 owner id 만 바꿔주면 될 것 같습니다.  
-            where: { user_id : req.session.user_id} 
-        })
-    
-        console.log(userInfo)
-
-        ipfs.add(buffer, (err, ipfsHash) => { // 전달받은 이미지 buffer로 ipfs에 이미지를 업로드한후 ipfs url 을 생성합니다 . 
-            try{
-                addNewErc721Token(userInfo.address, `https://ipfs.io/ipfs/${ipfsHash[0].hash}`).then((result) => {
-                        const artwork = db.Artwork.create({
-                            token_id: result,
-                            views: 0,
-                            is_selling, is_selling,
-                            price: price,
-                            ipfsURI: `https://ipfs.io/ipfs/${ipfsHash[0].hash}`,
-                            title : nftname, 
-                            desc : nftdesc,
-                            creator_id: userInfo.id,
-                            owner_id: userInfo.id   
-                        })
-                        res.status(200).send({deta : artwork, msg : "minting success"});
-                    })
-            } 
-            catch (error) {
-                return res.status(404).json(err.toString()); 
-              }
-        })
-    }
-});
-
-=======
 router.post('/upload', async (req, res) => {
     try{
         const { title, desc, isSelling, price, tags } = JSON.parse(req.body); // price 값 꼭 있어야 함. 정수형으로
@@ -101,7 +49,6 @@ router.post('/upload', async (req, res) => {
         res.status(500).json(err.toString());
     }
 })
->>>>>>> 87fb46ffefe83b1b648518d64425678395cecd86
 
 // 모든 작품 정보 조회 
 router.get('/getAllArtworks', async (req, res) => {
