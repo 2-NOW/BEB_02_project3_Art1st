@@ -1,24 +1,58 @@
-import db from '../models/index.js'
+import dotenv from 'dotenv';
+dotenv.config();
 
-// mysql> desc artworks;
-// +------------+------------+------+-----+---------+----------------+
-// | Field      | Type       | Null | Key | Default | Extra          |
-// +------------+------------+------+-----+---------+----------------+
-// | id         | int        | NO   | PRI | NULL    | auto_increment |
-// | token_id   | int        | NO   |     | NULL    |                |
-// | views      | int        | NO   |     | NULL    |                |
-// | is_selling | tinyint(1) | NO   |     | NULL    |                |
-// | price      | int        | NO   |     | NULL    |                |
-// | createdAt  | datetime   | NO   |     | NULL    |                |
-// | updatedAt  | datetime   | NO   |     | NULL    |                |
-// | creator_id | int        | YES  | MUL | NULL    |                |
-// | owner_id   | int        | YES  | MUL | NULL    |                |
-// +------------+------------+------+-----+---------+----------------+
+import Caver from 'caver-js';
+
+import db from '../models/index.js'
+import Erc721Abi from '../api/abi/erc721Abi.js'
 
 class ArtworkService {
+    #myErc721Contract;
+    #server;
+
     constructor() {
         this.Artwork = db.Artwork;
         this.User = db.User;
+
+        this.caver = new Caver(process.env.BAOBAB_NETWORK);
+        this.#server = this.caver.klay.accounts.wallet.add(process.env.SERVER_PRIVATEKEY);
+        this.#myErc721Contract = new this.caver.klay.Contract(Erc721Abi, process.env.ERC721_ADDRESS, {
+            from: this.#server.address // server Addr
+        }); 
+    }
+
+    async mintNewArtwork(title, desc, price, is_selling, ipfsLink, creator_session) {
+        try{
+            // 유저 정보 추출
+            const creator = await this.User.findOne({ // 세션객체에 저장된 이메일로 artwork creator id, owner id 값으로 추가 할 유저 id 추출 
+                where: { email : creator_session} 
+            });
+
+            // nft 민팅 실행
+            const receipt = await this.#myErc721Contract.methods.mintNFT(creator.address, ipfsLink)
+                            .send({from: this.#server.address, to: process.env.ERC721_ADDRESS, gas: 2000000});
+            
+            const tokenId = parseInt(receipt.events.Transfer.returnValues.tokenId);
+            console.log("new Minted tokenId: ", tokenId);
+
+            const artwork = await this.Artwork.create({
+                token_id: tokenId,
+                views: 0,
+                is_selling, is_selling,
+                price: price,
+                ipfsURI: ipfsLink,
+                title : title, 
+                desc : desc,
+                creator_id: creator.id,
+                owner_id: creator.id
+            })
+
+            return artwork;
+        }
+        catch(err){
+            throw Error(err.toString());
+        }
+
     }
 
     async getOneArtwork(artwork_id){

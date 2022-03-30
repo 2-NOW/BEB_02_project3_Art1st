@@ -1,17 +1,5 @@
 import db from '../models/index.js'
 
-// mysql> desc comments;
-// +------------+----------+------+-----+---------+----------------+
-// | Field      | Type     | Null | Key | Default | Extra          |
-// +------------+----------+------+-----+---------+----------------+
-// | id         | int      | NO   | PRI | NULL    | auto_increment |
-// | content    | text     | NO   |     | NULL    |                |
-// | createdAt  | datetime | NO   |     | NULL    |                |
-// | updatedAt  | datetime | NO   |     | NULL    |                |
-// | user_id    | int      | YES  | MUL | NULL    |                |
-// | artwork_id | int      | YES  | MUL | NULL    |                |
-// +------------+----------+------+-----+---------+----------------+
-
 class CommentService {
     constructor() {
         this.Comment = db.Comment;

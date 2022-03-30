@@ -1,4 +1,4 @@
-const erc721abi = [
+const erc721Abi = [
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
@@ -138,25 +138,35 @@ const erc721abi = [
 	{
 		"inputs": [
 			{
-				"internalType": "contract IERC20",
-				"name": "token",
+				"internalType": "address",
+				"name": "from",
 				"type": "address"
 			},
 			{
 				"internalType": "address",
-				"name": "recipient",
+				"name": "to",
 				"type": "address"
-			}
-		],
-		"name": "callPrice",
-		"outputs": [
+			},
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
 				"type": "uint256"
 			}
 		],
-		"stateMutability": "view",
+		"name": "buyNft",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -273,19 +283,6 @@ const erc721abi = [
 	},
 	{
 		"inputs": [],
-		"name": "price",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"name": "renounceOwnership",
 		"outputs": [],
 		"stateMutability": "nonpayable",
@@ -363,25 +360,6 @@ const erc721abi = [
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "price",
-				"type": "uint256"
-			}
-		],
-		"name": "setPrice",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "address",
 				"name": "tokenAddress",
 				"type": "address"
@@ -390,7 +368,7 @@ const erc721abi = [
 		"name": "setToken",
 		"outputs": [
 			{
-				"internalType": "contract IERC20",
+				"internalType": "contract Art1stTokenInterface",
 				"name": "",
 				"type": "address"
 			}
@@ -485,6 +463,6 @@ const erc721abi = [
 		"stateMutability": "nonpayable",
 		"type": "function"
 	}
-]
+];
 
-export default erc721abi;
+export default erc721Abi;
