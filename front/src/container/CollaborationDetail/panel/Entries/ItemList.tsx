@@ -5,6 +5,9 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActionArea from "@mui/material/CardActionArea";
 import Typography from "@mui/material/Typography";
+import Favorite from "@mui/icons-material/Favorite";
+import ChatIcon from "@mui/icons-material/Chat";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import data from "@/data/index";
 
@@ -31,6 +34,10 @@ function ItemList() {
     },
   };
 
+  const iconCss = {
+    fontSize: "1rem",
+  };
+
   return (
     <Box sx={{ mt: "2rem" }}>
       <Grid container>
@@ -47,16 +54,43 @@ function ItemList() {
                 <CardActionArea sx={contentCss}>
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                      Statue of Liberty
+                      Title
                     </Typography>
                     <Typography
                       sx={{ color: "white" }}
-                      variant="body2"
+                      variant="body1"
                       color="text.secondary"
                     >
-                      lorem ipsum dolor sit amet, consectetur adip sap et dolor
-                      sed diam non pro pos
+                      creator
                     </Typography>
+                    <Box sx={{ display: "flex", mt: "3vh" }}>
+                      <Favorite sx={iconCss} />
+                      <Typography
+                        sx={{ m: "0 1rem 0 0.3rem" }}
+                        variant="body2"
+                        component="div"
+                      >
+                        32
+                      </Typography>
+
+                      <ChatIcon sx={iconCss} />
+                      <Typography
+                        sx={{ m: "0 1rem 0 0.3rem" }}
+                        variant="body2"
+                        component="div"
+                      >
+                        4
+                      </Typography>
+
+                      <VisibilityIcon sx={iconCss} />
+                      <Typography
+                        sx={{ m: "0 1rem 0 0.3rem" }}
+                        variant="body2"
+                        component="div"
+                      >
+                        637
+                      </Typography>
+                    </Box>
                   </CardContent>
                 </CardActionArea>
               </Card>
