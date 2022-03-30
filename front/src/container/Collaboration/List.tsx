@@ -6,7 +6,6 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 import data from "@/data/index";
-import { borderColor } from "@mui/system";
 
 const applicablecss = {
   color: "white",
@@ -22,7 +21,7 @@ export default function List() {
   const applicable = true;
 
   return (
-    <Box sx={{ width: "80vw", m: "4rem auto" }}>
+    <Box sx={{ width: "70vw", m: "2rem 15vw auto" }}>
       <Grid container rowSpacing={"4rem"} spacing={3}>
         {testData.map((item, index) => {
           return (
