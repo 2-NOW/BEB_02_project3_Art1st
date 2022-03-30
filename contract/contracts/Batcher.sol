@@ -35,7 +35,6 @@ contract Batcher is Ownable {
         uint[] memory amounts,
         uint[] memory nfts
     ) public onlyOwner returns (bool){
-        uint nftCnt = 0;
         // actions: compensate-1, donation-2, buyNft-3
         for (uint i=0; i<actions.length; i++) {
             bool success; 
@@ -48,12 +47,15 @@ contract Batcher is Ownable {
                 success = Art1stTokenContract.donate(froms[i], toes[i], amounts[i]);
             }
             else if (actions[i] == 3) {
-                success = Art1stNftContract.buyNft(froms[i], toes[i], nfts[nftCnt], amounts[i]);
-                nftCnt += 1;
+                if(nfts[i] != 0) {
+                    success = Art1stNftContract.buyNft(froms[i], toes[i], nfts[i], amounts[i]);
+                }
+                else{
+                    success = false;
+                }
             }
             
-            require(nftCnt - 1 == nfts.length, "Batcher: buying nft transaction error");
-            if (!success) revert('Batcher: transaction failed');
+            if (!success) revert("Batcher: transaction failed");
         }
 
         return true;

@@ -39,7 +39,7 @@ contract Art1stToken is ERC20, Ownable {
     }
 
     // NFT 구매를 위해 입금 하는 함수. donate와 기본적으로 동일하지만, 명시적으로 기능을 나누기 위해 따로 구현.
-    function deposit(address from, address to, uint amount) external onlyOwner returns (bool) {
+    function deposit(address from, address to, uint amount) external returns (bool) {
         require(tx.origin == server, "ERC20: sender is not server address");
         _spendAllowance(from, server, amount);  // allowance 차감
         _transfer(from, to, amount); // 토큰 입금 진행(실제 balance에서 차감)
