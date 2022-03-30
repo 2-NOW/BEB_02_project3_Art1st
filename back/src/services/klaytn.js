@@ -33,7 +33,7 @@ class KlaytnService {
     #BatcherAddress;
 
     constructor() {
-        this.caver = new Caver(process.env.BAOBA_NETWORK);
+        this.caver = new Caver(process.env.BAOBAB_NETWORK);
         this.#server = this.caver.klay.accounts.wallet.add(process.env.SERVER_PRIVATEKEY);
 
         this.#Erc20Bytecode = Erc20Bytecode;

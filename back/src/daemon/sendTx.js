@@ -4,7 +4,7 @@ import Caver from 'caver-js';
 import db from '../models/index.js';
 import BatcherAbi from '../api/abi/batcherAbi.js';
 
-const caver = new Caver(process.env.BAOBA_NETWORK);
+const caver = new Caver(process.env.BAOBAB_NETWORK);
 
 const batcherContract = new caver.klay.Contract(BatcherAbi, process.env.BATCHER_ADDRESS, {
     from: process.env.SERVER_ADDRESS

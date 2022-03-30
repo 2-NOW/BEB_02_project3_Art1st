@@ -14,7 +14,7 @@ class ArtworkService {
         this.Artwork = db.Artwork;
         this.User = db.User;
 
-        this.caver = new Caver(process.env.BAOBA_NETWORK);
+        this.caver = new Caver(process.env.BAOBAB_NETWORK);
         this.#server = this.caver.klay.accounts.wallet.add(process.env.SERVER_PRIVATEKEY);
         this.#myErc721Contract = new this.caver.klay.Contract(Erc721Abi, process.env.ERC721_ADDRESS, {
             from: this.#server.address // server Addr

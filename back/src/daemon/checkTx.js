@@ -2,9 +2,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 import Caver from 'caver-js';
 import db from '../models/index.js';
-import BatcherAbi from '../api/abi/batcherAbi.js';
 
-const caver = new Caver(process.env.BAOBA_NETWORK);
+const caver = new Caver(process.env.BAOBAB_NETWORK);
 
 const startTask = async() => {
     let pendings = await db.Orderbook.findAll({
