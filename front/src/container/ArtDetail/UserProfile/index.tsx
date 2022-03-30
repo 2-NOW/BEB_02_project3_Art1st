@@ -1,11 +1,15 @@
-import Profile from "./Profile";
-import OtherWorks from "./OtherWorks";
+import Profile from './Profile';
+import OtherWorks from './OtherWorks';
+import Divider from '@mui/material/Divider';
 
-export default function ArtistProfile() {
+function index() {
   return (
     <>
-      <Profile />
+      <Divider sx={{ mt: '20vh' }} />
+      <Profile name={''} avatar={''} description={''} />
       <OtherWorks />
     </>
   );
 }
+
+export default index;

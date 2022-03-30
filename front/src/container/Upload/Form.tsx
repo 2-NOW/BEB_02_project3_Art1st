@@ -12,11 +12,13 @@ import ForSale from './fragment/ForSale';
 const wrapperCss = {
   display: 'flex',
   flexDirection: 'column',
-  m: '6rem 30vw 0 30vw',
+  m: '6rem 20vw 0 20vw',
 };
 
 function Form() {
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {};
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
   return (
     <Box sx={wrapperCss} component="form" onSubmit={handleSubmit}>
       <Title />
