@@ -42,4 +42,19 @@ router.post('/compensation', async(req, res) => {
         res.status(404).json(err.toString());
     }
 })
+
+router.post('/purchase', async (req, res) => {
+    const {to_id, artwork_id} = req.body;
+
+    try{
+        if(to_id === undefined || artwork_id === undefined) {
+            return res.status(400).json('Bad Request : Invalid values');
+        }
+        const data = await OrderServiceInterface.purchase(to_id, artwork_id);
+        res.status(201).json(data);
+    }
+    catch(err){
+        res.status(404).json(err.toString());
+    }
+})
 export default router;

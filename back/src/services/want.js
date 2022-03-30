@@ -1,16 +1,6 @@
 import db from '../models/index.js';
 import ArtworkService from './artwork.js';
 
-// +------------+----------+------+-----+---------+----------------+
-// | Field      | Type     | Null | Key | Default | Extra          |
-// +------------+----------+------+-----+---------+----------------+
-// | id         | int      | NO   | PRI | NULL    | auto_increment |
-// | createdAt  | datetime | NO   |     | NULL    |                |
-// | updatedAt  | datetime | NO   |     | NULL    |                |
-// | user_id    | int      | YES  | MUL | NULL    |                |
-// | artwork_id | int      | YES  | MUL | NULL    |                |
-// +------------+----------+------+-----+---------+----------------+
-
 class WantService {
     constructor() {
         this.Want = db.Want;

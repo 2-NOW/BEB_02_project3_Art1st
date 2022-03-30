@@ -5,6 +5,11 @@ const batcherAbi = [
 				"internalType": "address",
 				"name": "erc20addr",
 				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "erc721addr",
+				"type": "address"
 			}
 		],
 		"stateMutability": "nonpayable",
@@ -49,6 +54,11 @@ const batcherAbi = [
 			{
 				"internalType": "uint256[]",
 				"name": "amounts",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "nfts",
 				"type": "uint256[]"
 			}
 		],
