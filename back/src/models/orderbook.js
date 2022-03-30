@@ -6,7 +6,7 @@ export default (Sequelize, DataTypes) => {
           primaryKey: true
         },
         action: {
-          type: DataTypes.ENUM('donate', 'compensate'), // 일단은 이정도 ...
+          type: DataTypes.ENUM('donate', 'compensate', 'purchace'), // 일단은 이정도 ...
           allowNull: false
         },
         amount: {
@@ -21,5 +21,9 @@ export default (Sequelize, DataTypes) => {
           type: DataTypes.ENUM('before', 'pending', 'complete'),
           allowNull: false
         },
+        token_id: {
+          type: DataTypes.INTEGER,
+          allowNull: true
+        }
     });
 }
