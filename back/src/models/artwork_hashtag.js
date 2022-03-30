@@ -5,13 +5,5 @@ export default (Sequelize, DataTypes) => {
             autoIncrement: true,
             primaryKey: true
         },
-        // artwork_id: {
-        //     type: DataTypes.INTEGER,
-        //     allowNull: false
-        // },
-        // hashtag_id: {
-        //     type: DataTypes.INTEGER,
-        //     allowNull: false
-        // },
     })
 }
