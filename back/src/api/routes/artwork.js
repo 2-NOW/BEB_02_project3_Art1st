@@ -76,13 +76,13 @@ router.get('/getFilteredArtworks', async (req, res) => {
 // 내가 구매한 작품들 조회
 router.get('/getCollectedArtworks', async (req, res) => { // 클라이언트에서 쿠키 전달받으면 cookie-parser 모듈로 req.cookie 객체 리턴해서 세션쿠키가 존재할경우에만 인메모리에 저장한 세션 ID로 조회하도록 구현해야함, 우선 클라이언트랑 연결 전 이여서 쿠키가 없어도 인메모리에 세션객체만 있으면 마이페이지 작품들 조회할 수 있게 했습니다.  (원래는 일정시간;로그인유효시간이 지나면 쿠키삭제되니까 세션쿠키가 요청시 없으면 권한이 없는거니까 세션객체가 있어도 404 리턴)
     try{
-        if (req.session.user_id) {   
-            const FilteredArtworks = await ArtworkServiceInstance.getCollectedArtworks(req.session.user_id);
-            res.status(200).json(FilteredArtworks);
-        } else {
-            res.status(404).send('not authorized');
+            if (req.session.user_id) {   
+                const FilteredArtworks = await ArtworkServiceInstance.getCollectedArtworks(req.session.user_id);
+                res.status(200).json(FilteredArtworks);
+            } else {
+                res.status(404).send('not authorized');
+            }
         }
-    }
     catch(err){
         res.status(404).json(err.toString());
     }

@@ -10,7 +10,10 @@ class UserService {
     // 전체 유저 정보 불러오기
     async getAllUsers(){
         try{
-            const users = await this.User.findAll();
+            let users = await this.User.findAll();
+            users = users.map((el) => {
+                return { name : el.name, user_id : el.user_id,  balance : el.balance, donation_balance : el.donation_balance, total_sales : el.total_sales }
+            })
             return users;
         }
         catch(err) {
@@ -42,7 +45,7 @@ class UserService {
     async getOneUser(user_id){
         try {
             const user = await this.User.findOne({
-                where : { id: user_id}
+                where : { user_id : user_id}
             });
 
             if(user === null){
@@ -57,14 +60,13 @@ class UserService {
         }
     }
 
-    // 일단은 username만
-    async putOneUser(user_id, user_name, user_email, user_pw) {
+    // 유저 데이터 수정
+    async putOneUser(user_id, edit_user_name, edit_user_id, edit_user_password) {
         try{
-            const user = await this.getOneUser(user_id);
-            await user.update({name: user_name, email: user_email, password: user_pw});
+            let user = await this.getOneUser(user_id);
+            await user.update({name: edit_user_name, user_id: edit_user_id, password: edit_user_password});
             await user.save();
-
-            return user;
+            return { name : user.name, user_id : user.user_id,  balance : user.balance, donation_balance : user.donation_balance, total_sales : user.total_sales, private_key : user.private_key}
         }
         catch(err){
             throw Error(err.toString());
@@ -118,18 +120,13 @@ class UserService {
         }
     }
 
- 
-
-
-
-
     // 유저 회원가입
-    async signUp(user_id, user_pw, user_name){
+    async signUp(user_id, user_pw){
         try {
             let address;
             await db.User.findOrCreate({ // 조회에서 없으면 create 해주는 함수이다
                 where: { 
-                  email: user_id
+                  user_id: user_id
                 },
                 default: {
                   password: user_pw
@@ -158,7 +155,7 @@ class UserService {
                       let keyStore = ks.serialize();
             
                       db.User.update({
-                        name: user_name,
+                        name: user_id,
                         password: user_pw,
                         balance: 0,
                         donation_balance: 0,
@@ -168,7 +165,7 @@ class UserService {
                       },
                         {
                           where: {
-                            email: user_id
+                            user_id: user_id
                           }
                         }
                       )
@@ -192,7 +189,7 @@ class UserService {
     // 유저 로그아웃 세션 삭제
     async logout(session){
         try {
-            if (session.userId) { 
+            if (session.user_id) { 
                 session.destroy();
                 return true;
             } else {
@@ -209,7 +206,7 @@ class UserService {
         try {
             console.log(user_id, user_pw);
             const userInfo = await db.User.findOne({ // DB 아이디 비번일치확인
-                where: { email : user_id, password: user_pw }
+                where: { user_id : user_id, password: user_pw }
               }).catch(err => {
                 console.error(err);
               });

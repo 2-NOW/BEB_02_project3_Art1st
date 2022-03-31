@@ -10,7 +10,7 @@ export default (Sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: ''
         },
-        email: {
+        user_id: {
             type: DataTypes.STRING(30),
             allowNull: false,
             defaultValue: ''
