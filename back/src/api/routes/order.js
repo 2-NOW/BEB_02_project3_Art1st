@@ -44,8 +44,9 @@ router.post('/compensation', async(req, res) => {
 })
 
 router.post('/purchase', async (req, res) => {
-    const {to_id, artwork_id} = req.body;
-
+    const { artwork_id} = req.body;
+    const { to_id } = req.session.user_id;
+    
     try{
         if(to_id === undefined || artwork_id === undefined) {
             return res.status(400).json('Bad Request : Invalid values');

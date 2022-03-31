@@ -25,7 +25,7 @@ class ArtworkService {
         try{
             // 유저 정보 추출
             const creator = await this.User.findOne({ // 세션객체에 저장된 이메일로 artwork creator id, owner id 값으로 추가 할 유저 id 추출 
-                where: { email : creator_session} 
+                where: { user_id : creator_session} 
             });
 
             // nft 민팅 실행
@@ -44,7 +44,9 @@ class ArtworkService {
                 title : title, 
                 desc : desc,
                 creator_id: creator.id,
-                owner_id: creator.id
+                owner_id: creator.id,
+                collaboration_id: null,
+                votes: 0
             })
 
             return artwork;
