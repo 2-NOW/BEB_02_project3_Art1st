@@ -1,5 +1,4 @@
 import { Router } from "express";
-import db from "../../models/index.js";
 import UserService from "../../services/user.js";
 const UserServiceInstance = new UserService();
 const router = Router();
