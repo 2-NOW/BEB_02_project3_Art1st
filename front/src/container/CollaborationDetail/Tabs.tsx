@@ -44,6 +44,7 @@ function a11yProps(index: number) {
 
 export default function BasicTabs() {
   const [value, setValue] = useState(0);
+  const participants = 463;
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -60,8 +61,8 @@ export default function BasicTabs() {
             aria-label="basic tabs example"
           >
             <Tab label="About" {...a11yProps(0)} />
-            <Tab label="Winners" {...a11yProps(1)} />
-            <Tab label="Participants" {...a11yProps(2)} />
+            <Tab label="5 Winners" {...a11yProps(1)} />
+            <Tab label={participants + " Participants"} {...a11yProps(2)} />
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
