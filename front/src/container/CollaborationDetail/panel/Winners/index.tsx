@@ -1,13 +1,13 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
 
 import Item from "./Item";
 import data from "@/data/index";
 
 function index() {
-  const lists = [
+  const list = [
     {
-      award: "대상",
       image: data[11],
       title: "title",
       creator: "creator",
@@ -16,7 +16,6 @@ function index() {
       views: 2162,
     },
     {
-      award: "최우수상",
       image: data[12],
       title: "title",
       creator: "creator",
@@ -25,7 +24,6 @@ function index() {
       views: 733,
     },
     {
-      award: "우수상",
       image: data[13],
       title: "title",
       creator: "creator",
@@ -34,7 +32,6 @@ function index() {
       views: 356,
     },
     {
-      award: "장려상",
       image: data[14],
       title: "title",
       creator: "creator",
@@ -42,25 +39,62 @@ function index() {
       comments: 10,
       views: 200,
     },
+    {
+      image: data[15],
+      title: "title",
+      creator: "creator",
+      likes: 32,
+      comments: 10,
+      views: 200,
+    },
   ];
+  const award = ["대상", "최우수상", "우수상", "장려상"];
 
   return (
     <Box sx={{ mt: "2rem" }}>
-      {lists.map((winner) => {
-        return (
-          <Box>
+      {list.map((winner, idx) => {
+        return idx < 3 ? (
+          <Box sx={{ mb: "4rem" }}>
             <Typography variant="h5" sx={{ m: "2rem 0 0.5rem 0" }}>
-              {winner.award}
+              {award[idx]}
             </Typography>
-            <Item
-              image={winner.image}
-              title={winner.title}
-              creator={winner.creator}
-              likes={winner.likes}
-              comments={winner.comments}
-              views={winner.views}
-            />
+            <Grid item xl={6} xs={12}>
+              <Item
+                image={winner.image}
+                title={winner.title}
+                creator={winner.creator}
+                likes={winner.likes}
+                comments={winner.comments}
+                views={winner.views}
+              />
+            </Grid>
           </Box>
+        ) : idx == 3 ? (
+          <Box sx={{ mb: "4rem" }}>
+            <Typography variant="h5" sx={{ m: "2rem 0 0.5rem 0" }}>
+              {award[idx]}
+            </Typography>
+            <Grid item xl={6} xs={12}>
+              <Item
+                image={winner.image}
+                title={winner.title}
+                creator={winner.creator}
+                likes={winner.likes}
+                comments={winner.comments}
+                views={winner.views}
+              />
+              <Item
+                image={list[4].image}
+                title={list[4].title}
+                creator={list[4].creator}
+                likes={list[4].likes}
+                comments={list[4].comments}
+                views={list[4].views}
+              />
+            </Grid>
+          </Box>
+        ) : (
+          ""
         );
       })}
     </Box>

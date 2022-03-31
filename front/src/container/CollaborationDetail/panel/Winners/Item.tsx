@@ -44,62 +44,56 @@ function Item({ image, title, creator, likes, comments, views }: DataProps) {
   };
 
   return (
-    <Box sx={{ mb: "4rem" }}>
-      <Grid container>
-        <Grid item xl={6} xs={12}>
-          <Card elevation={12} sx={imageCss}>
-            <CardMedia
-              sx={{ position: "absolute" }}
-              component="img"
-              height="100%"
-              image={image}
-            />
-            <CardActionArea sx={contentCss}>
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {title}
-                </Typography>
-                <Typography
-                  sx={{ color: "white" }}
-                  variant="body1"
-                  color="text.secondary"
-                >
-                  {creator}
-                </Typography>
-                <Box sx={{ display: "flex", mt: "3vh" }}>
-                  <Favorite sx={iconCss} />
-                  <Typography
-                    sx={{ m: "0 1rem 0 0.3rem" }}
-                    variant="body2"
-                    component="div"
-                  >
-                    {likes}
-                  </Typography>
+    <Card elevation={12} sx={imageCss}>
+      <CardMedia
+        sx={{ position: "absolute" }}
+        component="img"
+        height="100%"
+        image={image}
+      />
+      <CardActionArea sx={contentCss}>
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div">
+            {title}
+          </Typography>
+          <Typography
+            sx={{ color: "white" }}
+            variant="body1"
+            color="text.secondary"
+          >
+            {creator}
+          </Typography>
+          <Box sx={{ display: "flex", mt: "3vh" }}>
+            <Favorite sx={iconCss} />
+            <Typography
+              sx={{ m: "0 1rem 0 0.3rem" }}
+              variant="body2"
+              component="div"
+            >
+              {likes}
+            </Typography>
 
-                  <ChatIcon sx={iconCss} />
-                  <Typography
-                    sx={{ m: "0 1rem 0 0.3rem" }}
-                    variant="body2"
-                    component="div"
-                  >
-                    {comments}
-                  </Typography>
+            <ChatIcon sx={iconCss} />
+            <Typography
+              sx={{ m: "0 1rem 0 0.3rem" }}
+              variant="body2"
+              component="div"
+            >
+              {comments}
+            </Typography>
 
-                  <VisibilityIcon sx={iconCss} />
-                  <Typography
-                    sx={{ m: "0 1rem 0 0.3rem" }}
-                    variant="body2"
-                    component="div"
-                  >
-                    {views}
-                  </Typography>
-                </Box>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
-      </Grid>
-    </Box>
+            <VisibilityIcon sx={iconCss} />
+            <Typography
+              sx={{ m: "0 1rem 0 0.3rem" }}
+              variant="body2"
+              component="div"
+            >
+              {views}
+            </Typography>
+          </Box>
+        </CardContent>
+      </CardActionArea>
+    </Card>
   );
 }
 
