@@ -3,6 +3,13 @@ import UserService from "../../services/user.js";
 const UserServiceInstance = new UserService();
 const router = Router();
 
+async function floating(fl){
+  fl = fl.split('.');
+  if(fl.length == 2) {
+      fl[1] = fl[1].slice(0,2);
+  }
+  return fl.join('.');
+}
 
 router.post('/login', async (req, res) => {
   const { user_id, user_pw } = req.body 
@@ -59,6 +66,7 @@ router.get('/specificUser', async(req, res) => {
   if(user_id){
       try{
         const user = await UserServiceInstance.getOneUser(user_id);
+        user.price = await floating(user.price);
         res.status(200).json(user);
     }
     catch(err){
@@ -82,6 +90,7 @@ router.put('/specificUser', async(req, res) => {
     try{
       if(user_id === undefined) return res.status(400).json("Error: Bad Request");
       const user = await UserServiceInstance.putOneUser(user_id, edit_user_name, edit_user_id, edit_user_password);
+      user.price = await floating(user.price);
       res.status(201).json(user);
         
     }
