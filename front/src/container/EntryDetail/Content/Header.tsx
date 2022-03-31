@@ -1,6 +1,11 @@
+import { useState } from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
+import Button from "@mui/material/Button";
+import HowToVoteIcon from "@mui/icons-material/HowToVote";
+
+import Modal from "./Modal";
 
 interface TitleProps {
   title: string;
@@ -9,7 +14,18 @@ interface TitleProps {
   created: string;
 }
 
+const buttonCss = {
+  m: "auto 0 auto auto",
+  position: "relative",
+  bottom: "3vh",
+  height: "5vh",
+  width: "7vw",
+};
+
 function Header({ title, creator, views, created }: TitleProps) {
+  const [openModal, setOpenModal] = useState(false);
+  const handleClick = () => setOpenModal(true);
+
   return (
     <>
       <Typography
@@ -48,7 +64,11 @@ function Header({ title, creator, views, created }: TitleProps) {
         >
           {views} views
         </Typography>
+        <Button variant="contained" sx={buttonCss} onClick={handleClick}>
+          <HowToVoteIcon /> Vote
+        </Button>
       </Box>
+      <Modal openModal={openModal} setOpenModal={setOpenModal} />
     </>
   );
 }

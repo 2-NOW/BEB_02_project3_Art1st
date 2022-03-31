@@ -1,41 +1,46 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import Link from "next/link";
+import { useRouter } from "next/router";
 
-import { css } from '@emotion/react';
-import { Typography } from '@mui/material';
+import { Typography, Box } from "@mui/material";
 
 interface NavLinkProps {
-  text: string;
+  menu: string[];
 }
 
 const linkCss = {
-  '&:hover': {
-    color: 'rgba(186, 42, 43, 1)',
-    transition: 'color 150ms',
+  "&:hover": {
+    color: "rgba(186, 42, 43, 1)",
+    transition: "color 150ms",
   },
-  ml: '3rem',
+  ml: "1.5rem",
 };
 
-function NavLink({ text }: NavLinkProps) {
-  const url = '/' + text.toLowerCase();
-  const { pathname } = useRouter();
-
+function NavLink({ menu }: NavLinkProps) {
   return (
-    <Link href={url}>
-      <a>
-        <Typography
-          sx={{
-            ...linkCss,
-            color: pathname === url ? 'rgba(186, 42, 43, 1)' : null,
-          }}
-          variant="h6"
-          component="div"
-          gutterBottom
-        >
-          {text}
-        </Typography>
-      </a>
-    </Link>
+    <Box sx={{ display: "flex", ml: "1.5rem" }}>
+      {menu.map((text) => {
+        const url = "/" + text.toLowerCase();
+        const { pathname } = useRouter();
+
+        return (
+          <Link href={url}>
+            <a>
+              <Typography
+                sx={{
+                  ...linkCss,
+                  color: pathname === url ? "rgba(186, 42, 43, 1)" : null,
+                }}
+                variant="h6"
+                component="div"
+                gutterBottom
+              >
+                {text}
+              </Typography>
+            </a>
+          </Link>
+        );
+      })}
+    </Box>
   );
 }
 
