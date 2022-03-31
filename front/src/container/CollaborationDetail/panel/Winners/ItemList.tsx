@@ -12,7 +12,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import data from "@/data/index";
 
 function ItemList() {
-  const testData = data.slice(0, 30);
+  const testData = data.slice(11, 16);
 
   const imageCss = {
     position: "relative",
