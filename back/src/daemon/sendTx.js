@@ -42,7 +42,7 @@ const startTask = async() => {
             }
             ids.push(orders[j].id);
             actions.push(actionEnum[orders[j].action]);
-            amounts.push(orders[j].amount);
+            amounts.push(caver.utils.toPeb(orders[j].amount, 'KLAY')); // amount값에 10e18 곱해줘야 함.
             tokens.push(orders[j].token_id===null ? 0 : Number(orders[j].token_id));
 
             var {address} = await db.User.findOne({attributes: ['address'], where: {id: orders[j].from_id}});

@@ -241,11 +241,13 @@ class KlaytnService {
 
     async getTokenBalance(user_id) {
         try{
-            const user = await this.UserServiceInterface.getOneUser(user_id);
-            const balance = await this.#myErc20Contract.methods.balanceOf(user.address).call();
-            const allowance = await this.#myErc20Contract.methods.allowance(user.address, this.#server.address).call();
-            console.log(balance, allowance);
-            return {balance, allowance};
+            const user = await this.UserServiceInterface.getOneUser(user_id); // id가 아니라 user_id 통해서 검색하는 걸로 바뀜.
+            const db_balance = user.balance; 
+            const db_donation_balance = user.donation_balance;
+            const chain_balance = await this.#myErc20Contract.methods.balanceOf(user.address).call();
+            const chain_allowance = await this.#myErc20Contract.methods.allowance(user.address, this.#server.address).call();
+
+            return {db_balance, db_donation_balance, chain_balance, chain_allowance};
         }
         catch(err){
             console.log(err);
@@ -253,7 +255,7 @@ class KlaytnService {
         }
     }
 
-    async getNftBalance(user_id) {
+    async getNftBalance(user_id) { // 유저가 갖고 있는 NFT의 개수 반환
         try{
             const user = await this.UserServiceInterface.getOneUser(user_id);
             const balance = await this.#myErc721Contract.methods.balanceOf(user.address).call();

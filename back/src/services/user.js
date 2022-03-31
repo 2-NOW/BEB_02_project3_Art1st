@@ -157,8 +157,8 @@ class UserService {
                       db.User.update({
                         name: user_id,
                         password: user_pw,
-                        balance: 0,
-                        donation_balance: 0,
+                        balance: '0',
+                        donation_balance: '0',
                         address: address,
                         private_key: prv_key,
                         total_sales: 0,
