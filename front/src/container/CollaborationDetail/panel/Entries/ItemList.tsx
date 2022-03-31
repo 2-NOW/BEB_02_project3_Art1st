@@ -52,7 +52,7 @@ function ItemList() {
                   image={src}
                 />
                 <CardActionArea sx={contentCss}>
-                  <CardContent>
+                  <CardContent sx={{ position: "absolute", bottom: "0" }}>
                     <Typography gutterBottom variant="h5" component="div">
                       Title
                     </Typography>
