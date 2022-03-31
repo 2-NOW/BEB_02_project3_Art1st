@@ -14,7 +14,7 @@ import BatcherAbi from '../api/abi/batcherAbi.js';
 import BatcherBytecode from '../api/abi/batcherBytecode.js';
 
 import UserInterface from '../services/user.js';
-
+import {addAmount, subAmount, isBigger} from './utils/calculateKlay.js';
 import Caver from 'caver-js';
 
 class KlaytnService {
@@ -244,10 +244,18 @@ class KlaytnService {
             const user = await this.UserServiceInterface.getOneUser(user_id); // id가 아니라 user_id 통해서 검색하는 걸로 바뀜.
             const db_balance = user.balance; 
             const db_donation_balance = user.donation_balance;
-            const chain_balance = await this.#myErc20Contract.methods.balanceOf(user.address).call();
-            const chain_allowance = await this.#myErc20Contract.methods.allowance(user.address, this.#server.address).call();
+            const chain_balance = this.caver.utils.fromPeb(await this.#myErc20Contract.methods.balanceOf(user.address).call(), 'KLAY');
+            const chain_allowance = this.caver.utils.fromPeb(await this.#myErc20Contract.methods.allowance(user.address, this.#server.address).call(), 'KLAY');
 
-            return {db_balance, db_donation_balance, chain_balance, chain_allowance};
+            var exchangable_balance;
+            if(await isBigger(db_balance, chain_balance)) { // true면 chain_balance가 더 큼
+                exchangable_balance = db_balance;
+            }
+            else{
+                exchangable_balance = chain_balance;
+            }
+
+            return {db_balance, db_donation_balance, chain_balance, chain_allowance, exchangable_balance};
         }
         catch(err){
             console.log(err);

@@ -5,6 +5,7 @@ import db from '../models/index.js';
 import ArtworkService from './artwork.js';
 import UserService from './user.js';
 
+import {addAmount, subAmount, isBigger} from './utils/calculateKlay.js';
 import Caver from 'caver-js';
 
 class OrderService {
@@ -17,36 +18,6 @@ class OrderService {
         this.caver = new Caver(process.env.BAOBAB_NETWORK);
     }
 
-    async addAmount(num1, num2) { // string 값, string 값
-        num1 = this.caver.utils.toPeb(num1, 'KLAY');
-        num2 = this.caver.utils.toPeb(num2, 'KLAY');
-
-        return this.caver.utils.fromPeb((BigInt(num1) + BigInt(num2)).toString());
-    }
-
-    async subAmount(num1, num2) { // num1 - num2
-        num1 = this.caver.utils.toPeb(num1, 'KLAY');
-        num2 = this.caver.utils.toPeb(num2, 'KLAY');
-
-        return this.caver.utils.fromPeb((BigInt(num1) - BigInt(num2)).toString());
-    } 
-
-    async isBigger(num1, num2) { // num2가 더 크면 true 반환
-        num1 = this.caver.utils.toPeb(num1, 'KLAY');
-        num2 = this.caver.utils.toPeb(num2, 'KLAY');
-
-        console.log(num1, num2);
-
-        if(BigInt(num1) < BigInt(num2)){
-            console.log('true');
-            return true;
-        }
-        else{
-            console.log('false');
-            return false;
-        }
-    }
-
     async donate(from_id, to_id, amount, msg){
         try{
             // 우선, 실제 존재하는 유저들인지 확인
@@ -54,7 +25,7 @@ class OrderService {
             const to = await this.UserServiceInterface.getOneUser(to_id);
 
             // -> 유효성 검사 
-            if (await this.isBigger(from.balance, amount)) { // amount가 더 크면 true 반환.
+            if (await isBigger(from.balance, amount)) { // amount가 더 크면 true 반환.
                 console.log('insufficient');
                 throw Error('Insufficient Balance.');
             }
@@ -71,13 +42,13 @@ class OrderService {
 
             // 그리고 먼저 DB 처리 부터 해주기 -> donation_tx랑 user들 잔액
             await from.update({ // 후원하는 사람
-                balance: await this.subAmount(from.balance, amount)
+                balance: await subAmount(from.balance, amount)
             });
             await from.save();
 
             await to.update({ // 후원 받는 사람
-                balance: await this.addAmount(to.balance, amount),
-                donation_balance: await this.addAmount(to.donation_balance, amount)
+                balance: await addAmount(to.balance, amount),
+                donation_balance: await addAmount(to.donation_balance, amount)
             });
             await to.save();
 
@@ -110,7 +81,7 @@ class OrderService {
 
             // 그리고 먼저 DB 처리 부터 해주기 -> user들 잔액(reward_transactions는 살릴지 말지 고민중);
             await to.update({ // 후원하는 사람
-                balance: await this.addAmount(to.balance, amount)
+                balance: await addAmount(to.balance, amount)
             });
             await to.save();
 
@@ -142,7 +113,7 @@ class OrderService {
                 throw Error('Unable to Purchase Artwork');
             }
             // 잔액 확인
-            if (await this.isBigger(to.balance, artwork.price)) { // amount가 더 크면 true 반환.
+            if (await isBigger(to.balance, artwork.price)) { // amount가 더 크면 true 반환.
                 console.log('insufficient');
                 throw Error('Insufficient Balance.');
             }
@@ -161,13 +132,13 @@ class OrderService {
             // 그리고 먼저 디비 처리 해주기
             // to의 잔액 차감
             await to.update({ // 후원하는 사람
-                balance: await this.subAmount(to.balance, artwork.price)
+                balance: await subAmount(to.balance, artwork.price)
             });
             await to.save();
 
             // owner의 잔액 증가
             await owner.update({
-                balance: await this.addAmount(owner.balance, artwork.price),
+                balance: await addAmount(owner.balance, artwork.price),
             });
             await owner.save();
 

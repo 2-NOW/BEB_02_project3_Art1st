@@ -1,5 +1,6 @@
 import db from '../models/index.js';
 import lightwallet from "eth-lightwallet";
+import {addAmount, subAmount, isBigger} from './utils/calculateKlay.js';
 
 
 class UserService {
@@ -98,7 +99,31 @@ class UserService {
         }
 
     }
-    //// Artworks Page Top Creator 16명 Users 정보 가져오기 
+    
+    // klay->token 스왑 이후 balance 추가  
+    async addUserBalance(user_id, balance){ // 여기서 balance 단위는 klay 단위(10e18을 곱하지 않은 형태)로 들어와야 함
+
+        const user = await this.getOneUser(user_id); 
+        await user.update({ // 유저 balance 수정
+            balance: await addAmount(user.balance, balance)
+        });
+        await user.save();
+
+        return user.balance; // 변경 후의 balance를 반환 
+    }
+
+    // token->klay 스왑 이후 balance 차감
+    async subUserBalance(user_id, balance) {
+        const user = await this.getOneUser(user_id);
+        await user.update({
+            balance: await subAmount(user.balance, balance)
+        })
+        await user.save();
+
+        return user.balance; // 변경 후의 balance를 반환
+    }
+
+    // Artworks Page Top Creator 16명 Users 정보 가져오기 
     async getTopUsers(){
         try{ 
             const topUsers = [];  
