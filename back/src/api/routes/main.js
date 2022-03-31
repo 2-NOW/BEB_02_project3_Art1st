@@ -33,7 +33,7 @@ router.get("/randomCreators", async (req, res) => { // userdata 랜덤으로 16�
       let profileImg = await db.Profile.findOne({
         where : { id: randomCreators[i]}
       })
-      user.name = name.dataValues.email;
+      user.name = name.dataValues.user_id;
       user.profileImg = profileImg.dataValues.picture
       result.push(user);
     

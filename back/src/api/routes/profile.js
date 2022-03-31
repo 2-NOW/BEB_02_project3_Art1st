@@ -4,13 +4,12 @@ const router = Router();
 
 const ProfileServiceInstance = new ProfileService();
 
-// 전체 유저 or 특정 유저(user_id)프로필 전체(사진, 설명) 가져오기
+// 특정 유저(user_id)프로필 전체(사진, 설명) 가져오기
 router.get('/', async (req, res) => {
-    const user_id = req.user_id;
-
+    const user_id = req.body.user_id;
     try{
-        if(user_id === undefined) { // 전체 유저 조회
-            const user_profiles = await ProfileServiceInstance.getAllProfiles();
+        if(user_id === null) { // 특정 유저 조회 (프로필 수정 페이지)
+            const user_profiles = await ProfileServiceInstance.getUserProfile(req.session.user_id);
             res.status(200).json(user_profiles);
         }
         else { // 특정 유저 조회
@@ -26,7 +25,7 @@ router.get('/', async (req, res) => {
 
 // 유저 더미 프로필 데이터 추가
 router.post('/', async (req, res)=> {
-    const user_id = req.user_id;
+    const user_id = req.session.user_id;
 
     try{
         if(user_id === undefined) return res.status(400).json("Error: Bad Request");
@@ -41,7 +40,7 @@ router.post('/', async (req, res)=> {
 
 // 유저 정보 업데이트
 router.put('/', async (req, res) => {
-    const user_id = req.user_id;
+    const user_id = req.session.user_id;
     const {user_desc, user_pic} = req.body;
 
     try{

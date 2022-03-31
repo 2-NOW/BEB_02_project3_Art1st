@@ -23,10 +23,7 @@ router.use('/user/:user_id/profile', (req, res) => {
     req.user_id = req.params.user_id;
     profile(req, res);
 })
-router.use('/user/:user_id/website', (req, res) => {
-    req.user_id = req.params.user_id;
-    website(req, res);
-})
+router.use('/user/website', website)
 
 router.use('/artwork', artwork);
 router.use('/artwork/:artwork_id/like', (req, res) => {

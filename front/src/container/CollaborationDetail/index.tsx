@@ -1,9 +1,8 @@
 import Box from "@mui/material/Box";
 
 import Layout from "@/components/Layout";
-import Content from "./Content/index";
-import Comment from "./Comment/index";
-import UserProfile from "./UserProfile/index";
+import Header from "./Header";
+import Tabs from "./Tabs";
 
 const wrapperCss = {
   display: "flex",
@@ -15,9 +14,12 @@ function index() {
   return (
     <Layout>
       <Box sx={wrapperCss}>
-        <Content />
-        <Comment />
-        <UserProfile />
+        <Header
+          title={"Artwork Name"}
+          creator={"Art1st"}
+          created={"2020.03.22"}
+        />
+        <Tabs />
       </Box>
     </Layout>
   );

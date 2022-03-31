@@ -5,24 +5,19 @@ class ProfileService {
     constructor() {
         this.Profile = db.Profile;
         this.UserServiceInterface = new UserService();
+        this.User = db.User;
     }
 
-    // 전체 유저 or 특정 유저(user_id)프로필 전체(사진, 설명) 가져오기
-    async getAllProfiles() {
-        try{
-            const profiles = await this.Profile.findAll();
-            return profiles;
-        }
-        catch (err) {
-            throw Error (err.toString())
-        }
-    }
 
     // 특정 유저 profile 가져오기
     async getUserProfile(user_id) {
         try{
-            const user_profile = await this.Profile.findOne({where : { user_id : user_id }});
-            if(user_profile === null){
+            let userId = await this.User.findOne({where: {user_id: user_id}}).catch((err) => {
+                console.log(err);
+            })
+            userId = userId.dataValues.id
+            const profile = await this.Profile.findOne({where : { user_id : userId }});
+            if(profile === null){
                 // 실제 있는 사용자인지 확인
                 await this.UserServiceInterface.isUser(user_id); 
     
@@ -32,7 +27,7 @@ class ProfileService {
                 throw Error ('Not Found User Profile');
             }
             else {
-                return user_profile;
+                return profile;
             }
         }
         catch(err){

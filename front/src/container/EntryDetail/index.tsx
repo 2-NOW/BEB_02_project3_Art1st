@@ -2,8 +2,8 @@ import Box from "@mui/material/Box";
 
 import Layout from "@/components/Layout";
 import Content from "./Content/index";
-import Comment from "./Comment/index";
-import UserProfile from "./UserProfile/index";
+import Comment from "./Comment";
+import UserProfile from "./UserProfile";
 
 const wrapperCss = {
   display: "flex",

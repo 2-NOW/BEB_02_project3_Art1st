@@ -4,6 +4,7 @@ import UserService from './user.js';
 class WebsiteService {
     constructor(){
             this.Website = db.Website;
+            this.User = db.User;
             this.UserServiceInterface = new UserService();
     }
 
@@ -22,7 +23,11 @@ class WebsiteService {
     async getUserWebsites(user_id){
         try{
             await this.UserServiceInterface.isUser(user_id); // 유저가 있는지 확인. 없다면 error 발생
-            const user_websites = await this.Website.findAll({where : { user_id : user_id }});
+            let userId = await this.User.findOne({where: {user_id: user_id}}).catch((err) => {
+                console.log(err);
+            })
+            userId = userId.dataValues.id
+            const user_websites = await this.Website.findAll({where : { user_id : userId }});
 
             return user_websites;
         }
@@ -34,11 +39,12 @@ class WebsiteService {
     // 특정 유저의 특정 웹사이트 가져오기
     async getUserOneWebsite(user_id, website_id){
         try{
+            console.log(user_id, website_id);
             await this.UserServiceInterface.isUser(user_id); // 유저가 있는지 확인. 없다면 error 발생
             const user_website = await this.Website.findOne({
                 where : { id: website_id, user_id: user_id}
             });
-        
+            console.log(user_website);
             if(user_website === null) {
                 throw Error ('Not Found User Website');
             }
@@ -54,9 +60,13 @@ class WebsiteService {
     async postUserWebsite(user_id, user_site){
         try{
             await this.UserServiceInterface.isUser(user_id); // 유저가 있는지 확인. 없다면 error 발생
+            let userId = await this.User.findOne({where: {user_id: user_id}}).catch((err) => {
+                console.log(err);
+            })
+            userId = userId.dataValues.id
             const user_website = await this.Website.create({
                 site: user_site,
-                user_id: user_id
+                user_id: userId
             });
 
             return user_website;
@@ -95,7 +105,13 @@ class WebsiteService {
 
     async deleteUserWebsite(user_id, website_id){
         try{
-            const user_website = await this.getUserOneWebsite(user_id, website_id);
+            let userId = await this.User.findOne({where: {user_id: user_id}}).catch((err) => {
+                console.log(err);
+            })
+            userId = userId.dataValues.id
+            console.log(userId);
+            const user_website = await this.getUserOneWebsite(userId, website_id);
+            console.log(user_website);
             await user_website.destroy();
             await user_website.save();
 
