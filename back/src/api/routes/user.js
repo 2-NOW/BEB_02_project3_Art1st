@@ -1,9 +1,58 @@
 import { Router } from "express";
-import db from "../../models/index.js";
 import UserService from "../../services/user.js";
+import KlaytnService from "../../services/klaytn.js";
 const UserServiceInstance = new UserService();
+const KlaytnServiceInstance = new KlaytnService();
 const router = Router();
 
+async function floating(fl){
+  fl = fl.split('.');
+  if(fl.length == 2) {
+      fl[1] = fl[1].slice(0,2);
+  }
+  return fl.join('.');
+}
+
+// 스왑 후 잔액 변경
+router.put('/balance', async(req, res)=> {
+  const { balance, action } = req.body;
+  const { user_id } = req.session;
+
+  try{
+    if(user_id === undefined) return res.status(400).json("Error: Bad Request");
+     
+    if(action === 'buy') { // klay -> token
+      // balance 추가
+      const updatedBalance = await UserServiceInstance.addUserBalance(user_id, balance);
+      return res.status(201).json(updatedBalance);
+    }
+    else if (action === 'sell') { // token -> klay
+      // balance 감소
+      const updatedBalance = await UserServiceInstance.subUserBalance(user_id, balance);
+      return res.status(201).json(updatedBalance);
+    }
+    else {
+      return res.status(400).json("Error: Bad Request");
+    }
+  }
+  catch(err){
+      res.status(404).json(err.toString());
+  }
+})
+
+// 스왑 가능한 토큰 잔액 확인
+router.get('/balance', async(req, res) => {
+  const {user_id} = req.session;
+
+  try{
+    // 스왑 가능한 토큰 잔액을 확인 (db상의 값과 onchain 상의 값 중 min 값 반환)
+    const {exchangable_balance} = await KlaytnServiceInstance.getTokenBalance(user_id);
+    res.status(200).json(exchangable_balance);
+  }
+  catch(err){
+    res.status(500).json(err.toString()); // onchain 상의 토큰 잔액을 불러오지 못하는 경우는 -> server 문제
+  }
+})
 
 router.post('/login', async (req, res) => {
   const { user_id, user_pw } = req.body 
@@ -60,6 +109,7 @@ router.get('/specificUser', async(req, res) => {
   if(user_id){
       try{
         const user = await UserServiceInstance.getOneUser(user_id);
+        user.price = await floating(user.price);
         res.status(200).json(user);
     }
     catch(err){
@@ -83,6 +133,7 @@ router.put('/specificUser', async(req, res) => {
     try{
       if(user_id === undefined) return res.status(400).json("Error: Bad Request");
       const user = await UserServiceInstance.putOneUser(user_id, edit_user_name, edit_user_id, edit_user_password);
+      user.price = await floating(user.price);
       res.status(201).json(user);
         
     }

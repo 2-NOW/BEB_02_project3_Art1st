@@ -39,7 +39,7 @@ class ArtworkService {
                 token_id: tokenId,
                 views: 0,
                 is_selling, is_selling,
-                price: price,
+                price: String(price),
                 ipfsURI: ipfsLink,
                 title : title, 
                 desc : desc,
@@ -78,7 +78,7 @@ class ArtworkService {
             const artwork = await this.getOneArtwork(artwork_id);
             await artwork.update({
                 is_selling: is_selling,
-                price: price,
+                price: String(price),
                 owner_id: owner_id
             });
             await artwork.save();
