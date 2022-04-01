@@ -10,6 +10,7 @@ import hashtag from './routes/hashtag.js'
 import comment from './routes/comment.js';
 import order from './routes/order.js';
 import klaytn from './routes/klaytn.js';
+import collaboration from './routes/collaboration.js';
 
 const router = express.Router();
 
@@ -48,5 +49,6 @@ router.use('/order', order);
 router.use('/klaytn', klaytn);
 router.use('/profile', profile);
 router.use('/website', website);
+router.use('/collaboration', collaboration);
 
 export default router;
