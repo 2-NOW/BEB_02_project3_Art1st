@@ -39,7 +39,7 @@ function ItemList() {
   };
 
   return (
-    <Box sx={{ width: "70vw", m: "2rem 15vw auto" }}>
+    <Box sx={{ mt: "2rem" }}>
       <Grid container>
         {testData.map((src) => {
           return (

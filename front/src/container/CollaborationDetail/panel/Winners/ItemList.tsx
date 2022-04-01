@@ -12,7 +12,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import data from "@/data/index";
 
 function ItemList() {
-  const testData = data.slice(0, 30);
+  const testData = data.slice(11, 16);
 
   const imageCss = {
     position: "relative",
@@ -39,7 +39,7 @@ function ItemList() {
   };
 
   return (
-    <Box sx={{ width: "70vw", m: "2rem 15vw auto" }}>
+    <Box sx={{ mt: "2rem" }}>
       <Grid container>
         {testData.map((src) => {
           return (
