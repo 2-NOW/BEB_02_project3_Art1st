@@ -2,9 +2,12 @@ import db from '../models/index.js';
 import lightwallet from "eth-lightwallet";
 
 
+
 class UserService {
     constructor(){
         this.User = db.User;
+        this.Profile = db.Profile;
+        this.Website = db.Website;
     }
 
     // 전체 유저 정보 불러오기
@@ -47,12 +50,19 @@ class UserService {
             const user = await this.User.findOne({
                 where : { user_id : user_id}
             });
+            console.log(user);
+            let userId = await this.User.findOne({where: {user_id: user_id}}).catch((err) => {
+                console.log(err);
+            })
+            userId = userId.dataValues.id
+            const user_websites = await this.Website.findAll({where : { user_id : userId }});
+            const user_profile = await this.Profile.findOne({where : { user_id : userId }});
 
             if(user === null){
                 throw Error('Not Found User');
             }
             else {
-                return user;
+                return { user : user, user_profile : user_profile, user_websites: user_websites}
             }
         }
         catch(err) {
@@ -137,7 +147,7 @@ class UserService {
                   // 있으면 있다고 응답
                   throw Error("User exists");
                 // 없으면 DB에 저장
-                } else {
+                } else {         
                   let mnemonic;
                   mnemonic = lightwallet.keystore.generateRandomSeed(); // 랜덤한 니모닉 시드 생성  
                   // 생성된 니모닉코드와 password로 keyStore, address 생성
@@ -146,7 +156,7 @@ class UserService {
                     seedPhrase: mnemonic,
                     hdPathString: "m/0'/0'/0'"
                   },
-                  function (err, ks) {
+                  async function (err, ks) {
                     ks.keyFromPassword(user_pw, function (err, pwDerivedKey) {
                       ks.generateNewAddress(pwDerivedKey, 1); // n개의 새로운 주소생성
                       
@@ -173,10 +183,9 @@ class UserService {
                         console.error(err);
                       })
                     });
-                  });
+                  }); 
                 }
               }).then(()=>{
-                console.log(address);
                 return address
               })
         }
