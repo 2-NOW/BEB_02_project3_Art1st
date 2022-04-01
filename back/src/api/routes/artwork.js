@@ -18,10 +18,11 @@ const ArtworkServiceInstance = new ArtworkService();
 router.post('/upload', async (req, res) => {
     try{
         const { title, desc, isSelling, price, tags } = JSON.parse(req.body); // price 값 꼭 있어야 함. 정수형으로
+        const { user_id } = req.session
         const img = req.files.image;
     
         // 유저 찾기
-        if (!req.session.userId) {// 세션객체 없으면 에러400
+        if (!user_id) {// 세션객체 없으면 에러400
             return res.status(404).send('not authorized'); 
         } 
         // 우선 유저 추출 부분 service 단으로 뺏습니다. 필요하시면 다시 수정하셔도 되요.
@@ -40,7 +41,7 @@ router.post('/upload', async (req, res) => {
         // var userId = 'mingyun';
     
         // 이후 nft 민팅
-        const newArtwork = await ArtworkServiceInstance.mintNewArtwork(title, desc, price, isSelling, ipfsLink, req.session.user_id);
+        const newArtwork = await ArtworkServiceInstance.mintNewArtwork(title, desc, price, isSelling, ipfsLink, user_id);
         res.status(201).json(newArtwork);
         
     }
@@ -121,7 +122,7 @@ router.get('/getFavoritedArtworks', async (req, res) => { // 클라이언트에�
 //구매가 정상적으로 완료된 작품의 DB상 소유권을 업데이트
 router.put('/putBoughtArtworks', async (req, res) => {  // 클라이언트에서 쿠키 전달받으면 cookie-parser 모듈로 req.cookie 객체 리턴해서 세션쿠키가 존재할경우에만 인메모리에 저장한 세션 ID로 조회, 우선 클라이언트랑 연결 전 이여서 쿠키가 없어도 인메모리에 세션객체만 있으면 마이페이지 작품들 조회할 수 있게 했습니다.  (원래는 일정시간;로그인유효시간이 지나면 쿠키삭제되니까 세션쿠키가 요청시 없으면 권한이 없는거니까 세션객체가 있어도 404 리턴)
     try{
-        if (req.session.user_id, req.body.artwork_id) {   
+        if (req.session.user_id && req.body.artwork_id) {   
             const artworks = await ArtworkServiceInstance.putBoughtArtworks(req.session.user_id, req.body.artwork_id);
             res.status(200).json(artworks);
         } else {
