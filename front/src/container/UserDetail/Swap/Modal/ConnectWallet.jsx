@@ -9,15 +9,14 @@ const buttoncss = {
   marginTop: "1rem",
 };
 
-function ConnectWallet() {
+function ConnectWallet({ setAccount }) {
   const kaikasLogin = async () => {
     if (typeof window.klaytn !== "undefined") {
       const provider = window["klaytn"];
     }
     try {
-      const wallet = await window.klaytn.enable();
-      dispatch({ type: "ON_CONNECT", account: wallet });
-      getUserId(wallet);
+      const wallet = await window.klaytn.enable(); //kaikas wallet address
+      setAccount(wallet);
     } catch (ex) {
       console.log(ex);
     }
@@ -42,4 +41,3 @@ function ConnectWallet() {
 }
 
 export default ConnectWallet;
-//connect wallet: enter an amount: insufficent balance: swap

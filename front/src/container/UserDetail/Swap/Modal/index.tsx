@@ -6,6 +6,8 @@ import Typography from "@mui/material/Typography";
 import SwapInput from "./SwapInput";
 import SwapTo from "./SwapTo";
 import ConnectWallet from "./ConnectWallet";
+import SwapKlaybutton from "./SwapKlaybutton";
+import SwapASTbutton from "./SwapASTbutton";
 
 const style = {
   position: "absolute" as "absolute",
@@ -40,6 +42,7 @@ interface ModalProps {
 function Index({ openModal, setOpenModal }: ModalProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [value, setValue] = useState(0);
+  const [account, setAccount] = useState("");
   const handleClose = () => setOpenModal(false);
 
   const swapable = 1000; //api) user/balance
@@ -73,7 +76,13 @@ function Index({ openModal, setOpenModal }: ModalProps) {
             token={tokens[Number(!selectedIndex)].token}
             value={value}
           />
-          <ConnectWallet />
+          {account == "" ? (
+            <ConnectWallet setAccount={setAccount} />
+          ) : selectedIndex ? (
+            <SwapKlaybutton account={account} klayAmount={value} />
+          ) : (
+            <SwapASTbutton account={account} ASTAmount={value} />
+          )}
         </Box>
       </Modal>
     </>
