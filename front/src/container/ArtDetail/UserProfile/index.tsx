@@ -20,6 +20,8 @@ function index({ creatorId }: { creatorId: string | string[] | undefined }) {
     ['user', creatorId, 'createdArtworks'],
     getUserCreateById(creatorId, 3)
   );
+  if (createdArtworksIsLoading) return <div>Loading...</div>;
+  if (userIsLoading) return <div>Loading...</div>;
 
   const { id, picture, description } = userData.user_profile;
   const { name } = userData.user;

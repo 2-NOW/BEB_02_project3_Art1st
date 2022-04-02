@@ -49,21 +49,33 @@ function index({
 
       <Box sx={{ mt: '2rem' }}>
         <IconButton>
-          <Link href={websites[0]}>
+          <a
+            href={websites[0]}
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+          >
             <InstagramIcon />
-          </Link>
+          </a>
         </IconButton>
 
         <IconButton>
-          <Link href={websites[1]}>
+          <a
+            href={websites[1]}
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+          >
             <TwitterIcon />
-          </Link>
+          </a>
         </IconButton>
 
         <IconButton>
-          <Link href={websites[2]}>
+          <a
+            href={websites[2]}
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+          >
             <FacebookIcon />
-          </Link>
+          </a>
         </IconButton>
       </Box>
 

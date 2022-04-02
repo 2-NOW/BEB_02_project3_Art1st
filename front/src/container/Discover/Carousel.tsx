@@ -13,7 +13,7 @@ import 'slick-carousel/slick/slick-theme.css';
 interface IData {
   id: number;
   name: string;
-  picture: string;
+  ProfileImg: string;
 }
 
 function index({ data }: { data: IData[] }) {
@@ -61,7 +61,7 @@ function index({ data }: { data: IData[] }) {
               <Box key={index}>
                 <Avatar
                   sx={{ m: '0 auto', width: '7rem', height: '7rem' }}
-                  src={user.picture}
+                  src={user.ProfileImg}
                 />
                 <Typography
                   sx={{ mt: '0.5rem', textAlign: 'center' }}

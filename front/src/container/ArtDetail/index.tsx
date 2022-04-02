@@ -27,6 +27,7 @@ function index() {
     isError,
     isLoading,
   } = useQuery(['artwork', id], getArtworkById(id));
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <Layout>

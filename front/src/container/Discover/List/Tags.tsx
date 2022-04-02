@@ -5,7 +5,7 @@ import testLabelData from './data';
 
 interface IData {
   id: number;
-  name: string;
+  hashtag: string;
 }
 
 interface TagsProps {
@@ -21,6 +21,8 @@ function Tags({ data, setTagId }: TagsProps) {
     setClickedTagIndex(index);
     setTagId(index === 0 ? undefined : index - 1);
   };
+
+  console.log(data);
 
   const tagCss = {
     width: '70vw',
@@ -41,14 +43,14 @@ function Tags({ data, setTagId }: TagsProps) {
         />
 
         {data.map((item) => {
-          const { id, name } = item;
+          const { id, hashtag } = item;
           return (
             <Chip
               sx={{ m: '0.2rem' }}
               color="primary"
               key={id + 1}
               onClick={() => handleTagClick(id + 1)}
-              label={name}
+              label={hashtag}
               variant={id + 1 === clickedTagIndex ? 'filled' : 'outlined'}
             />
           );
