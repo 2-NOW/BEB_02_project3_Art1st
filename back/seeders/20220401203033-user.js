@@ -5,7 +5,7 @@ module.exports = {
     await queryInterface.bulkInsert("users", [
       {
         name: "test1",
-        user_id: "test1@test.com",
+        user_id: "test1",
         password: "@!DKJ@#!JK!@KJ132",
         balance: 0,
         donation_balance: 0,
@@ -17,7 +17,7 @@ module.exports = {
       },
       {
         name: "test2",
-        user_id: "test2@test.com",
+        user_id: "test2",
         password: "@!DKJ@#!JK!@KJ132",
         balance: 0,
         donation_balance: 0,
@@ -30,7 +30,7 @@ module.exports = {
 
       {
         name: "test3",
-        user_id: "test3@test.com",
+        user_id: "test3",
         password: "@!DKJ@#!JK!@KJ132",
         balance: 0,
         donation_balance: 0,
@@ -42,7 +42,7 @@ module.exports = {
       },
       {
         name: "test4",
-        user_id: "test4@test.com",
+        user_id: "test4",
         password: "@!DKJ@#!JK!@KJ132",
         balance: 0,
         donation_balance: 0,
@@ -54,7 +54,7 @@ module.exports = {
       },
       {
         name: "test5",
-        user_id: "test5@test.com",
+        user_id: "test5",
         password: "@!DKJ@#!JK!@KJ132",
         balance: 0,
         donation_balance: 0,
@@ -66,7 +66,7 @@ module.exports = {
       },
       {
         name: "test6",
-        user_id: "test6@test.com",
+        user_id: "test6",
         password: "@!DKJ@#!JK!@KJ132",
         balance: 0,
         donation_balance: 0,
@@ -78,7 +78,7 @@ module.exports = {
       },
       {
         name: "test7",
-        user_id: "test7@test.com",
+        user_id: "test7",
         password: "@!DKJ@#!JK!@KJ132",
         balance: 0,
         donation_balance: 0,
@@ -90,7 +90,7 @@ module.exports = {
       },
       {
         name: "test8",
-        user_id: "test8@test.com",
+        user_id: "test8",
         password: "@!DKJ@#!JK!@KJ132",
         balance: 0,
         donation_balance: 0,
@@ -102,7 +102,7 @@ module.exports = {
       },
       {
         name: "test9",
-        user_id: "test9@test.com",
+        user_id: "test9",
         password: "@!DKJ@#!JK!@KJ132",
         balance: 0,
         donation_balance: 0,
@@ -114,7 +114,7 @@ module.exports = {
       },
       {
         name: "test10",
-        user_id: "test10@test.com",
+        user_id: "test10",
         password: "@!DKJ@#!JK!@KJ132",
         balance: 0,
         donation_balance: 0,
@@ -126,7 +126,7 @@ module.exports = {
       },
       {
         name: "test11",
-        user_id: "test11@test.com",
+        user_id: "test11",
         password: "@!DKJ@#!JK!@KJ132",
         balance: 0,
         donation_balance: 0,
@@ -138,7 +138,7 @@ module.exports = {
       },
       {
         name: "test12",
-        user_id: "test12@test.com",
+        user_id:"test12",
         password: "@!DKJ@#!JK!@KJ132",
         balance: 0,
         donation_balance: 0,
@@ -150,7 +150,7 @@ module.exports = {
       },
       {
         name: "test13",
-        user_id: "test13@test.com",
+        user_id: "test13",
         password: "@!DKJ@#!JK!@KJ132",
         balance: 0,
         donation_balance: 0,
@@ -162,7 +162,7 @@ module.exports = {
       },
       {
         name: "test14",
-        user_id: "test14@test.com",
+        user_id: "test14",
         password: "@!DKJ@#!JK!@KJ132",
         balance: 0,
         donation_balance: 0,
@@ -174,7 +174,7 @@ module.exports = {
       },
       {
         name: "test15",
-        user_id: "test15@test.com",
+        user_id: "test15",
         password: "@!DKJ@#!JK!@KJ132",
         balance: 0,
         donation_balance: 0,
@@ -186,7 +186,7 @@ module.exports = {
       },
       {
         name: "test16",
-        user_id: "test16@test.com",
+        user_id: "test16",
         password: "@!DKJ@#!JK!@KJ132",
         balance: 0,
         donation_balance: 0,
@@ -198,7 +198,7 @@ module.exports = {
       },
       {
         name: "test17",
-        user_id: "test17@test.com",
+        user_id: "test17",
         password: "@!DKJ@#!JK!@KJ132",
         balance: 0,
         donation_balance: 0,
@@ -210,7 +210,7 @@ module.exports = {
       },
       {
         name: "test18",
-        user_id: "test18@test.com",
+        user_id:"test18",
         password: "@!DKJ@#!JK!@KJ132",
         balance: 0,
         donation_balance: 0,
@@ -222,7 +222,7 @@ module.exports = {
       },
       {
         name: "test19",
-        user_id: "test19@test.com",
+        user_id: "test19",
         password: "@!DKJ@#!JK!@KJ132",
         balance: 0,
         donation_balance: 0,
@@ -234,7 +234,7 @@ module.exports = {
       },
       {
         name: "test20",
-        user_id: "test20@test.com",
+        user_id: "test20",
         password: "@!DKJ@#!JK!@KJ132",
         balance: 0,
         donation_balance: 0,
