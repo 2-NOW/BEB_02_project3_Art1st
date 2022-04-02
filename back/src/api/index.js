@@ -34,10 +34,7 @@ router.use('/artwork/:artwork_id/want', (req, res) => {
     req.artwork_id = req.params.artwork_id;
     want(req, res);
 });
-// router.use('/artwork/:artwork_id/hashtag', (req, res) => { 
-//     req.artwork_id = req.params.artwork_id; 
-//     hashtag(req, res);
-// });
+
 router.use('/artwork/hashtag', hashtag); // params 에서 추출하는거 잠깐 테스트 때문에 이렇게 수정했습니다 근데 /artwork/hashtag/ 이 엔드포인트로 요청날리면 "Error: Error: WHERE parameter \"artwork_id\" has invalid \"undefined\" value" 이런 에러가 뜨네요 미들웨어 에서 엔드포인트를 /artwork/hashtag 로 수정했는데도 artwork_id params에 넣어서 요청 날려야 하는건 왜일까요
 router.use('/artwork/:artwork_id/comment', (req, res) => {
     req.artwork_id = req.params.artwork_id;

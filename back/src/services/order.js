@@ -18,11 +18,11 @@ class OrderService {
         this.caver = new Caver(process.env.BAOBAB_NETWORK);
     }
 
-    async donate(from_id, to_id, amount, msg){
+    async donate(from_id, to_id, amount, msg){ // from_id => session.user_id
         try{
             // 우선, 실제 존재하는 유저들인지 확인
-            const from = await this.UserServiceInterface.getOneUser(from_id);
-            const to = await this.UserServiceInterface.getOneUser(to_id);
+            const from = await this.UserServiceInterface.getOneUser(from_id); // user_id col
+            const to = await this.UserServiceInterface.getOneUserWithID(to_id); // id col
 
             // -> 유효성 검사 
             if (await isBigger(from.balance, amount)) { // amount가 더 크면 true 반환.
@@ -64,7 +64,7 @@ class OrderService {
         }
     }
 
-    async compensate(to_id, amount){
+    async compensate(to_id, amount){ 
         try{
             // 우선, 실제 존재하는 유저인지 확인
             const to = await this.UserServiceInterface.getOneUser(to_id);
@@ -75,7 +75,7 @@ class OrderService {
                 amount: amount,
                 status: 'before',
                 from_id: process.env.SERVER_ID, // compensate는 from 존재 X. 서버 ID로 고정.
-                to_id: to_id,
+                to_id: to.id,
                 transaction_hash: '0x0' // 아직 hash 없음
             })
 
@@ -95,13 +95,13 @@ class OrderService {
     async purchase(to_id, artwork_id) { // nft 기준 to. to는 돈을 내는 사람임.
         try{
             // 우선, 실제 존재하는 유저인지 확인
-            const to = await this.UserServiceInterface.getOneUser(to_id);
+            const to = await this.UserServiceInterface.getOneUser(to_id); // user_col
 
             // 그리고 아트워크의 정보 가져오기
             const artwork = await this.ArtworkServiceInterface.getOneArtwork(artwork_id);
 
             // 아트워크의 소유주 정보 가져오기
-            const owner = await this.UserServiceInterface.getOneUser(artwork.owner_id); // ㅜㅜ 여기 .. 의존성 망가졌어요
+            const owner = await this.UserServiceInterface.getOneUserWithID(artwork.owner_id); 
 
             // 유효성 검사
             // 구매자가 소유주인지 확인
@@ -139,6 +139,8 @@ class OrderService {
             // owner의 잔액 증가
             await owner.update({
                 balance: await addAmount(owner.balance, artwork.price),
+                total_sales : artwork.owner_id == artwork.creator_id ? 
+                                await addAmount(owner.total_sales, artwork.price) : owner.total_sales
             });
             await owner.save();
 
