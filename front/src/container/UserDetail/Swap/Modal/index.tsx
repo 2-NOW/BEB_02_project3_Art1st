@@ -2,7 +2,6 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
 import SwapInput from "./SwapInput";
 import SwapTo from "./SwapTo";
@@ -18,20 +17,6 @@ const style = {
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
-};
-
-const downwardcss = {
-  padding: "4px",
-  borderRadius: "12px",
-  height: "32px",
-  width: "32px",
-  position: "relative",
-  marginTop: "-14px",
-  marginBottom: "-14px",
-  left: "calc(50% - 16px)",
-  backgroundColor: "rgb(247, 248, 250)",
-  border: "4px solid rgb(255, 255, 255)",
-  zIndex: 2,
 };
 
 const tokens = [
@@ -82,12 +67,6 @@ function Index({ openModal, setOpenModal }: ModalProps) {
             setValue={setValue}
             maxValue={swapable}
           />
-
-          <Box sx={downwardcss}>
-            <ArrowDownwardIcon
-              sx={{ position: "relative", right: "0.25rem", bottom: "0.25rem" }}
-            />
-          </Box>
 
           <SwapTo
             image={tokens[Number(!selectedIndex)].image}
