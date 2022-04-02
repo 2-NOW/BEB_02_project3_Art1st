@@ -6,7 +6,6 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract Art1stTokenInterface {
     function compensate(address to, uint amount) external returns (bool) {}
     function donate(address from, address to, uint amount) external returns (bool) {}
-
 }
 
 contract Art1stNftInterface {

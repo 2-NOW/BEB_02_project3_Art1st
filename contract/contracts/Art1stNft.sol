@@ -42,6 +42,7 @@ contract Art1stNft is ERC721URIStorage, Ownable {
 
     // NFT 기준 from에서 to임. 돈은 to->from
     function buyNft(address from, address to, uint256 tokenId, uint256 price) external onlyOwner returns (bool) {
+        require(tx.origin == server, "ERC721: sender is not server address");
         // 우선, 돈을 입금하고
         Art1stTokenContract.deposit(to, from, price); // 돈은 to -> from
         // 그 다음에 nft의 소유주를 바꿔줌
