@@ -1,28 +1,11 @@
-import Signin from '@/components/Layout/Navbar/fragment/Signin';
-import { getSession } from 'next-auth/react';
-import { GetServerSideProps } from 'next';
-import { Session } from 'next-auth';
+import MyPageContainer from '@/container/MyPage/index';
 
-export default function Home({ session }: { session: Session }) {
-  return <Signin session={session} />;
+export default function Profile() {
+  // todo: mypage get 비동기 완료
+  // todo: put edit user 완료
+  return (
+    <>
+      <MyPageContainer />
+    </>
+  );
 }
-
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const session = await getSession({ req });
-
-  console.log('session', session);
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/api/auth/signin',
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      session,
-    },
-  };
-};

@@ -1,6 +1,25 @@
 import { HOST_ADDRESS } from '@/utils/constant/index';
 import axios from 'axios';
 
+interface IPutEditUser {
+  user_desc?: string;
+  user_name?: string;
+  user_picture?: string;
+}
+
+export const putEditUser = ({
+  user_name,
+  user_desc,
+  user_picture,
+}: IPutEditUser) =>
+  axios.put(HOST_ADDRESS + '/user', {
+    user_name,
+    user_desc,
+    user_picture,
+  });
+
+/////////////
+
 // PUT user name
 export const putUserName = async (name: string) => {
   const { data } = await axios.put(

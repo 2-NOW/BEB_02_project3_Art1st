@@ -7,14 +7,16 @@ import IconButton from '@mui/material/IconButton';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-import data from '@/data/index';
-
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-function index() {
-  const testData = data.slice(0, 15);
+interface IData {
+  id: number;
+  name: string;
+  picture: string;
+}
 
+function index({ data }: { data: IData[] }) {
   const initialSettings = {
     dots: false,
     infinite: false,
@@ -54,18 +56,18 @@ function index() {
 
       <Box sx={{ m: '2rem auto', width: '70vw' }}>
         <Slider ref={slickRef} {...initialSettings}>
-          {testData.map((item, index) => {
+          {data.map((user, index) => {
             return (
               <Box key={index}>
                 <Avatar
                   sx={{ m: '0 auto', width: '7rem', height: '7rem' }}
-                  src={item}
+                  src={user.picture}
                 />
                 <Typography
                   sx={{ mt: '0.5rem', textAlign: 'center' }}
                   variant="body1"
                 >
-                  Artist
+                  {user.name}
                 </Typography>
               </Box>
             );

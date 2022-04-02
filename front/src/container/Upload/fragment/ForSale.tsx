@@ -8,23 +8,30 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import Image from 'next/image';
 
-function ForSale() {
-  const [isChecked, setIsChecked] = useState(false);
-  const handleChecked = () => setIsChecked(!isChecked);
+interface ForSaleProps {
+  forSale: boolean;
+  setForSale: (forSale: boolean) => void;
+  price: string;
+  setPrice: (price: string) => void;
+}
+
+function ForSale({ forSale, setForSale, price, setPrice }: ForSaleProps) {
+  const handleChecked = () => setForSale(!forSale);
 
   return (
     <FormControl sx={{ mt: '2vh' }}>
       <Box sx={{ display: 'flex' }}>
         <FormControlLabel
           sx={{ width: '8rem' }}
-          control={<Checkbox checked={isChecked} onChange={handleChecked} />}
+          control={<Checkbox checked={forSale} onChange={handleChecked} />}
           label="For sale"
         />
 
         <TextField
           sx={{ ml: '2rem', mt: '0.3rem', width: '30%' }}
-          id="input-with-icon-textfield"
-          disabled={isChecked ? false : true}
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          disabled={forSale ? false : true}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">

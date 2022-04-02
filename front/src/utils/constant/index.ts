@@ -17,7 +17,7 @@ export const NEXTAUTH_URL = 'http://localhost:3000/api/auth';
 export const DATABASE_URL = 'file:./dev.db';
 
 // # dev api domain address
-export const HOST_ADDRESS = 'http://localhost:3000';
+export const HOST_ADDRESS = 'http://localhost:4000';
 
 // # deployment api domain address
 export const DEPLOYMENT_ADDRESS = 'http://';

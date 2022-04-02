@@ -1,10 +1,18 @@
+import Link from 'next/link';
+
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
+import CardActionArea from '@mui/material/CardActionArea';
 import Button from '@mui/material/Button';
 
 import data from '@/data/index';
+
+interface IBanner {
+  id: number;
+  ipfsURI: string;
+}
 
 const imageCss = {
   width: '25rem',
@@ -17,7 +25,9 @@ const buttonCss = {
   width: '10rem',
 };
 
-function Banner() {
+function Banner({ bannerData }: { bannerData: IBanner }) {
+  const { id, ipfsURI } = bannerData;
+
   return (
     <Box sx={{ display: 'flex', pb: '5rem' }}>
       <Box sx={{ ml: '20rem' }}>
@@ -54,7 +64,11 @@ function Banner() {
       </Box>
 
       <Card sx={imageCss} elevation={12}>
-        <CardMedia component="img" height="100%" image={data[0]} />
+        <CardActionArea>
+          <Link href={`/artwork/${id}`}>
+            <CardMedia component="img" height="100%" image={ipfsURI} />
+          </Link>
+        </CardActionArea>
       </Card>
     </Box>
   );

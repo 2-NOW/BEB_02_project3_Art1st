@@ -1,30 +1,76 @@
-import Header from "./fragment/Header";
-import ArtImage from "./fragment/ArtImage";
-import Description from "./fragment/Description";
-import Tags from "./fragment/Tags";
-import CheckIcons from "./fragment/CheckIcons";
+import { useQuery } from 'react-query';
 
-import data from "@/data/index";
+import Header from './fragment/Header';
+import ArtImage from './fragment/ArtImage';
+import Description from './fragment/Description';
+import Tags from './fragment/Tags';
+import CheckIcons from './fragment/CheckIcons';
 
-function index() {
+import { getArtworkById } from '@/api/artwork/get';
+import testData from '@/data/index';
+
+interface IArtworkData {
+  title: string;
+  creator_id: number;
+  owner_id: number;
+  owner_name: string;
+  creator_name: string;
+  createdAt: string;
+  views: number;
+  image: string;
+  description: string;
+  tags: string[];
+  like_count: number;
+  want_count: number;
+  is_selling: boolean;
+  price: number;
+}
+
+// image, description, tags, likecount, wantcount, is_selling, price
+
+function index({
+  data,
+  id,
+}: {
+  data: IArtworkData;
+  id: string | string[] | undefined;
+}) {
+  //todo: price, owner ui 추가
   const testText =
-    "lorem ipsum  dolor sit amet ipsum dolor sit ametlorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit ametlorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit ametlorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet";
-  const testTags = ["tag1", "tag2", "tag3", "tag4", "tag5"];
+    'lorem ipsum  dolor sit amet ipsum dolor sit ametlorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit ametlorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit ametlorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet';
+  const testTags = ['tag1', 'tag2', 'tag3', 'tag4', 'tag5'];
+
+  const {
+    title,
+    creator_id,
+    owner_id,
+    owner_name,
+    creator_name,
+    createdAt,
+    views,
+    image,
+    description,
+    tags,
+    like_count,
+    want_count,
+    is_selling,
+    price,
+  } = data;
 
   return (
     <>
       <Header
-        title={"Artwork Name"}
-        creator={"Creator"}
-        views={1234}
-        created={"2020.03.22"}
-        price={100}
-        is_selling={false}
+        title={title}
+        creator={creator_name}
+        views={views}
+        created={createdAt}
+        is_selling={is_selling}
+        price={price}
       />
-      <ArtImage artImage={data[20]} />
-      <Description description={testText} />
-      <Tags tags={testTags} />
-      <CheckIcons likeCount={22} wantCount={24} />
+      <ArtImage artImage={image} />
+      <Description description={description} />
+      <Tags tags={tags} />
+      <CheckIcons id={id} likeCount={like_count} wantCount={want_count} />
     </>
   );
 }
