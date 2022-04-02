@@ -5,7 +5,7 @@ import VoteService from "../../services/vote.js";
 const router = Router();
 const VoteServiceInstance = new VoteService();
 
-router.post('/:artwork_id', async(req, res) => {
+router.post('/collaboration_id/:artwork_id', async(req, res) => {
     try{
         const artwork_id = req.params.artwork_id;
         const user_id = req.session.user_id
