@@ -1,8 +1,8 @@
-import { useState } from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 
+import Setpfp from "./Setpfp";
 import Modal from "../Modal/index";
 
 interface TitleProps {
@@ -12,6 +12,7 @@ interface TitleProps {
   created: string;
   is_selling: boolean;
   price: number;
+  artImage: string;
 }
 
 function Header({
@@ -21,16 +22,20 @@ function Header({
   created,
   is_selling,
   price,
+  artImage,
 }: TitleProps) {
   return (
     <>
-      <Typography
-        sx={{ pl: "0.3rem", pb: "0.3rem" }}
-        variant="h3"
-        component="div"
-      >
-        {title}
-      </Typography>
+      <Box sx={{ display: "flex" }}>
+        <Typography
+          sx={{ pl: "0.3rem", pb: "0.3rem" }}
+          variant="h3"
+          component="div"
+        >
+          {title}
+        </Typography>
+        <Setpfp artImage={artImage} />
+      </Box>
 
       <Box sx={{ display: "flex" }}>
         <Typography
