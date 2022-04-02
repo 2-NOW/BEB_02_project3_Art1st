@@ -17,7 +17,7 @@ function index({ id }: { id: string | string[] | undefined }) {
 
   return (
     <Card sx={{ mt: '13vh' }} elevation={2}>
-      <CommentInput />
+      <CommentInput id={id} />
       <CommentList commentData={commentData} />
     </Card>
   );

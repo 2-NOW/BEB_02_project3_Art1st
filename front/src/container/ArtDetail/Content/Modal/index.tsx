@@ -1,7 +1,7 @@
-import { useState } from "react";
-import Buy from "./Buy";
-import Noncommercial from "./Noncommercial";
-import Sell from "./Sell";
+import { useState } from 'react';
+import Buy from './Buy';
+import Noncommercial from './Noncommercial';
+import Sell from './Sell';
 
 interface saleProps {
   is_selling: boolean;
@@ -23,7 +23,7 @@ export default function Purchase({ is_selling, price }: saleProps) {
       ) : own ? (
         <Sell open={open} setOpen={setOpen} />
       ) : (
-        ""
+        ''
       )}
     </>
   );

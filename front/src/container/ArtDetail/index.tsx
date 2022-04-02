@@ -31,7 +31,7 @@ function index() {
   return (
     <Layout>
       <Box sx={wrapperCss}>
-        <Content data={artworkData} />
+        <Content data={artworkData} id={id} />
         <Comment id={id} />
         <UserProfile creatorId={artworkData.creator_id} />
       </Box>

@@ -20,12 +20,12 @@ export const postUserSignup = ({ userId, password }: postUserInterface) =>
     password,
   });
 
-// POST create new user profile
-// 굳이 안해도 될 듯
-export const postUserProfileDiscription = () =>
-  axios.post(HOST_ADDRESS + '/user/profile', null, {
-    withCredentials: true,
-  });
+// // POST create new user profile
+// // 굳이 안해도 될 듯
+// export const postUserProfileDiscription = () =>
+//   axios.post(HOST_ADDRESS + '/user/profile', null, {
+//     withCredentials: true,
+//   });
 
 // POST user website
 export const postUserProfileWebsite = (user_site: string) =>
