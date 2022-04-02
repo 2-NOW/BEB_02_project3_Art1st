@@ -3,10 +3,6 @@ import OrderService from "../../services/order.js";
 const router = Router();
 const OrderServiceInterface = new OrderService();
 
-router.get('/', async(req, res)=> {
-    res.send('test OK');
-})
-
 router.post('/donation', async(req, res) => { // 내가 from
     const { to_id, amount, msg } = req.body;
     const from_id = req.session.user_id;
@@ -18,8 +14,8 @@ router.post('/donation', async(req, res) => { // 내가 from
         if(from_id === undefined || to_id === undefined || amount === undefined || msg === undefined || to_id === '1'){
             return res.status(400).json('Bad Request : Invalid values');
         }
-        const data = await OrderServiceInterface.donate(from_id, to_id, amount, msg);
-        res.status(201).json(data);
+        await OrderServiceInterface.donate(from_id, to_id, amount, msg);
+        res.status(201).send(true);
     }
     catch(err){
         res.status(404).json(err.toString())
@@ -37,8 +33,8 @@ router.post('/compensation', async(req, res) => { // 내가 to
         if(to_id === undefined || amount === undefined ){
             return res.status(400).json('Bad Request : Invalid values');
         }
-        const data = await OrderServiceInterface.compensate(to_id, amount);
-        res.status(201).json(data);
+        await OrderServiceInterface.compensate(to_id, amount);
+        res.status(201).send(true);
     }
     catch(err) {
         res.status(404).json(err.toString());
@@ -53,8 +49,8 @@ router.post('/purchase', async (req, res) => { // 내가 to
         if(to_id === undefined || artwork_id === undefined) {
             return res.status(400).json('Bad Request : Invalid values');
         }
-        const data = await OrderServiceInterface.purchase(to_id, artwork_id);
-        res.status(201).json(data);
+        await OrderServiceInterface.purchase(to_id, artwork_id);
+        res.status(201).send(true);
     }
     catch(err){
         res.status(404).json(err.toString());

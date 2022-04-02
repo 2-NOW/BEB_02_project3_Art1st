@@ -185,15 +185,24 @@ class UserService {
     async getTopUsers(){
         try{ 
             const topUsers = [];  
-            const profile = [];
+            const profiles = [];
             const users = await db.User.findAll({ // 판매량순으로 유저 정렬
-                order: [["total_sales", "DESC"]],
+                order: [[db.Sequelize.cast(db.Sequelize.col("total_sales"), 'FLOAT'), "DESC"]],
+                limit: 16,
+                where: {
+                    [db.Sequelize.Op.not]: [{name: 'server'}]
+                }
             })
-            for(let i = 0; i < 16; i ++){
-                profile[i] = await db.Profile.findOne({ // 판매량순으로 정렬된 유저데이터로 프로필 테이블 조회 
+
+            for(let i = 0; i < users.length ; i ++){
+                let profile = await db.Profile.findOne({ // 판매량순으로 정렬된 유저데이터로 프로필 테이블 조회 
                     where : { user_id : users[i].id}
                 });
-                topUsers[i] = { name : users[i].name, ProfileImg : profile[i].picture};
+
+                if(profile === null){
+                    break;
+                }
+                topUsers[i] = { id: users[i].id, name : users[i].name, ProfileImg : profile.picture};
             }        
    
             return topUsers;
