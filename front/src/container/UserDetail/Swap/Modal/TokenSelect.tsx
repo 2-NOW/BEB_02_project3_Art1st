@@ -47,9 +47,9 @@ interface Tokenprops {
   image: string;
   token: string;
 }
+
 export default function Token({ setSelectedIndex, image, token }: Tokenprops) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  // const [selectedIndex, setSelectedIndex] = useState(0);
   const open = Boolean(anchorEl);
   const handleClickListItem = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);

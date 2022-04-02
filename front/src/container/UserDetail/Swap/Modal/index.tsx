@@ -57,7 +57,7 @@ function Index({ openModal, setOpenModal }: ModalProps) {
   const [value, setValue] = useState(0);
   const handleClose = () => setOpenModal(false);
 
-  const swapable = 1000; //
+  const swapable = 1000; //api) user/balance
 
   return (
     <>
