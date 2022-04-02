@@ -6,21 +6,37 @@ import CardMedia from '@mui/material/CardMedia';
 
 import data from '@/data/index';
 
-function OtherWorks() {
-  const testData = data.slice(5, 8);
+interface ICreatedArtworks {
+  artwork_id: number;
+  title: string;
+  ipfsURI: string;
+  is_selling: boolean;
+  price: string;
+  views: number;
+  like_count: number;
+  comment_count: number;
+  creator_name: string;
+  owner_name: string;
+}
 
+function OtherWorks({ data }: { data: ICreatedArtworks[] }) {
   return (
     <Box sx={{ mt: '10vh', mb: '18vh' }}>
-      <Typography sx={{ mb: '1rem' }} variant="h5">
+      <Typography sx={{ mb: '4vh' }} variant="h4">
         More from this Artist
       </Typography>
 
       <Grid container spacing="2rem">
-        {testData.map((src) => {
+        {data.map((item) => {
+          const { artwork_id, ipfsURI } = item;
           return (
-            <Grid item lg={4}>
-              <Card sx={{ height: '25vh' }}>
-                <CardMedia component="img" image={src} />
+            <Grid key={artwork_id} item lg={4}>
+              <Card elevation={12}>
+                <CardMedia
+                  sx={{ height: '25vh' }}
+                  component="img"
+                  image={ipfsURI}
+                />
               </Card>
             </Grid>
           );

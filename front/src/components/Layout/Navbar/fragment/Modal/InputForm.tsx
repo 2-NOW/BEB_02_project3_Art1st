@@ -5,9 +5,12 @@ import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Typography from '@mui/material/Typography';
+
+import { useMutation } from 'react-query';
 
 import PwInput from './PwInput';
+
+import { postUserSignup, postUserLogin } from '@/api/user/post';
 
 interface InputFormProps {
   isLogin: boolean;
@@ -21,22 +24,35 @@ const loginButtonCss = {
 };
 
 function InputForm({ isLogin, setIsLogin }: InputFormProps) {
-  const [id, setId] = useState('');
+  const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [checked, setChecked] = useState(false);
 
+  const userSignupMutation = useMutation(postUserSignup);
+  const userLoginMutation = useMutation(postUserLogin);
+
   const handleIdChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => setId(e.target.value);
+  ) => setUserId(e.target.value);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (userId && password) {
+      if (isLogin) userLoginMutation.mutate({ userId, password });
+      else if (checked) userSignupMutation.mutate({ userId, password });
+    }
   };
 
   const handleAgree = (e: ChangeEvent<HTMLInputElement>) =>
     setChecked(e.target.checked);
 
-  const handleSwitch = () => setIsLogin(!isLogin);
+  const handleSwitch = () => {
+    setIsLogin(!isLogin);
+    setUserId('');
+    setPassword('');
+    setChecked(false);
+  };
 
   return (
     <Box
@@ -49,7 +65,7 @@ function InputForm({ isLogin, setIsLogin }: InputFormProps) {
           variant="standard"
           label="Id"
           onChange={handleIdChange}
-          value={id}
+          value={userId}
         />
       </FormControl>
 
@@ -58,16 +74,27 @@ function InputForm({ isLogin, setIsLogin }: InputFormProps) {
       {!isLogin && (
         <FormControlLabel
           sx={{ mt: '1rem' }}
-          control={<Checkbox onChange={handleAgree} color="primary" />}
+          control={
+            <Checkbox
+              checked={checked}
+              onChange={handleAgree}
+              color="primary"
+            />
+          }
           label="I agree to the terms and conditions."
         />
       )}
 
       <Button sx={loginButtonCss} type="submit" variant="contained">
-        {isLogin ? 'Login' : 'SignIn'}
+        {isLogin ? 'Login' : 'Sign In'}
       </Button>
 
-      <Button sx={{ mt: '1rem' }} onClick={handleSwitch} variant="text">
+      <Button
+        sx={{ mt: '1rem' }}
+        type="button"
+        onClick={handleSwitch}
+        variant="text"
+      >
         {isLogin ? 'Create new account?' : 'Already have an account?'}
       </Button>
     </Box>
