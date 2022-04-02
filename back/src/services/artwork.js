@@ -4,7 +4,9 @@ dotenv.config();
 import Caver from 'caver-js';
 
 import db from '../models/index.js'
+import HashtagService from './hashtag.js';
 import Erc721Abi from '../api/abi/erc721abi.js'
+import artwork from '../models/artwork.js';
 
 class ArtworkService {
     #myErc721Contract;
@@ -13,6 +15,7 @@ class ArtworkService {
     constructor() {
         this.Artwork = db.Artwork;
         this.User = db.User;
+        this.HashtagServiceInterface = new HashtagService();
 
         this.caver = new Caver(process.env.BAOBAB_NETWORK);
         this.#server = this.caver.klay.accounts.wallet.add(process.env.SERVER_PRIVATEKEY);
@@ -21,7 +24,8 @@ class ArtworkService {
         }); 
     }
 
-    async mintNewArtwork(title, desc, price, is_selling, ipfsLink, creator_session) {
+    // 새로운 artwork 민팅
+    async mintNewArtwork(title, desc, price, is_selling, ipfsLink, tags, creator_session) {
         try{
             // 유저 정보 추출
             const creator = await this.User.findOne({ // 세션객체에 저장된 이메일로 artwork creator id, owner id 값으로 추가 할 유저 id 추출 
@@ -49,7 +53,9 @@ class ArtworkService {
                 votes: 0
             })
 
-            return artwork;
+            // 이후에 hashtag 연결 진행
+            const success = await this.HashtagServiceInterface.makeArtworkTag(artwork.id, tags);
+            return success;
         }
         catch(err){
             throw Error(err.toString());
@@ -57,6 +63,7 @@ class ArtworkService {
 
     }
 
+    // 하나의 artwork 작품 가져옴
     async getOneArtwork(artwork_id){
         try{
             const artwork = await this.Artwork.findOne({where: {id: artwork_id}});
@@ -73,6 +80,7 @@ class ArtworkService {
 
     }
 
+    // 하나의 artwork 정보 수정
     async putOneArtwork(artwork_id, is_selling, price, owner_id){
         try{
             const artwork = await this.getOneArtwork(artwork_id);
@@ -91,6 +99,7 @@ class ArtworkService {
         }
     }
 
+    // artwork를 만든 creator 정보를 조회
     async getCreatorInfo(artwork_id){
         try{
             // artwork가 존재하는지 확인
@@ -128,6 +137,7 @@ class ArtworkService {
         }
     }
 
+    // 모든 artwork 조회
     async getAllArtworks(){
         try{
             const artworks = await this.Artwork.findAll().catch((err) => {
@@ -140,7 +150,8 @@ class ArtworkService {
         }
     }
 
-    async getFilteredArtworks(tagName, forSale){// 필터링된 작품들 조회 
+    // 필터링된 작품들 조회 
+    async getFilteredArtworks(tagName, forSale){
         console.log(tagName, forSale);
         try{
             if(tagName !== null && forSale === 0){ // 태그에 해당되는 작품들 조회 
@@ -206,6 +217,56 @@ class ArtworkService {
         }
     }
 
+    // id col을 통해 구매한 작품들 조회
+    async getCollectedArtworksWithId(id){
+        try{
+            let artworks = await this.Artwork.findAll({
+                attributes: [['id', 'artwork_id'], 'title', 'ipfsURI', 'is_selling', 'price', 'views', 'creator_id', 'owner_id'],
+                where: {owner_id : id},
+            });
+
+            artworks = await Promise.all(
+                artworks.map(async (val) => {
+                    val = val.dataValues;
+
+                    // creator_name 호출
+                    const creator_name = await this.User.findOne({
+                        attributes: [['name', 'creator_name']],
+                        where: {id : val.creator_id}
+                    });
+
+                    // owner_name 호출
+                    const owner_name = await this.User.findOne({
+                        attributes: [['name', 'owner_name']],
+                        where : {id: val.owner_id}
+                    });
+
+                    const comment_count = await db.Comment.count({
+                        where : { artwork_id : val.artwork_id}
+                    });
+
+                    const like_count = await db.Like.count({
+                        where: {artwork_id : val.artwork_id}
+                    })
+
+                    val.like_count = like_count;
+                    val.comment_count = comment_count;
+                    val.creator_name = creator_name.dataValues.creator_name;
+                    delete val.creator_id;
+                    val.owner_name = owner_name.dataValues.owner_name;
+                    delete val.owner_id;
+
+                    return val;
+                })
+            );
+
+            return artworks;
+        }
+        catch(err){
+            throw Error(err.toString());
+        }
+    }
+
     // 내가 생성한 작품들 조회
     async getCreatedArtworks (user_id){
         try {  
@@ -220,6 +281,59 @@ class ArtworkService {
 
                 return CreatedArtworks;
         }   
+        catch(err){
+            throw Error(err.toString());
+        }
+    }
+
+
+    // id col을 통해 생성한 작품들 조회
+    async getCreatedArtworksWithId(id, limit){
+        try{
+            limit = (limit === undefined ? undefined : Number(limit));
+            let artworks = await this.Artwork.findAll({
+                attributes: [['id', 'artwork_id'], 'title', 'ipfsURI', 'is_selling', 'price', 'views', 'creator_id', 'owner_id'],
+                where: {creator_id : id},
+                limit
+            });
+
+            artworks = await Promise.all(
+                artworks.map(async (val) => {
+                    val = val.dataValues;
+
+                    // creator_name 호출
+                    const creator_name = await this.User.findOne({
+                        attributes: [['name', 'creator_name']],
+                        where: {id : val.creator_id}
+                    });
+
+                    // owner_name 호출
+                    const owner_name = await this.User.findOne({
+                        attributes: [['name', 'owner_name']],
+                        where : {id: val.owner_id}
+                    });
+
+                    const comment_count = await db.Comment.count({
+                        where : { artwork_id : val.artwork_id}
+                    });
+
+                    const like_count = await db.Like.count({
+                        where: {artwork_id : val.artwork_id}
+                    })
+
+                    val.like_count = like_count;
+                    val.comment_count = comment_count;
+                    val.creator_name = creator_name.dataValues.creator_name;
+                    delete val.creator_id;
+                    val.owner_name = owner_name.dataValues.owner_name;
+                    delete val.owner_id;
+
+                    return val;
+                })
+            );
+
+            return artworks;
+        }
         catch(err){
             throw Error(err.toString());
         }

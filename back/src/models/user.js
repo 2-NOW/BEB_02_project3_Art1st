@@ -41,7 +41,7 @@ export default (Sequelize, DataTypes) => {
             defaultValue: ''
         },
         total_sales: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING(100),
             allowNull: false,
             defaultValue: 0,
         },

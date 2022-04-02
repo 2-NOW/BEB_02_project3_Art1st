@@ -15,7 +15,7 @@ const router = Router();
 const ArtworkServiceInstance = new ArtworkService();
 
 
-router.post('/upload', async (req, res) => {
+router.post('/', async (req, res) => {
     try{
         const { title, desc, isSelling, price, tags } = JSON.parse(req.body); // price 값 꼭 있어야 함. 정수형으로
         const { user_id } = req.session
@@ -31,17 +31,19 @@ router.post('/upload', async (req, res) => {
         const {cid} = await ipfsClient.add(img);
         const ipfsLink = 'https://ipfs.io/ipfs/'+cid;
         console.log('new NFT IPFS link: ', ipfsLink);
-    
+        
         // example
-        // var title = "2번 제목 예시";
-        // var desc = "2번 설명 예시";
-        // var isSelling = false;
-        // var price = 0;
-        // var ipfsLink = '2nd NFT link';
-        // var userId = 'mingyun';
+        // let title = "4번 제목 예시";
+        // let desc = "4번 설명 예시";
+        // let isSelling = false;
+        // let price = 0;
+        // let ipfsLink = '3nd NFT link';
+        // let user_id = 'hyobin';
+        // let tags = ['효', '빈'];
     
         // 이후 nft 민팅
-        const newArtwork = await ArtworkServiceInstance.mintNewArtwork(title, desc, price, isSelling, ipfsLink, user_id);
+        const newArtwork = await ArtworkServiceInstance.mintNewArtwork(title, desc, price, isSelling, ipfsLink, tags, user_id);
+
         res.status(201).json(newArtwork);
         
     }

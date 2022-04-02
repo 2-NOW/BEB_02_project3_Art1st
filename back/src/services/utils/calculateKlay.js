@@ -29,4 +29,12 @@ async function isBigger(num1, num2) { // num2가 더 크면 true 반환
     }
 }
 
-export {addAmount, subAmount, isBigger};
+async function floating(str){
+    str = str.split('.');
+    if(str.length == 2) {
+        str[1] = str[1].slice(0,2);
+    }
+    return str.join('.');
+  }
+
+export {addAmount, subAmount, isBigger, floating};

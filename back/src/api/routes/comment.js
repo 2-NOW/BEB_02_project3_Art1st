@@ -18,12 +18,21 @@ router.get('/', async(req, res) => {
 
 router.post('/', async(req, res) => {
     const artwork_id = req.artwork_id;
-    const { user_id } = req.query;
+    const { user_id } = req.session;
     const { content } = req.body;
 
+    // for test
+    // const user_id = 'hyobin'
+    
     try{
-        const comment = await CommentServiceInstance.postArtworkComment(artwork_id, content, user_id);
-        res.status(201).json(comment);
+        if(user_id === undefined) return res.status(401).json("Error: Unauthorized");
+        const success = await CommentServiceInstance.postArtworkComment(artwork_id, content, user_id);
+        if(success){
+            return res.status(201).send();
+        }
+        else {
+            return res.status(500).json('Unknown Error');
+        }
     }
     catch(err){
         res.status(404).json(err.toString());

@@ -32,6 +32,34 @@ class HashtagService {
         }
     }
     
+    async makeArtworkTag(artwork_id, tags) {
+        try{
+
+            for (let tag of tags) {
+                // 먼저 tag들을 hashtag 디비에 넣어주기
+                const [hashtag, created] = await this.Hashtag.findOrCreate({
+                    where: {hashtag : tag},
+                    defaults: {
+                        count: 0
+                    }
+                });
+
+                hashtag.update({count: Number(hashtag.count) + 1});
+                hashtag.save();
+
+                // 그 다음 hashtag랑 nft 연결
+                await this.ArtworkHashtag.create({
+                    artwork_id: artwork_id,
+                    hashtag_id: hashtag.id
+                });
+            }
+
+            return true;
+        }
+        catch(err) {
+            throw Error(err.toString());
+        }
+    }
     // 유저들이 많이사용한 상위 10개의 해쉬태그 조회 
     async getMostUsedArtworkTags(){
         try{

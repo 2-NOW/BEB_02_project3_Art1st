@@ -1,17 +1,12 @@
 import { Router } from "express";
 import UserService from "../../services/user.js";
 import KlaytnService from "../../services/klaytn.js";
+import ArtworkService from "../../services/artwork.js";
 const UserServiceInstance = new UserService();
+const ArtworkServiceInstance = new ArtworkService();
 const KlaytnServiceInstance = new KlaytnService();
 const router = Router();
 
-async function floating(fl){
-  fl = fl.split('.');
-  if(fl.length == 2) {
-      fl[1] = fl[1].slice(0,2);
-  }
-  return fl.join('.');
-}
 
 // 스왑 후 잔액 변경
 router.put('/balance', async(req, res)=> {
@@ -54,6 +49,7 @@ router.get('/balance', async(req, res) => {
   }
 })
 
+// 로그인
 router.post('/login', async (req, res) => {
   const { user_id, user_pw } = req.body 
   try {
@@ -66,6 +62,7 @@ router.post('/login', async (req, res) => {
   }
 })  
 
+// 로그 아웃
 router.delete('/logout', (req, res) => {
   try {
     const isLogout = UserServiceInstance.logout(req.session);
@@ -91,84 +88,72 @@ router.get('/topCreator', async (req, res) => {
   }
 });
 
-
-// 전체 user 정보 가져오기
+// 나의 user 정보 가져오기
 router.get('/', async (req, res) => {
-    try{
-        const users = await UserServiceInstance.getAllUsers();
-        res.status(200).json(users);
-    }
-    catch(err){
-        res.status(404).json(err.toString());
-    }
-});
-
-// 특정 user 정보 가져오기
-router.get('/specificUser', async(req, res) => {
-  const {user_id} = req.body;
-  if(user_id){
-      try{
-        const user = await UserServiceInstance.getOneUser(user_id);
-        user.price = await floating(user.price);
-        res.status(200).json(user);
-    }
-    catch(err){
-        res.status(404).json(err.toString());
-    }
-  } else {
-    try{
-      const user = await UserServiceInstance.getOneUser(req.session.user_id);
-      res.status(200).json(user);
-    }
-    catch(err){
-        res.status(404).json(err.toString());
-    }
+   const {user_id} = req.session;
+  
+  try {
+    if(user_id === undefined ) return res.status(401).json("Error: Unauthorized");
+    const user = await UserServiceInstance.getMyUserInfo(user_id);
+    return res.status(200).json(user);
   }
-});
-
-// 특정 user 정보 수정
-router.put('/specificUser', async(req, res) => {
-    const {edit_user_name, edit_user_id, edit_user_password} = req.body;
-    const { user_id } = req.session;
-    try{
-      if(user_id === undefined) return res.status(400).json("Error: Bad Request");
-      const user = await UserServiceInstance.putOneUser(user_id, edit_user_name, edit_user_id, edit_user_password);
-      user.price = await floating(user.price);
-      res.status(201).json(user);
-        
-    }
-    catch(err){
-        res.status(404).json(err.toString());
-    }
+  catch(err){
+    return res.status(404).json(err.toString());
+  }
 })
 
-// 특정 user의 username 가져오기
-router.get('/:user_id/username', async (req, res) => {
-    const user_id = req.params.user_id;
+// 나의 user 정보(닉네임)이나 프로필 수정)
+router.put('/', async(req, res) => {
+  const {user_id} = req.session;
+  const {user_desc, user_picture, user_name} = req.body;
 
-    try{
-        const user_name = await UserServiceInstance.getOneUserName(user_id);
-        res.status(200).json({user_name});
+  try{
+    if(user_id === undefined ) return res.status(401).json("Error: Unauthorized");
+    const updated_user = await UserServiceInstance.putMyUserInfo(user_id, user_desc, user_picture, user_name);
+    return res.status(201).json(updated_user);
+  }
+  catch(err){
+    return res.status(404).json(err.toString());
+  }
 
-    }
-    catch(err) {
-        res.status(404).json(err.toString());
-    }
+})
 
-});
+router.get('/:id', async(req, res) => {
+  const {id} = req.params; 
+  try{
+    const user = await UserServiceInstance.getOtherUserInfo(id);
+    return res.status(200).json(user);
+  }
+  catch(err){
+    return res.status(404).json(err.toString());
+  }
+})
 
-// 특정 user의 username 수정하기
-router.put('/:user_id/username', async(req, res) => {
-    const user_id = req.params.user_id;
-    const {user_name} = req.body;
+router.get('/:id/collected', async (req, res) => {
+  const {id} = req.params;
+  try{
+    const artworks = await ArtworkServiceInstance.getCollectedArtworksWithId(id);
+    return res.status(200).json(artworks);
+  }
+  catch(err){
+    return res.status(404).json(err.toString());
+  }
+})
 
-    try{
-        const updated_user = await UserServiceInstance.putOneUserName(user_id, user_name);
-        res.status(201).json(updated_user);
-    }
-    catch(err) {
-        res.status(404).json(err.toString());
-    }
+router.get('/:id/created', async (req, res) => {
+  const {id} = req.params;
+  const {limit} = req.query;
+  try{
+    const artworks = await ArtworkServiceInstance.getCreatedArtworksWithId(id, limit);
+    return res.status(200).json(artworks);
+  }
+  catch(err){
+    return res.status(404).json(err.toString());
+  }
+})
+
+router.get('/:id/favorite', async (req, res) => {
+  const {id} = req.params;
 
 })
 

@@ -1,8 +1,6 @@
 import db from '../models/index.js';
 import lightwallet from "eth-lightwallet";
-import {addAmount, subAmount, isBigger} from './utils/calculateKlay.js';
-
-
+import {addAmount, subAmount, floating} from './utils/calculateKlay.js';
 
 class UserService {
     constructor(){
@@ -45,71 +43,121 @@ class UserService {
 
     }
 
-    // 특정 유저 정보 불러오기
+    // 특정 유저 정보 user_id로 불러오기
     async getOneUser(user_id){
         try {
             const user = await this.User.findOne({
                 where : { user_id : user_id}
             });
-            console.log(user);
-            let userId = await this.User.findOne({where: {user_id: user_id}}).catch((err) => {
-                console.log(err);
-            })
-            userId = userId.dataValues.id
-            const user_websites = await this.Website.findAll({where : { user_id : userId }});
-            const user_profile = await this.Profile.findOne({where : { user_id : userId }});
 
             if(user === null){
                 throw Error('Not Found User');
             }
-            else {
-                return { user : user, user_profile : user_profile, user_websites: user_websites}
-            }
-        }
-        catch(err) {
-            throw Error(err.toString());
-        }
-    }
-
-    // 유저 데이터 수정
-    async putOneUser(user_id, edit_user_name, edit_user_id, edit_user_password) {
-        try{
-            let user = await this.getOneUser(user_id);
-            await user.update({name: edit_user_name, user_id: edit_user_id, password: edit_user_password});
-            await user.save();
-            return { name : user.name, user_id : user.user_id,  balance : user.balance, donation_balance : user.donation_balance, total_sales : user.total_sales, private_key : user.private_key}
-        }
-        catch(err){
-            throw Error(err.toString());
-        }
-    }
-
-    // 특정 유저 name 가져오기
-    async getOneUserName(user_id){
-        try {
-            const user = await this.getOneUser(user_id);
-            return user.name;
-        }
-        catch(err) {
-            throw Error(err.toString());
-        }
-    }
-
-    // 특정 유저 name 수정하기
-    async putOneUserName(user_id, user_name){
-        try {
-            const user = await this.getOneUser(user_id);
-            await user.update({name: user_name});
-            await user.save();
 
             return user;
         }
         catch(err) {
             throw Error(err.toString());
         }
-
     }
+
+    // 유저 정보 id로 불러오기
+    async getOneUserWithID(id) {
+        try{
+            const user = await this.User.findOne({
+                where : {id: id}
+            });
+
+            if(user === null) {
+                throw Error('Not Found User');
+            }
+                
+            return user;
+        }
+        catch(err) {
+            throw Error(err.toString());
+        }
+    }
+
+    // 특정 유저 정보(내 정보임)불러오기
+    async getMyUserInfo(user_id){
+        try {
+            const user = await this.User.findOne({
+                attributes: ['id', 'name', 'user_id', 'balance', 'donation_balance', 'address', 'total_sales'],
+                where : { user_id : user_id}
+            });
+
+            user.balance = await floating(user.balance);
+            user.donation_balance = await floating(user.donation_balance);
+            user.total_sales = await floating(user.total_sales);
+
+            if(user === null){
+                throw Error('Not Found User');
+            }
     
+            const user_websites = await this.Website.findAll({
+                attributes : ['id', 'site'],
+                where : {user_id : user.id}
+            });
+    
+            const user_profile = await this.Profile.findOne({
+                attributes: ['id', 'picture', 'description'],
+                where : {user_id : user.id}
+            });
+    
+            return { user : user, user_profile : user_profile, user_websites: user_websites};
+        }
+        catch(err) {
+            throw Error(err.toString());
+        }
+    }
+
+    // 유저 정보 id로 불러오기
+    async getOtherUserInfo(id) {
+        try{
+            const user = await this.User.findOne({
+                attributes: ['id', 'name', 'user_id', 'address'],
+                where : {id: id}
+            });
+
+            if(user === null) {
+                throw Error('Not Found User');
+            }
+            
+            const user_websites = await this.Website.findAll({
+                attributes : ['id', 'site'],
+                where : {user_id : id}
+            });
+            const user_profile = await this.Profile.findOne({
+                attributes: ['id', 'picture', 'description'],
+                where : {user_id : id}
+            });
+
+            return {user : user, user_profile : user_profile, user_websites: user_websites};
+        }
+        catch(err) {
+            throw Error(err.toString());
+        }
+    }
+
+    // 내 유저 데이터 수정
+    async putMyUserInfo(user_id, new_user_desc, new_user_picture, new_user_name){
+        try{
+            const {user, user_profile, user_websites} = await this.getMyUserInfo(user_id);
+
+            await user.update({name: new_user_name});
+            await user.save();
+            
+            await user_profile.update({picture: new_user_picture, description: new_user_desc});
+            await user_profile.save();
+
+            return {user, user_profile, user_websites};
+        }
+        catch(err){
+            throw Error(err.toString());
+        }
+    }
+
     // klay->token 스왑 이후 balance 추가  
     async addUserBalance(user_id, balance){ // 여기서 balance 단위는 klay 단위(10e18을 곱하지 않은 형태)로 들어와야 함
 
