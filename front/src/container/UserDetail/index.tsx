@@ -21,11 +21,11 @@ function index() {
   //todo: profile에 후원기능 추가예정
 
   const { id } = useRouter().query;
-  const {
-    data: { user, user_profile, user_websites },
-    isError,
-    isLoading,
-  } = useQuery(['user', id], getUserById(id));
+  const { data, isError, isLoading } = useQuery(['user', id], getUserById(id));
+
+  if (isLoading) return <div>Loading...</div>;
+
+  const { user, user_profile, user_websites } = data;
 
   return (
     <Layout>

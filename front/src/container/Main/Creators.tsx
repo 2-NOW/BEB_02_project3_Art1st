@@ -38,18 +38,21 @@ function Creators({ creators }: { creators: ICreator[] }) {
               md={3}
             >
               <Card sx={cardCss} elevation={5}>
-                <CardActionArea>
-                  <Link href={`/user/${creator.id}`}>
-                    <Avatar sx={avatarCss} src={creator.picture} />
-                    <Typography
-                      sx={{ m: '1rem auto', textAlign: 'center' }}
-                      variant="h6"
-                      gutterBottom
-                    >
-                      {creator.name}
-                    </Typography>
-                  </Link>
-                </CardActionArea>
+                <Link href={`/user/${creator.id}`}>
+                  <a>
+                    <CardActionArea>
+                      <Avatar sx={avatarCss} src={creator.picture} />
+
+                      <Typography
+                        sx={{ m: '1rem auto', textAlign: 'center' }}
+                        variant="h6"
+                        gutterBottom
+                      >
+                        {creator.name}
+                      </Typography>
+                    </CardActionArea>
+                  </a>
+                </Link>
               </Card>
             </Grid>
           );

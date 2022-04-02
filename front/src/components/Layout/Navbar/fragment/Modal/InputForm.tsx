@@ -39,8 +39,10 @@ function InputForm({ isLogin, setIsLogin }: InputFormProps) {
     e.preventDefault();
 
     if (userId && password) {
-      if (isLogin) userLoginMutation.mutate({ userId, password });
-      else if (checked) userSignupMutation.mutate({ userId, password });
+      if (isLogin)
+        userLoginMutation.mutate({ user_id: userId, user_pw: password });
+      else if (checked)
+        userSignupMutation.mutate({ user_id: userId, user_pw: password });
     }
   };
 
@@ -86,7 +88,7 @@ function InputForm({ isLogin, setIsLogin }: InputFormProps) {
       )}
 
       <Button sx={loginButtonCss} type="submit" variant="contained">
-        {isLogin ? 'Login' : 'Sign In'}
+        {isLogin ? 'Login' : 'Sign up'}
       </Button>
 
       <Button

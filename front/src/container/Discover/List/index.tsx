@@ -42,6 +42,9 @@ function index() {
     getArtworkList(isSelling, tagId)
   );
 
+  if (isLoading) return <div>Loading...</div>;
+  if (isLoadingArtworkList) return <div>Loading...</div>;
+
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>

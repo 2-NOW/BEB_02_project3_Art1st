@@ -14,6 +14,7 @@ function index({ id }: { id: string | string[] | undefined }) {
     isLoading: commentIsLoading,
   } = useQuery(['comment', id], getArtworkCommentsById(id));
   // const {data, isError, isLoading} = useQuery([ 'user', id], get
+  if (commentIsLoading) return <div>Loading...</div>;
 
   return (
     <Card sx={{ mt: '13vh' }} elevation={2}>

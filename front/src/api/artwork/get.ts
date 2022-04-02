@@ -7,13 +7,13 @@ export const getTopCreators = () => async () => {
 };
 
 export const getMostUsedTags = () => async () => {
-  const { data } = await axios.get(HOST_ADDRESS + '/tag/top');
+  const { data } = await axios.get(HOST_ADDRESS + '/artwork/tag/top');
   return data;
 };
 
 export const getArtworkList =
   (isSelling: 0 | 1, tagId?: number) => async () => {
-    const { data } = await axios.get(HOST_ADDRESS + '/artwork/list', {
+    const { data } = await axios.get(HOST_ADDRESS + '/artwork', {
       params: { tag_id: tagId, is_selling: isSelling },
     });
     return data;

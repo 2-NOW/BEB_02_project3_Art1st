@@ -12,6 +12,7 @@ function index() {
     isLoading,
   } = useQuery(['user', 'top'], getTopCreators());
 
+  if (isLoading) return <div>Loading...</div>;
   return (
     <Layout>
       <Carousel data={topUserData} />

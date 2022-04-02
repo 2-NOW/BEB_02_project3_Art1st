@@ -33,6 +33,9 @@ export default function index() {
     isError: favoriteIsError,
   } = useQuery(['user', 'favorite'], getUserFavorite());
 
+  if (collectIsLoading) return <div>Loading...</div>;
+  if (createIsLoading) return <div>Loading...</div>;
+  if (favoriteIsLoading) return <div>Loading...</div>;
   return (
     <Box sx={{ width: '100%' }}>
       <Box>

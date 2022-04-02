@@ -2,22 +2,22 @@ import { HOST_ADDRESS } from '@/utils/constant/index';
 import axios from 'axios';
 
 interface postUserInterface {
-  userId: string;
-  password: string;
+  user_id: string;
+  user_pw: string;
 }
 
 // POST user login
-export const postUserLogin = ({ userId, password }: postUserInterface) =>
+export const postUserLogin = ({ user_id, user_pw }: postUserInterface) =>
   axios.post(HOST_ADDRESS + '/user/login', {
-    userId,
-    password,
+    user_id,
+    user_pw,
   });
 
 // POST user signup
-export const postUserSignup = ({ userId, password }: postUserInterface) =>
+export const postUserSignup = ({ user_id, user_pw }: postUserInterface) =>
   axios.post(HOST_ADDRESS + '/user/signup', {
-    userId,
-    password,
+    user_id,
+    user_pw,
   });
 
 // // POST create new user profile
