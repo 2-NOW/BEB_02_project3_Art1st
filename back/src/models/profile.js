@@ -6,7 +6,7 @@ export default (Sequelize, DataTypes) => {
             primaryKey: true
         },
         picture: {
-            type: DataTypes.STRING(50),
+            type: DataTypes.STRING(256),
             allowNull: false
         },
         description: {

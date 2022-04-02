@@ -14,6 +14,8 @@ import profile from './profile.js';
 import want from './want.js';
 import website from './website.js';
 import orderbook from './orderbook.js';
+import collaboration from './collaboration.js';
+import vote from './vote.js';
 
 
 const env = process.env.NODE_ENV || 'development';
@@ -35,6 +37,13 @@ db.Like = like(sequelize, Sequelize);
 db.Profile = profile(sequelize, Sequelize);
 db.Want = want(sequelize, Sequelize);
 db.Website = website(sequelize, Sequelize);
+db.Collaboration = collaboration(sequelize, Sequelize);
+db.Vote = vote(sequelize, Sequelize);
+
+
+// artwork collaboration_id 외래키 설정
+db.Collaboration.hasMany(db.Artwork, {foreignKey: 'collaboration_id', allowNull: false});
+db.Artwork.belongsTo(db.Collaboration, {foreignKey: 'collaboration_id'});
 
 // artwork creator_id 외래키 설정
 db.User.hasMany(db.Artwork, {foreignKey: 'creator_id', allowNull: false });
@@ -43,6 +52,18 @@ db.Artwork.belongsTo(db.User, {foreignKey: 'creator_id'});
 // artwork owner_id 외래키 설정
 db.User.hasMany(db.Artwork, {foreignKey: 'owner_id', allowNull: false,});
 db.Artwork.belongsTo(db.User, {foreignKey: 'owner_id'});
+
+// vote artwork_id 외래키 설정
+db.Artwork.hasMany(db.Vote, {foreignKey: 'artwork_id',allowNull: false,});
+db.Vote.belongsTo(db.Artwork, {foreignKey: 'artwork_id',});
+
+// vote user_id 외래키 설정
+db.User.hasMany(db.Vote, {foreignKey: 'user_id',allowNull: false,});
+db.Vote.belongsTo(db.User, {foreignKey: 'user_id',});
+
+// artwrok_hahstag hashtag_id 외래키 설정
+db.Hashtag.hasMany(db.ArtworkHashtag, {foreignKey: 'hashtag_id',allowNull: false,});
+db.ArtworkHashtag.belongsTo(db.Hashtag, {foreignKey: 'hashtag_id'});
 
 // artwork_hashtag artwork_id 외래키 설정
 db.Artwork.hasMany(db.ArtworkHashtag, {foreignKey: 'artwork_id',allowNull: false,});
