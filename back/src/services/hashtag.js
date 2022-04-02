@@ -69,7 +69,9 @@ class HashtagService {
             }).catch((err) => {
                 console.loc(err);
             })
-            MostUsedArtworktags = MostUsedArtworktags.map(el => el.hashtag);
+            MostUsedArtworktags = MostUsedArtworktags.map(el => {
+                return {id: el.id, hashtag: el.hashtag}
+            });
             return MostUsedArtworktags;
 
         }

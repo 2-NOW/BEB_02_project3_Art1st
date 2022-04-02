@@ -78,7 +78,7 @@ router.delete('/logout', (req, res) => {
 });
 
 // Artworks Page Top Creator 15명 Users 정보 가져오기 
-router.get('/topCreator', async (req, res) => {
+router.get('/top', async (req, res) => {
   try{
       const TopUsers = await UserServiceInstance.getTopUsers();
       res.status(200).json(TopUsers);
@@ -118,6 +118,49 @@ router.put('/', async(req, res) => {
 
 })
 
+// 내가 소유한 작품 내역
+router.get('/collected', async(req, res)=> {
+  const {user_id} = req.session;
+
+  try{
+    if(user_id === undefined ) return res.status(401).json("Error: Unauthorized");
+    const artworks = await ArtworkServiceInstance.getCollectedArtworks(user_id);
+    return res.status(200).json(artworks);
+  }
+  catch(err){
+    return res.status(404).json(err.toString());
+  }
+})
+
+// 내가 생성한 작품 내역
+router.get('/created', async(req, res)=> {
+  const {user_id} = req.session;
+
+  try{
+    if(user_id === undefined) return res.status(401).json("Error: Unauthorized");
+    const artworks = await ArtworkServiceInstance.getCreatedArtworks(user_id);
+    return res.status(200).json(artworks);
+  }
+  catch(err) {
+    return res.status(404).json(err.toString());
+  }
+})
+
+// 내가 좋아요 누른 작품 내역
+router.get('/favorite', async(req, res)=>{
+  const {user_id} = req.session;
+
+  try{
+    if(user_id === undefined) return res.status(401).json("Error: Unauthorized");
+    const artworks = await ArtworkServiceInstance.getFavoritedArtworks(user_id);
+    return res.status(200).json(artworks);
+  }
+  catch(err){
+    return res.status(404).json(err.toString());
+  }
+})
+
+// 다른 특정 user 정보 가져오기
 router.get('/:id', async(req, res) => {
   const {id} = req.params; 
   try{
@@ -129,10 +172,11 @@ router.get('/:id', async(req, res) => {
   }
 })
 
+// 다른 특정 user가 소유한 작품 내역
 router.get('/:id/collected', async (req, res) => {
   const {id} = req.params;
   try{
-    const artworks = await ArtworkServiceInstance.getCollectedArtworksWithId(id);
+    const artworks = await ArtworkServiceInstance.getAllArtworks(undefined, undefined, id, undefined, undefined);
     return res.status(200).json(artworks);
   }
   catch(err){
@@ -140,11 +184,12 @@ router.get('/:id/collected', async (req, res) => {
   }
 })
 
+// 다른 특정 user가 만든 작품 내역
 router.get('/:id/created', async (req, res) => {
   const {id} = req.params;
   const {limit} = req.query;
   try{
-    const artworks = await ArtworkServiceInstance.getCreatedArtworksWithId(id, limit);
+    const artworks = await ArtworkServiceInstance.getAllArtworks(undefined,undefined, undefined, id, limit);
     return res.status(200).json(artworks);
   }
   catch(err){
@@ -152,10 +197,6 @@ router.get('/:id/created', async (req, res) => {
   }
 })
 
-router.get('/:id/favorite', async (req, res) => {
-  const {id} = req.params;
-
-})
 
 router.post('/signup', async(req,res) => {
   // 포스트맨에서 userName, password를 넣으면
