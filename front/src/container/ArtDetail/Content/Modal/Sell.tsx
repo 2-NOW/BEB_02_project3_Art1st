@@ -7,6 +7,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
 interface ModalProps {
   open: boolean;
@@ -32,7 +33,6 @@ function Sell({ open, setOpen }: ModalProps) {
     setOpen(false);
   };
 
-  console.log(price);
   return (
     <Box>
       <Button
@@ -62,9 +62,15 @@ function Sell({ open, setOpen }: ModalProps) {
             margin="dense"
             type="number"
             variant="standard"
+            placeholder="Price"
             onChange={handleChange}
-            sx={{ width: "50%" }}
+            sx={{ width: "40%" }}
           />
+          <Typography
+            sx={{ position: "relative", left: "11rem", bottom: "2rem" }}
+          >
+            AST
+          </Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
