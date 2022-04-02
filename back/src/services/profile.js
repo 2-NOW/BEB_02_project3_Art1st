@@ -44,10 +44,15 @@ class ProfileService {
                 throw Error ('User Profile data already exists');
             }
             else {
+                console.log(user_id)
+                let userId = await this.User.findOne({where: {user_id: user_id}}).catch((err) => {
+                    console.log(err);
+                })
+                userId = userId.dataValues.id
                 const user_profile= await db.Profile.create({
                     picture: '',
                     description: '',
-                    user_id: user_id
+                    user_id: userId
                 });
 
                 return user_profile;

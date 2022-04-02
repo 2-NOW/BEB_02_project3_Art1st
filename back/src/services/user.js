@@ -1,10 +1,12 @@
 import db from '../models/index.js';
 import lightwallet from "eth-lightwallet";
-
+import {addAmount, subAmount, floating} from './utils/calculateKlay.js';
 
 class UserService {
     constructor(){
         this.User = db.User;
+        this.Profile = db.Profile;
+        this.Website = db.Website;
     }
 
     // 전체 유저 정보 불러오기
@@ -41,7 +43,7 @@ class UserService {
 
     }
 
-    // 특정 유저 정보 불러오기
+    // 특정 유저 정보 user_id로 불러오기
     async getOneUser(user_id){
         try {
             const user = await this.User.findOne({
@@ -51,54 +53,135 @@ class UserService {
             if(user === null){
                 throw Error('Not Found User');
             }
-            else {
-                return user;
-            }
-        }
-        catch(err) {
-            throw Error(err.toString());
-        }
-    }
-
-    // 유저 데이터 수정
-    async putOneUser(user_id, edit_user_name, edit_user_id, edit_user_password) {
-        try{
-            let user = await this.getOneUser(user_id);
-            await user.update({name: edit_user_name, user_id: edit_user_id, password: edit_user_password});
-            await user.save();
-            return { name : user.name, user_id : user.user_id,  balance : user.balance, donation_balance : user.donation_balance, total_sales : user.total_sales, private_key : user.private_key}
-        }
-        catch(err){
-            throw Error(err.toString());
-        }
-    }
-
-    // 특정 유저 name 가져오기
-    async getOneUserName(user_id){
-        try {
-            const user = await this.getOneUser(user_id);
-            return user.name;
-        }
-        catch(err) {
-            throw Error(err.toString());
-        }
-    }
-
-    // 특정 유저 name 수정하기
-    async putOneUserName(user_id, user_name){
-        try {
-            const user = await this.getOneUser(user_id);
-            await user.update({name: user_name});
-            await user.save();
 
             return user;
         }
         catch(err) {
             throw Error(err.toString());
         }
-
     }
-    //// Artworks Page Top Creator 16명 Users 정보 가져오기 
+
+    // 유저 정보 id로 불러오기
+    async getOneUserWithID(id) {
+        try{
+            const user = await this.User.findOne({
+                where : {id: id}
+            });
+
+            if(user === null) {
+                throw Error('Not Found User');
+            }
+                
+            return user;
+        }
+        catch(err) {
+            throw Error(err.toString());
+        }
+    }
+
+    // 특정 유저 정보(내 정보임)불러오기
+    async getMyUserInfo(user_id){
+        try {
+            const user = await this.User.findOne({
+                attributes: ['id', 'name', 'user_id', 'balance', 'donation_balance', 'address', 'total_sales'],
+                where : { user_id : user_id}
+            });
+
+            user.balance = await floating(user.balance);
+            user.donation_balance = await floating(user.donation_balance);
+            user.total_sales = await floating(user.total_sales);
+
+            if(user === null){
+                throw Error('Not Found User');
+            }
+    
+            const user_websites = await this.Website.findAll({
+                attributes : ['id', 'site'],
+                where : {user_id : user.id}
+            });
+    
+            const user_profile = await this.Profile.findOne({
+                attributes: ['id', 'picture', 'description'],
+                where : {user_id : user.id}
+            });
+    
+            return { user : user, user_profile : user_profile, user_websites: user_websites};
+        }
+        catch(err) {
+            throw Error(err.toString());
+        }
+    }
+
+    // 유저 정보 id로 불러오기
+    async getOtherUserInfo(id) {
+        try{
+            const user = await this.User.findOne({
+                attributes: ['id', 'name', 'user_id', 'address'],
+                where : {id: id}
+            });
+
+            if(user === null) {
+                throw Error('Not Found User');
+            }
+            
+            const user_websites = await this.Website.findAll({
+                attributes : ['id', 'site'],
+                where : {user_id : id}
+            });
+            const user_profile = await this.Profile.findOne({
+                attributes: ['id', 'picture', 'description'],
+                where : {user_id : id}
+            });
+
+            return {user : user, user_profile : user_profile, user_websites: user_websites};
+        }
+        catch(err) {
+            throw Error(err.toString());
+        }
+    }
+
+    // 내 유저 데이터 수정
+    async putMyUserInfo(user_id, new_user_desc, new_user_picture, new_user_name){
+        try{
+            const {user, user_profile, user_websites} = await this.getMyUserInfo(user_id);
+
+            await user.update({name: new_user_name});
+            await user.save();
+            
+            await user_profile.update({picture: new_user_picture, description: new_user_desc});
+            await user_profile.save();
+
+            return {user, user_profile, user_websites};
+        }
+        catch(err){
+            throw Error(err.toString());
+        }
+    }
+
+    // klay->token 스왑 이후 balance 추가  
+    async addUserBalance(user_id, balance){ // 여기서 balance 단위는 klay 단위(10e18을 곱하지 않은 형태)로 들어와야 함
+
+        const user = await this.getOneUser(user_id); 
+        await user.update({ // 유저 balance 수정
+            balance: await addAmount(user.balance, balance)
+        });
+        await user.save();
+
+        return user.balance; // 변경 후의 balance를 반환 
+    }
+
+    // token->klay 스왑 이후 balance 차감
+    async subUserBalance(user_id, balance) {
+        const user = await this.getOneUser(user_id);
+        await user.update({
+            balance: await subAmount(user.balance, balance)
+        })
+        await user.save();
+
+        return user.balance; // 변경 후의 balance를 반환
+    }
+
+    // Artworks Page Top Creator 16명 Users 정보 가져오기 
     async getTopUsers(){
         try{ 
             const topUsers = [];  
@@ -137,7 +220,7 @@ class UserService {
                   // 있으면 있다고 응답
                   throw Error("User exists");
                 // 없으면 DB에 저장
-                } else {
+                } else {         
                   let mnemonic;
                   mnemonic = lightwallet.keystore.generateRandomSeed(); // 랜덤한 니모닉 시드 생성  
                   // 생성된 니모닉코드와 password로 keyStore, address 생성
@@ -146,7 +229,7 @@ class UserService {
                     seedPhrase: mnemonic,
                     hdPathString: "m/0'/0'/0'"
                   },
-                  function (err, ks) {
+                  async function (err, ks) {
                     ks.keyFromPassword(user_pw, function (err, pwDerivedKey) {
                       ks.generateNewAddress(pwDerivedKey, 1); // n개의 새로운 주소생성
                       
@@ -157,8 +240,8 @@ class UserService {
                       db.User.update({
                         name: user_id,
                         password: user_pw,
-                        balance: 0,
-                        donation_balance: 0,
+                        balance: '0',
+                        donation_balance: '0',
                         address: address,
                         private_key: prv_key,
                         total_sales: 0,
@@ -173,10 +256,9 @@ class UserService {
                         console.error(err);
                       })
                     });
-                  });
+                  }); 
                 }
               }).then(()=>{
-                console.log(address);
                 return address
               })
         }
