@@ -15,7 +15,12 @@ contract Art1stToken is ERC20, Ownable {
     }
 
     // 스왑 기능
-    function buy(address to) payable public {
+    // https://ko.docs.klaytn.com/dapp/sdk/caver-js/api-references/caver.contract#methods-methodname-send
+    // 요거 참고하시면 될 거 같아영! 
+    // 대충 myContract(컨트랙트 객체).buy('0x111').send({from: (카이카스 주소), gas: (가스 양), value: (peb 단위)});
+    // 이렇게 호출하면 될 거 같아여
+    // value 값 넣어 주실 때 decimal이 18이니까 1e18 곱해주시거나(peb 단위) 하면 될거같아여
+    function buy(address to) payable public { // to : DB 상의 address 주소(이 주소에 AST 토큰이 입금됨)
         uint256 amountToBuy = msg.value * 15; // 1:15의 비율로 스왑 진행
         require(amountToBuy > 0, "SWAP: You need to send some ethere");
 
@@ -26,7 +31,9 @@ contract Art1stToken is ERC20, Ownable {
         emit Bought(msg.value, amountToBuy);
 
     }
-    
+
+    // to: db상의 address 값(이 주소에서 AST 토큰이 차감됨)
+    // amount : 내가 스왑 하고자 하는 AST 토큰의 값(decimal이 18이니까 1e18 곱해주셔야 해요. 아니면 caver.utils 사용하셔도 되용)
     function sell(address to, uint256 amount) payable public {
         require(amount > 0, "SWAP: You need to sell at least some tokens");
 
@@ -37,7 +44,7 @@ contract Art1stToken is ERC20, Ownable {
         require(balanceOf(to) == allowance(to, server), "SWAP: balance and allowance do not equal after swap");
 
         uint256 klayToSell = amount/13;
-        payable(msg.sender).transfer(klayToSell);
+        payable(msg.sender).transfer(klayToSell); // 비율 맞춰서 klay가 msg.sender(= 카이카스 지갑 주소)에 입금됩니다
         emit Sold(amount, klayToSell);
     }
 
