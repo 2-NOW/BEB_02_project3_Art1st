@@ -29,6 +29,12 @@ export default function index({ id }: { id: string | string[] | undefined }) {
     isLoading: createIsLoading,
   } = useQuery(['user', 'create', id], getUserCreateById(id));
 
+  if (collectIsLoading) return <div>Loading...</div>;
+  if (createIsLoading) return <div>Loading...</div>;
+
+  console.log('collect', collectData);
+  console.log('create', createData);
+
   return (
     <Box sx={{ width: '100%' }}>
       <Box>

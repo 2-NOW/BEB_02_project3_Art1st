@@ -34,6 +34,8 @@ function index() {
 
   const { data: userData, isLoading, isError } = useQuery(['user'], getUser());
 
+  if (isLoading) return <div>Loading...</div>;
+
   const { picture: profileImage, description } = userData.user_profile;
   const { name: userName, user_websites: websites } = userData.user;
   return (

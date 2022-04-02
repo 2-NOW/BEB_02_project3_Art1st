@@ -1,35 +1,31 @@
-import { useQuery } from 'react-query';
+import { useQuery, useMutation } from 'react-query';
 
 import Layout from '@/components/Layout/index';
 import Banner from './Banner';
 import Creators from './Creators';
 
-import axios from 'axios';
-
 import { getMainData } from '@/api/main/get';
 
+import { postArtworkComment } from '@/api/artwork/post';
+
 function index() {
-  // const { isLoading, error, data, isFetching } = useQuery('repoData', () =>
-  //   axios.get('http://localhost:4000/main').then((res) => res.data)
-  // );
-  // console.log(data);
+  const { data, isError, isLoading } = useQuery(['main'], getMainData());
 
-  axios.get('http://localhost:4000/main');
+  const testId = '4';
+  const testContent = 'test';
+  const testMutation = useMutation(postArtworkComment);
 
-  const {
-    data: testData,
-    isError,
-    isLoading,
-  } = useQuery(['main'], () => axios.get('http://localhost:4000/main'));
-  console.log(123);
-  // const fetch('http://localhost:4000/main')
-  // const { banner: bannerData, creators } = data;testData
-  const { banner: bannerData, creators } = testData;
+  const handleClick = () => {
+    testMutation.mutate({ id: testId, content: testContent });
+  };
+  if (isLoading) return <div>Loading...</div>;
+  // if (!isLoading) console.log(data);
 
   return (
     <Layout>
-      <Banner bannerData={bannerData} />
-      <Creators creators={creators} />
+      <button onClick={handleClick}>test</button>
+      <Banner bannerData={data.banner} />
+      <Creators creators={data.creators} />
     </Layout>
   );
 }
