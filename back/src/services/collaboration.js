@@ -36,7 +36,7 @@ class CollaborationService {
             const winnerArtworks = await this.Artwork.findAll({
                 where : { collaboration_id : collaboration_id },
                 order: [["count_votes", "DESC"]], 
-                limit: 3,
+                limit: 5,
             });
      
             return winnerArtworks;
