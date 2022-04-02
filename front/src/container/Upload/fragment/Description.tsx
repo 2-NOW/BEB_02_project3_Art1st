@@ -1,10 +1,17 @@
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 
-function Description() {
+interface DescriptionProps {
+  description: string;
+  setDescription: (description: string) => void;
+}
+
+function Description({ description, setDescription }: DescriptionProps) {
   return (
     <FormControl sx={{ mt: '7vh' }}>
       <TextField
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
         multiline
         minRows={5}
         maxRows={8}

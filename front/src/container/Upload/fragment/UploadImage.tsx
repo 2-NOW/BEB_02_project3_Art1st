@@ -22,8 +22,11 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }));
 
-function UploadImage() {
-  const [image, setImage] = useState<File | null>(null);
+interface UploadImageProps {
+  image: File | null;
+  setImage: (image: File | null) => void;
+}
+function UploadImage({ image, setImage }: UploadImageProps) {
   const [imageUrl, setImageUrl] = useState<string>('');
 
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {

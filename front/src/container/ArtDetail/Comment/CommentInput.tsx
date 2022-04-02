@@ -1,13 +1,29 @@
+import { useState, FormEvent } from 'react';
+import { useMutation } from 'react-query';
+
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-
 import SendIcon from '@mui/icons-material/Send';
 
-function CommentInput() {
+import { postArtworkComment } from '@/api/artwork/post';
+
+function CommentInput({ id }: { id: string | string[] | undefined }) {
+  const [content, setComment] = useState('');
+  const commentMutation = useMutation(postArtworkComment);
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    commentMutation.mutate({ id, content });
+  };
   return (
-    <Box sx={{ position: 'relative', p: '2rem' }} component="form">
+    <Box
+      sx={{ position: 'relative', p: '2rem' }}
+      component="form"
+      onSubmit={handleSubmit}
+    >
       <TextField
+        value={content}
+        onChange={(e) => setComment(e.target.value)}
         fullWidth
         multiline
         minRows={5}
