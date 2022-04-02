@@ -267,15 +267,12 @@ class UserService {
                     });
                   }); 
                 }
-              }).then(()=>{
-                return address
               })
         }
         catch(err){
             throw Error(err.toString());
         }
     }
-
 
     // 유저 로그아웃 세션 삭제
     async logout(session){
