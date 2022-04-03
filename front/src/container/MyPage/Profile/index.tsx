@@ -61,7 +61,6 @@ function index() {
 
   if (isLoading) return <Loading />;
 
-  console.log(userData);
   const {
     picture: profileImage,
     description,

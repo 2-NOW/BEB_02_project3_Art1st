@@ -22,8 +22,6 @@ function Tags({ data, setTagId }: TagsProps) {
     setTagId(index === 0 ? undefined : index - 1);
   };
 
-  console.log(data);
-
   const tagCss = {
     width: '70vw',
     m: '2rem auto 0 16vw',

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { useQuery } from 'react-query';
 
 import Typography from '@mui/material/Typography';
@@ -19,11 +19,11 @@ function index() {
 
   const [checked, setChecked] = useState(false);
 
-  const [isSelling, setIsSelling] = useState<0 | 1>(0);
+  const [isSelling, setIsSelling] = useState<undefined | 1>(undefined);
   const [tagId, setTagId] = useState<undefined | number>(undefined);
 
-  const handleCheckboxChange = () => {
-    setIsSelling(checked ? 1 : 0);
+  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setIsSelling(e.target.checked ? 1 : undefined);
     setChecked(!checked);
   };
 
@@ -45,9 +45,11 @@ function index() {
         setIsSelling(isSelling);
         setTagId(tagId);
       },
+      staleTime: 1 * 60 * 1000,
     }
   );
 
+  if (!isLoadingArtworkList) console.log(artworkListData);
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>

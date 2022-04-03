@@ -51,7 +51,7 @@ function ItemList({ data }: { data: IData[] }) {
   };
 
   return (
-    <Box sx={{ width: '70vw', m: '2rem 15vw auto' }}>
+    <Box sx={{ width: '70vw', m: '2rem 15vw 15vh 15vw' }}>
       <Grid container>
         {data.map((item) => {
           const {

@@ -1,12 +1,12 @@
-import { useState } from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import TextField from "@mui/material/TextField";
+import { useState } from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
 
 interface ModalProps {
   open: boolean;
@@ -28,16 +28,14 @@ function Sell({ open, setOpen }: ModalProps) {
   };
 
   const sellproduct = () => {
-    //API 통신) /artwork/:artwork_id is_selling true, price price
     setOpen(false);
   };
 
-  console.log(price);
   return (
     <Box>
       <Button
         variant="contained"
-        sx={{ margin: "auto 0 auto auto", position: "relative", bottom: "3vh" }}
+        sx={{ margin: 'auto 0 auto auto', position: 'relative', bottom: '3vh' }}
         onClick={handleClickOpen}
       >
         Sell NFT
@@ -54,7 +52,7 @@ function Sell({ open, setOpen }: ModalProps) {
         <DialogContent>
           <DialogContentText>
             {
-              "As you confirm, this piece will now be for sale at the written price. However listed price cannot be edited once the item is listed. You will need to cancel your listing and relist the item with the update."
+              'As you confirm, this piece will now be for sale at the written price. However listed price cannot be edited once the item is listed. You will need to cancel your listing and relist the item with the update.'
             }
           </DialogContentText>
           <TextField
@@ -63,7 +61,7 @@ function Sell({ open, setOpen }: ModalProps) {
             type="number"
             variant="standard"
             onChange={handleChange}
-            sx={{ width: "50%" }}
+            sx={{ width: '50%' }}
           />
         </DialogContent>
         <DialogActions>

@@ -37,7 +37,6 @@ function CheckIcons({ likeCount, wantCount, id }: CheckIconsProps) {
   const handleLike = (e: ChangeEvent<HTMLInputElement>) => {
     setLike(e.target.checked);
     if (e.target.checked) {
-      console.log(123);
       addLikeMutation.mutate(id, {
         onSuccess: () => queryClient.invalidateQueries(['artwork', id]),
       });

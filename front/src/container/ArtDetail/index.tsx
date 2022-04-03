@@ -31,7 +31,6 @@ function index() {
 
   if (isLoading) return <Loading />;
 
-  console.log(artworkData);
   return (
     <Layout>
       <Box sx={wrapperCss}>

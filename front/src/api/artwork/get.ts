@@ -12,7 +12,7 @@ export const getMostUsedTags = () => async () => {
 };
 
 export const getArtworkList =
-  (isSelling: 0 | 1, tagId?: number) => async () => {
+  (isSelling: undefined | 1, tagId?: number) => async () => {
     const { data } = await axios.get(HOST_ADDRESS + '/artwork', {
       params: { tag_id: tagId, is_selling: isSelling },
     });

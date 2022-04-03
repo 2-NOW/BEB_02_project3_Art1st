@@ -37,7 +37,6 @@ function Form() {
       formData.append('metadata', JSON.stringify(metaData));
 
       uploadArtwork.mutate(formData);
-      console.log(formData);
     }
   };
 
