@@ -20,6 +20,7 @@ function index() {
         created={"2020.03.22"}
         price={100}
         is_selling={false}
+        artImage={data[20]}
       />
       <ArtImage artImage={data[20]} />
       <Description description={testText} />
