@@ -93,8 +93,8 @@ router.get('/top', async (req, res) => {
 
 // 나의 user 정보 가져오기
 router.get('/', async (req, res) => {
-  const { user_id } = req.session;
-
+  // const { user_id } = req.session;
+  const user_id= 'ss'
   try {
     if (user_id === undefined)
       return res.status(401).json('Error: Unauthorized');
@@ -108,7 +108,7 @@ router.get('/', async (req, res) => {
 // 나의 user 정보(닉네임)이나 프로필 수정)
 router.put('/', async (req, res) => {
   const { user_id } = req.session;
-  const { user_desc, user_picture, user_name } = req.body;
+  const { user_desc, user_picture, user_name, instargram, tweeter, facebook } = req.body;
 
   try {
     if (user_id === undefined)
@@ -117,7 +117,10 @@ router.put('/', async (req, res) => {
       user_id,
       user_desc,
       user_picture,
-      user_name
+      user_name,
+      instargram,
+      tweeter,
+      facebook
     );
     return res.status(201).json(updated_user);
   } catch (err) {
