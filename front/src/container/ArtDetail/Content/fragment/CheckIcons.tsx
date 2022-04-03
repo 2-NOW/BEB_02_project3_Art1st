@@ -13,6 +13,7 @@ import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 
 import { postArtworkLike, postArtworkWant } from '@/api/artwork/post';
 import { delArtworkLike, delArtworkWant } from '@/api/artwork/delete';
+import { queryClient } from '@/utils/reactQuery/queryClient';
 
 interface CheckIconsProps {
   likeCount: number;
@@ -36,17 +37,26 @@ function CheckIcons({ likeCount, wantCount, id }: CheckIconsProps) {
   const handleLike = (e: ChangeEvent<HTMLInputElement>) => {
     setLike(e.target.checked);
     if (e.target.checked) {
-      addLikeMutation.mutate(id);
+      console.log(123);
+      addLikeMutation.mutate(id, {
+        onSuccess: () => queryClient.invalidateQueries(['artwork', id]),
+      });
     } else {
-      delLikeMutation.mutate(id);
+      delLikeMutation.mutate(id, {
+        onSuccess: () => queryClient.invalidateQueries(['artwork', id]),
+      });
     }
   };
   const handleWant = (e: ChangeEvent<HTMLInputElement>) => {
     setWant(e.target.checked);
     if (e.target.checked) {
-      addWantMutation.mutate(id);
+      addWantMutation.mutate(id, {
+        onSuccess: () => queryClient.invalidateQueries(['artwork', id]),
+      });
     } else {
-      delWantMutation.mutate(id);
+      delWantMutation.mutate(id, {
+        onSuccess: () => queryClient.invalidateQueries(['artwork', id]),
+      });
     }
   };
 

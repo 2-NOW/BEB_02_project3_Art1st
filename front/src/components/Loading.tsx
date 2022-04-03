@@ -1,13 +1,18 @@
-import Backdrop from '@mui/material/Backdrop';
+import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 
 export default function Loading() {
   return (
-    <Backdrop
-      sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      open={true}
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100vw',
+        height: '100vh',
+      }}
     >
-      <CircularProgress color="inherit" />
-    </Backdrop>
+      <CircularProgress />
+    </Box>
   );
 }

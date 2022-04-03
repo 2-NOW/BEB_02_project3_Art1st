@@ -49,12 +49,14 @@ function Banner({ bannerData }: { bannerData: IBanner }) {
         </Typography>
 
         <Box sx={{ mt: '11rem', ml: '3.5rem' }}>
-          <Button sx={buttonCss} variant="contained" size="large">
-            Explore
-          </Button>
+          <Link href="/discover">
+            <Button sx={buttonCss} variant="contained" size="large">
+              Explore
+            </Button>
+          </Link>
 
           <Button
-            sx={{ ml: '1.5rem', ...buttonCss }}
+            sx={{ ml: '1rem', ...buttonCss }}
             variant="outlined"
             size="large"
           >
@@ -64,11 +66,11 @@ function Banner({ bannerData }: { bannerData: IBanner }) {
       </Box>
 
       <Card sx={imageCss} elevation={12}>
-        <CardActionArea>
-          <Link href={`/artwork/${id}`}>
+        <Link href={`/artwork/${id}`}>
+          <CardActionArea sx={{ height: '100%' }}>
             <CardMedia component="img" height="100%" image={ipfsURI} />
-          </Link>
-        </CardActionArea>
+          </CardActionArea>
+        </Link>
       </Card>
     </Box>
   );

@@ -28,9 +28,8 @@ function Content({
             sx={{ mt: '2rem', fontSize: '2rem' }}
             fullWidth
             variant="standard"
-            value={editName}
             onChange={(e) => setEditName(e.target.value)}
-            defaultValue={userName}
+            defaultValue={userName ? userName : editName}
             placeholder="What's your name?"
             inputProps={{
               style: { fontSize: '1.5rem' },
@@ -42,9 +41,8 @@ function Content({
             fullWidth
             minRows={4}
             variant="standard"
-            value={editDescription}
             onChange={(e) => setEditDescription(e.target.value)}
-            defaultValue={description}
+            defaultValue={description ? description : editDescription}
             placeholder="Describe who you are."
             inputProps={{
               style: { fontSize: '1rem' },

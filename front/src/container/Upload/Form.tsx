@@ -29,9 +29,7 @@ function Form() {
 
   const uploadArtwork = useMutation(postArtworkUpload);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    // todo: submit 확인하고 안되면 onclick으로 변경
-    e.preventDefault();
+  const handleCreate = () => {
     if (title && description && image) {
       const metaData = { title, description, tags, forSale, price };
       const formData = new FormData();
@@ -39,11 +37,12 @@ function Form() {
       formData.append('metadata', JSON.stringify(metaData));
 
       uploadArtwork.mutate(formData);
+      console.log(formData);
     }
   };
 
   return (
-    <Box sx={wrapperCss} component="form" onSubmit={handleSubmit}>
+    <Box sx={wrapperCss}>
       <Title title={title} setTitle={setTitle} />
       <Uploadimage image={image} setImage={setImage} />
       <Description description={description} setDescription={setDescription} />
@@ -54,7 +53,7 @@ function Form() {
         price={price}
         setPrice={setPrice}
       />
-      <UploadButton />
+      <UploadButton handleCreate={handleCreate} />
     </Box>
   );
 }

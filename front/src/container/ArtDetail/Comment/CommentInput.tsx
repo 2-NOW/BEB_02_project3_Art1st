@@ -1,5 +1,5 @@
 import { useState, FormEvent } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -10,10 +10,19 @@ import { postArtworkComment } from '@/api/artwork/post';
 
 function CommentInput({ id }: { id: string | string[] | undefined }) {
   const [content, setComment] = useState('');
+  const queryClient = useQueryClient();
   const commentMutation = useMutation(postArtworkComment);
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    commentMutation.mutate({ id, content });
+    commentMutation.mutate(
+      { id, content },
+      {
+        onSuccess: () => {
+          setComment('');
+          queryClient.invalidateQueries(['comment', id]);
+        },
+      }
+    );
   };
   return (
     <Box

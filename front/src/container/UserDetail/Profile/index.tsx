@@ -28,7 +28,6 @@ function index({
   description,
   websites,
 }: ProfileProps) {
-  // todo: Link 부분 a태그로 변경
   return (
     <>
       <Box sx={profileImageCss}>

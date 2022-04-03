@@ -1,20 +1,22 @@
 import { useState, FormEvent, ChangeEvent } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { useMutation, useQueryClient } from 'react-query';
+
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-
-import { useMutation } from 'react-query';
-
 import PwInput from './PwInput';
 
 import { postUserSignup, postUserLogin } from '@/api/user/post';
+import { loginSuccessState, signUpSuccessState } from '@/store/status';
 
 interface InputFormProps {
   isLogin: boolean;
   setIsLogin: (value: boolean) => void;
+  setOpenModal: (value: boolean) => void;
 }
 
 const loginButtonCss = {
@@ -23,13 +25,25 @@ const loginButtonCss = {
   height: '2.3rem',
 };
 
-function InputForm({ isLogin, setIsLogin }: InputFormProps) {
+function InputForm({ isLogin, setIsLogin, setOpenModal }: InputFormProps) {
+  const queryClient = useQueryClient();
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [checked, setChecked] = useState(false);
 
-  const userSignupMutation = useMutation(postUserSignup);
-  const userLoginMutation = useMutation(postUserLogin);
+  const setIsSignupState = useSetRecoilState(signUpSuccessState);
+
+  const {
+    mutate: signUpMutate,
+    isSuccess: signUpIsSuccess,
+    isLoading: signUpIsLoading,
+  } = useMutation(postUserSignup);
+
+  const {
+    mutate: loginMutate,
+    isSuccess: loginIsSuccess,
+    isLoading: loginIsLoading,
+  } = useMutation(postUserLogin);
 
   const handleIdChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -40,9 +54,25 @@ function InputForm({ isLogin, setIsLogin }: InputFormProps) {
 
     if (userId && password) {
       if (isLogin)
-        userLoginMutation.mutate({ user_id: userId, user_pw: password });
+        loginMutate(
+          { user_id: userId, user_pw: password },
+          {
+            onSuccess: () => queryClient.invalidateQueries(['user', 'islogin']),
+          }
+        );
       else if (checked)
-        userSignupMutation.mutate({ user_id: userId, user_pw: password });
+        signUpMutate(
+          { user_id: userId, user_pw: password },
+          {
+            onSuccess: () => {
+              setIsLogin(true);
+              setUserId('');
+              setPassword('');
+              setChecked(false);
+              setIsSignupState(true);
+            },
+          }
+        );
     }
   };
 

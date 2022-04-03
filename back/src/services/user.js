@@ -2,7 +2,6 @@ import db from '../models/index.js';
 import lightwallet from 'eth-lightwallet';
 import { addAmount, subAmount, floating } from './utils/calculateKlay.js';
 
-
 class UserService {
   constructor() {
     this.User = db.User;
@@ -105,7 +104,14 @@ class UserService {
       }
 
       const user_profile = await this.Profile.findOne({
-        attributes: ['id', 'picture', 'description', 'instargram', 'tweeter', 'facebook'],
+        attributes: [
+          'id',
+          'picture',
+          'description',
+          'instargram',
+          'tweeter',
+          'facebook',
+        ],
         where: { user_id: user.id },
       });
 
@@ -131,7 +137,14 @@ class UserService {
       }
 
       const user_profile = await this.Profile.findOne({
-        attributes: ['id', 'picture', 'description', 'instargram', 'tweeter', 'facebook'],
+        attributes: [
+          'id',
+          'picture',
+          'description',
+          'instargram',
+          'tweeter',
+          'facebook',
+        ],
         where: { user_id: id },
       });
 
@@ -145,11 +158,17 @@ class UserService {
   }
 
   // 내 유저 데이터 수정
-  async putMyUserInfo(user_id, new_user_desc, new_user_picture, new_user_name, instargram, tweeter, facebook) {
+  async putMyUserInfo(
+    user_id,
+    new_user_desc,
+    new_user_picture,
+    new_user_name,
+    instargram,
+    tweeter,
+    facebook
+  ) {
     try {
-      const { user, user_profile } = await this.getMyUserInfo(
-        user_id
-      );
+      const { user, user_profile } = await this.getMyUserInfo(user_id);
 
       await user.update({ name: new_user_name });
       await user.save();
@@ -159,7 +178,7 @@ class UserService {
         description: new_user_desc,
         instargram: instargram,
         tweeter: tweeter,
-        facebook: facebook
+        facebook: facebook,
       });
       await user_profile.save();
 
@@ -287,13 +306,14 @@ class UserService {
                   });
 
                   db.Profile.create({
-                    picture: '',
+                    picture:
+                      'https://i.pinimg.com/564x/18/b9/ff/18b9ffb2a8a791d50213a9d595c4dd52.jpg',
                     description: '',
                     instargram: '',
                     tweeter: '',
                     facebook: '',
-                    user_id: userInfo.id
-                  })
+                    user_id: userInfo.id,
+                  });
                 });
               }
             );
@@ -337,7 +357,9 @@ class UserService {
       } else {
         // 있으면 세션ID 생성
         req.session.user_id = req.body.user_id;
-        req.session.save(() => {console.log(req.session);});
+        req.session.save(() => {
+          console.log(req.session);
+        });
         console.log(req.session);
       }
     } catch (err) {

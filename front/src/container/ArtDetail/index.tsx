@@ -4,6 +4,7 @@ import { useQuery } from 'react-query';
 import Box from '@mui/material/Box';
 
 import Layout from '@/components/Layout';
+import Loading from '@/components/Loading';
 import Content from './Content/index';
 import Comment from './Comment/index';
 import UserProfile from './UserProfile/index';
@@ -27,9 +28,10 @@ function index() {
     isError,
     isLoading,
   } = useQuery(['artwork', id], getArtworkById(id));
-  if (isLoading) return <div>Loading...</div>;
-  console.log(artworkData);
 
+  if (isLoading) return <Loading />;
+
+  console.log(artworkData);
   return (
     <Layout>
       <Box sx={wrapperCss}>

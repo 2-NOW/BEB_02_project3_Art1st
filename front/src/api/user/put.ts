@@ -1,42 +1,48 @@
 import { HOST_ADDRESS } from '@/utils/constant/index';
 import axios from 'axios';
+axios.defaults.withCredentials = true;
 
 interface IPutEditUser {
   user_desc?: string;
   user_name?: string;
   user_picture?: string;
+  instagram?: string;
+  twitter?: string;
+  facebook?: string;
 }
 
 export const putEditUser = ({
   user_name,
   user_desc,
   user_picture,
+  instagram,
+  twitter,
+  facebook,
 }: IPutEditUser) =>
   axios.put(HOST_ADDRESS + '/user', {
     user_name,
     user_desc,
     user_picture,
+    instargram: instagram,
+    tweeter: twitter,
+    facebook,
   });
 
 /////////////
+// user_desc, user_picture, user_name, instargram, tweeter, facebook
 
 // PUT user name
 export const putUserName = async (name: string) => {
-  const { data } = await axios.put(
-    HOST_ADDRESS + '/user',
-    { name },
-    { withCredentials: true }
-  );
+  const { data } = await axios.put(HOST_ADDRESS + '/user', { name });
   return data;
 };
 
 // PUT user profile
 export const putUserProfile = async (user_desc?: string, user_pic?: string) => {
-  const { data } = await axios.put(
-    HOST_ADDRESS + '/user/profile',
-    { user_desc, user_pic },
-    { withCredentials: true }
-  );
+  const { data } = await axios.put(HOST_ADDRESS + '/user/profile', {
+    user_desc,
+    user_pic,
+  });
   return data;
 };
 
@@ -47,8 +53,7 @@ export const putUserProfileWebsite = async (
 ) => {
   const { data } = await axios.put(
     HOST_ADDRESS + '/user/website' + website_id,
-    { user_site },
-    { withCredentials: true }
+    { user_site }
   );
   return data;
 };

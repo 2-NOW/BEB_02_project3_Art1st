@@ -25,7 +25,8 @@ function index() {
 
   if (isLoading) return <div>Loading...</div>;
 
-  const { user, user_profile, user_websites } = data;
+  const { user, user_profile, facebook, instagram, tweeter } = data;
+  const user_websites = [instagram, tweeter, facebook];
 
   return (
     <Layout>

@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import Card from '@mui/material/Card';
 import CommentInput from './CommentInput';
 import CommentList from './CommentList';
+import Loading from '@/components/Loading';
 
 import { getArtworkCommentsById } from '@/api/artwork/get';
 
@@ -13,8 +14,8 @@ function index({ id }: { id: string | string[] | undefined }) {
     isError: commentIsError,
     isLoading: commentIsLoading,
   } = useQuery(['comment', id], getArtworkCommentsById(id));
-  // const {data, isError, isLoading} = useQuery([ 'user', id], get
-  if (commentIsLoading) return <div>Loading...</div>;
+
+  if (commentIsLoading) return <Loading />;
 
   return (
     <Card sx={{ mt: '13vh' }} elevation={2}>

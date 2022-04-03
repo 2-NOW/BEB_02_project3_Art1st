@@ -1,9 +1,16 @@
 import { HOST_ADDRESS } from '@/utils/constant/index';
 import axios from 'axios';
+axios.defaults.withCredentials = true;
 
 // user
 export const getUser = () => async () => {
   const { data } = await axios.get(HOST_ADDRESS + '/user/');
+  return data;
+};
+
+// user islogin
+export const getUserIslogin = () => async () => {
+  const { data } = await axios.get(HOST_ADDRESS + '/user/islogin');
   return data;
 };
 

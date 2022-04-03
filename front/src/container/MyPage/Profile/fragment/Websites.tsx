@@ -10,16 +10,32 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 interface WebsitesProps {
   websites: string[];
   isEdit: boolean;
+  editInstagram: string;
+  editTwitter: string;
+  editFacebook: string;
+  setEditInstagram: (value: string) => void;
+  setEditTwitter: (value: string) => void;
+  setEditFacebook: (value: string) => void;
 }
 
-function Websites({ websites, isEdit }: WebsitesProps) {
+function Websites({
+  websites,
+  isEdit,
+  editInstagram,
+  editTwitter,
+  editFacebook,
+  setEditInstagram,
+  setEditTwitter,
+  setEditFacebook,
+}: WebsitesProps) {
   return (
     <Box sx={{ mt: '2rem' }}>
       {isEdit ? (
         <>
           <Input
             sx={{ mt: '0.5rem' }}
-            defaultValue={websites[0]}
+            defaultValue={websites[0] ? websites[0] : editInstagram}
+            onChange={(e) => setEditInstagram(e.target.value)}
             placeholder="Instagram"
             disableUnderline
             startAdornment={
@@ -30,7 +46,8 @@ function Websites({ websites, isEdit }: WebsitesProps) {
           />
           <Input
             sx={{ mt: '0.5rem' }}
-            defaultValue={websites[1]}
+            defaultValue={websites[1] ? websites[1] : editTwitter}
+            onChange={(e) => setEditTwitter(e.target.value)}
             placeholder="Twitter"
             disableUnderline
             startAdornment={
@@ -41,7 +58,8 @@ function Websites({ websites, isEdit }: WebsitesProps) {
           />
           <Input
             sx={{ mt: '0.5rem' }}
-            defaultValue={websites[2]}
+            defaultValue={websites[2] ? websites[2] : editFacebook}
+            onChange={(e) => setEditFacebook(e.target.value)}
             placeholder="Facebook"
             disableUnderline
             startAdornment={

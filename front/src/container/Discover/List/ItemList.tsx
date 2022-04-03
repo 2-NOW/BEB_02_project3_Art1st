@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Favorite from '@mui/icons-material/Favorite';
 import ChatIcon from '@mui/icons-material/Chat';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import Link from 'next/link';
 
 interface IData {
   artwork_id: number;
@@ -54,6 +55,7 @@ function ItemList({ data }: { data: IData[] }) {
       <Grid container>
         {data.map((item) => {
           const {
+            artwork_id,
             title,
             ipfsURI,
             is_selling,
@@ -73,48 +75,52 @@ function ItemList({ data }: { data: IData[] }) {
                   height="100%"
                   image={ipfsURI}
                 />
-                <CardActionArea sx={contentCss}>
-                  <CardContent sx={{ position: 'absolute', bottom: '0' }}>
-                    <Typography gutterBottom variant="h5" component="div">
-                      {title}
-                    </Typography>
-                    <Typography
-                      sx={{ color: 'white' }}
-                      variant="body1"
-                      color="text.secondary"
-                    >
-                      {creator_name}
-                    </Typography>
-                    <Box sx={{ display: 'flex', mt: '3vh' }}>
-                      <Favorite sx={iconCss} />
-                      <Typography
-                        sx={{ m: '0 1rem 0 0.3rem' }}
-                        variant="body2"
-                        component="div"
-                      >
-                        {like_count}
-                      </Typography>
+                <Link href={`/artwork/${artwork_id}`}>
+                  <a>
+                    <CardActionArea sx={contentCss}>
+                      <CardContent sx={{ position: 'absolute', bottom: '0' }}>
+                        <Typography gutterBottom variant="h5" component="div">
+                          {title}
+                        </Typography>
+                        <Typography
+                          sx={{ color: 'white' }}
+                          variant="body1"
+                          color="text.secondary"
+                        >
+                          {creator_name}
+                        </Typography>
+                        <Box sx={{ display: 'flex', mt: '3vh' }}>
+                          <Favorite sx={iconCss} />
+                          <Typography
+                            sx={{ m: '0 1rem 0 0.3rem' }}
+                            variant="body2"
+                            component="div"
+                          >
+                            {like_count}
+                          </Typography>
 
-                      <ChatIcon sx={iconCss} />
-                      <Typography
-                        sx={{ m: '0 1rem 0 0.3rem' }}
-                        variant="body2"
-                        component="div"
-                      >
-                        {comment_count}
-                      </Typography>
+                          <ChatIcon sx={iconCss} />
+                          <Typography
+                            sx={{ m: '0 1rem 0 0.3rem' }}
+                            variant="body2"
+                            component="div"
+                          >
+                            {comment_count}
+                          </Typography>
 
-                      <VisibilityIcon sx={iconCss} />
-                      <Typography
-                        sx={{ m: '0 1rem 0 0.3rem' }}
-                        variant="body2"
-                        component="div"
-                      >
-                        {views}
-                      </Typography>
-                    </Box>
-                  </CardContent>
-                </CardActionArea>
+                          <VisibilityIcon sx={iconCss} />
+                          <Typography
+                            sx={{ m: '0 1rem 0 0.3rem' }}
+                            variant="body2"
+                            component="div"
+                          >
+                            {views}
+                          </Typography>
+                        </Box>
+                      </CardContent>
+                    </CardActionArea>
+                  </a>
+                </Link>
               </Card>
             </Grid>
           );

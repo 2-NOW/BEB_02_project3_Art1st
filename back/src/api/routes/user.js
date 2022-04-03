@@ -93,8 +93,7 @@ router.get('/top', async (req, res) => {
 
 // 나의 user 정보 가져오기
 router.get('/', async (req, res) => {
-  // const { user_id } = req.session;
-  const user_id= 'ss'
+  const { user_id } = req.session;
   try {
     if (user_id === undefined)
       return res.status(401).json('Error: Unauthorized');
@@ -105,10 +104,26 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/islogin', async (req, res) => {
+  const { user_id } = req.session;
+  try {
+    if (user_id === undefined) return res.status(200).json(false);
+    const user = await UserServiceInstance.getMyUserInfo(user_id);
+    const {
+      user_profile: { picture },
+      user: { name },
+    } = user;
+    return res.status(200).json({ picture, name });
+  } catch (err) {
+    return res.status(404).json(err.toString());
+  }
+});
+
 // 나의 user 정보(닉네임)이나 프로필 수정)
 router.put('/', async (req, res) => {
   const { user_id } = req.session;
-  const { user_desc, user_picture, user_name, instargram, tweeter, facebook } = req.body;
+  const { user_desc, user_picture, user_name, instargram, tweeter, facebook } =
+    req.body;
 
   try {
     if (user_id === undefined)
@@ -220,10 +235,9 @@ router.post('/signup', async (req, res) => {
   // 포스트맨에서 userName, password를 넣으면
   const { user_id, user_pw } = req.body;
   try {
-    await UserServiceInstance.signUp( user_id, user_pw);
+    await UserServiceInstance.signUp(user_id, user_pw);
     res.status(201).json(true);
-  }
-  catch(err){
+  } catch (err) {
     res.status(404).json(err.toString());
   }
 });

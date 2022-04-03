@@ -29,7 +29,7 @@ function index({ creatorId }: { creatorId: string | string[] | undefined }) {
   return (
     <>
       <Divider sx={{ mt: '20vh' }} />
-      <Profile name={name} avatar={picture} description={description} />
+      <Profile id={id} name={name} avatar={picture} description={description} />
       <OtherWorks data={createdArtworksData} />
     </>
   );
