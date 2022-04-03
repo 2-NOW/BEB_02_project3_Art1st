@@ -5,6 +5,7 @@ import Carousel from './Carousel';
 import List from './List/index';
 
 import { getTopCreators } from '@/api/artwork/get';
+import Loading from '@/components/Loading';
 function index() {
   const {
     data: topUserData,
@@ -12,11 +13,16 @@ function index() {
     isLoading,
   } = useQuery(['user', 'top'], getTopCreators());
 
-  if (isLoading) return <div>Loading...</div>;
   return (
     <Layout>
-      <Carousel data={topUserData} />
-      <List />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <Carousel data={topUserData} />
+          <List />
+        </>
+      )}
     </Layout>
   );
 }

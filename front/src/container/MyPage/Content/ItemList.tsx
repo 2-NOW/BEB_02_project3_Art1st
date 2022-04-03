@@ -1,4 +1,5 @@
-import Box from '@mui/material/Box';
+import Link from 'next/link';
+
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
@@ -54,21 +55,23 @@ function ItemList({ data }: { data: IData[] }) {
                 height="100%"
                 image={item.ipfsURI}
               />
-              <CardActionArea sx={contentCss}>
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {item.title}
-                  </Typography>
-                  <Typography
-                    sx={{ color: 'white' }}
-                    variant="body2"
-                    color="text.secondary"
-                  >
-                    lorem ipsum dolor sit amet, consectetur adip sap et dolor
-                    sed diam non pro pos
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
+              <Link href={`/artwork/${item.artwork_id}`}>
+                <CardActionArea sx={contentCss}>
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {item.title}
+                    </Typography>
+                    <Typography
+                      sx={{ color: 'white' }}
+                      variant="body2"
+                      color="text.secondary"
+                    >
+                      lorem ipsum dolor sit amet, consectetur adip sap et dolor
+                      sed diam non pro pos
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Link>
             </Card>
           </Grid>
         );

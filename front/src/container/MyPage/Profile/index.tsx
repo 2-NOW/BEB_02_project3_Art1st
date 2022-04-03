@@ -15,13 +15,6 @@ import Alert from '@/components/Alert';
 import { getUser } from '@/api/user/get';
 import { putEditUser } from '@/api/user/put';
 
-const profileCss = {
-  width: '15rem',
-  position: 'sticky',
-  top: '10rem',
-  m: '0 auto 0 14vw',
-};
-
 function index() {
   // todo: swap 기능 ui 추가 후 address 및 balance 데이터 뿌리는 작업 예정
   // todo: edit user post 기능
@@ -80,7 +73,7 @@ function index() {
   const { name: userName } = userData.user;
   const websites = [instargram, tweeter, facebook];
   return (
-    <Box sx={profileCss}>
+    <>
       <ProfileImage src={profileImage} />
 
       <Content
@@ -118,7 +111,7 @@ function index() {
         setIsEdit={setIsEdit}
         handleConfirm={handleConfirm}
       />
-    </Box>
+    </>
   );
 }
 

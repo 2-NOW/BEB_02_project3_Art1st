@@ -12,7 +12,7 @@ import { getUserById } from '@/api/user/get';
 
 const profileCss = {
   width: '15rem',
-  position: 'sticky',
+  position: 'fixed',
   top: '10rem',
   m: '0 auto 0 14vw',
 };

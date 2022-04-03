@@ -1,5 +1,7 @@
 import { useState, useRef, useCallback } from 'react';
+import Link from 'next/link';
 import Slider from 'react-slick';
+
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -63,12 +65,16 @@ function index({ data }: { data: IData[] }) {
                   sx={{ m: '0 auto', width: '7rem', height: '7rem' }}
                   src={user.ProfileImg}
                 />
-                <Typography
-                  sx={{ mt: '0.5rem', textAlign: 'center' }}
-                  variant="body1"
-                >
-                  {user.name}
-                </Typography>
+                <Link href={`/user/${user.id}`}>
+                  <a>
+                    <Typography
+                      sx={{ mt: '0.5rem', textAlign: 'center' }}
+                      variant="body1"
+                    >
+                      {user.name}
+                    </Typography>
+                  </a>
+                </Link>
               </Box>
             );
           })}

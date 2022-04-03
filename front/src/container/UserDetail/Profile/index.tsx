@@ -47,7 +47,7 @@ function index({
       </Typography>
 
       <Box sx={{ mt: '2rem' }}>
-        <IconButton>
+        <IconButton disabled={websites[0] ? false : true}>
           <a
             href={websites[0]}
             target="_blank"
@@ -57,7 +57,7 @@ function index({
           </a>
         </IconButton>
 
-        <IconButton>
+        <IconButton disabled={websites[1] ? false : true}>
           <a
             href={websites[1]}
             target="_blank"
@@ -67,7 +67,7 @@ function index({
           </a>
         </IconButton>
 
-        <IconButton>
+        <IconButton disabled={websites[2] ? false : true}>
           <a
             href={websites[2]}
             target="_blank"

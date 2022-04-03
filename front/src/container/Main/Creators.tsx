@@ -25,8 +25,8 @@ const avatarCss = {
 
 function Creators({ creators }: { creators: ICreator[] }) {
   return (
-    <Box sx={{ width: '80vw', m: '8rem auto' }}>
-      <Grid container rowSpacing={'4rem'}>
+    <Box sx={{ width: '80vw', m: '11rem auto' }}>
+      <Grid container rowSpacing={'3rem'}>
         {creators.map((creator, index) => {
           return (
             <Grid
