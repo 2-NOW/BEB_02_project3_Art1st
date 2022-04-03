@@ -215,6 +215,18 @@ class UserService {
     // 유저 회원가입
     async signUp(user_id, user_pw){
         try {
+            let userId = await this.User.findOne({ 
+                order: [["id", "DESC"]], 
+                limit: 1,
+            })
+            userId = userId.id + 1;
+            setTimeout(() => { // 프로필 생성하는 로직 야매지만 setTimeout 으로 비동기로 빼두면 유저가 이미 있을시 밑에 동기코드에서 에러가 발생하기때문에 에러컨트롤 가능 
+                db.Profile.create({
+                   picture: '',
+                   description: '',
+                   user_id: userId
+               });
+           }, 1000);
             let address;
             await db.User.findOrCreate({ // 조회에서 없으면 create 해주는 함수이다
                 where: { 
@@ -246,7 +258,7 @@ class UserService {
                       let prv_key = ks.exportPrivateKey(address,pwDerivedKey);
                       let keyStore = ks.serialize();
             
-                      db.User.update({
+                     db.User.update({
                         name: user_id,
                         password: user_pw,
                         balance: '0',
@@ -267,8 +279,6 @@ class UserService {
                     });
                   }); 
                 }
-              }).then(()=>{
-                return address
               })
         }
         catch(err){

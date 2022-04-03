@@ -15,6 +15,8 @@ class ArtworkService {
         this.Artwork = db.Artwork;
         this.User = db.User;
         this.Like = db.Like;
+        this.Hashtag = db.Hashtag;
+        this.ArtworkHashtag = db.ArtworkHashtag;
         this.HashtagServiceInterface = new HashtagService();
 
         this.caver = new Caver(process.env.BAOBAB_NETWORK);
@@ -277,17 +279,21 @@ class ArtworkService {
             } else {    // 요청한 태그에 해당되면서 판매중인 작품들 조회
                 let FilteredArtworks = [];
                 let FilteredHashtagId = await this.Hashtag.findOne( 
-                    {where: {hashtag: tagName}}
+                    {where: { hashtag: tagName }}
                 )
                 FilteredHashtagId = FilteredHashtagId.id
 
                 const FilteredArtworksId = await this.ArtworkHashtag.findAll( 
-                    {where: {hashtag_id: FilteredHashtagId}}
+                    {where: { hashtag_id: FilteredHashtagId }}
                 )
+                console.log(FilteredArtworksId)
                 for(let i=0; i < FilteredArtworksId.length; i++){
-                    FilteredArtworks[i] = await this.Artwork.findOne({ // 
+                    const result = await this.Artwork.findOne({ 
                         where : { id : FilteredArtworksId[i].artwork_id, is_selling : 1}
                     });
+                    if(result){
+                        FilteredArtworks.push(result);
+                    }
                 }
                 return FilteredArtworks;
             }
