@@ -28,6 +28,7 @@ function index() {
     isLoading,
   } = useQuery(['artwork', id], getArtworkById(id));
   if (isLoading) return <div>Loading...</div>;
+  console.log(artworkData);
 
   return (
     <Layout>
