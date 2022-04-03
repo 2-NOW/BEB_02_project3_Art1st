@@ -87,9 +87,9 @@ class UserService {
                 where : { user_id : user_id}
             });
 
-            user.balance = await floating(user.balance);
-            user.donation_balance = await floating(user.donation_balance);
-            user.total_sales = await floating(user.total_sales);
+            // user.balance = await floating(user.balance);
+            // user.donation_balance = await floating(user.donation_balance);
+            // user.total_sales = await floating(user.total_sales);
 
             if(user === null){
                 throw Error('Not Found User');
@@ -317,8 +317,8 @@ class UserService {
               } else { // 있으면 세션ID 생성 
                 console.log(userInfo);
                 req.session.user_id = req.body.user_id;
-                req.session.save(function () { 
-                });
+                // req.session.save(function () { 
+                // });
                 console.log(req.session);   
               }
         }
