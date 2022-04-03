@@ -13,5 +13,14 @@ export default (Sequelize, DataTypes) => {
             type: DataTypes.TEXT,
             allowNull: false
         },
+        instargram: {
+            type: DataTypes.TEXT,
+        },
+        tweeter: {
+            type: DataTypes.TEXT
+        },
+        facebook: {
+            type: DataTypes.TEXT
+        }
     })
 }

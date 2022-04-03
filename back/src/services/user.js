@@ -2,6 +2,7 @@ import db from '../models/index.js';
 import lightwallet from 'eth-lightwallet';
 import { addAmount, subAmount, floating } from './utils/calculateKlay.js';
 
+
 class UserService {
   constructor() {
     this.User = db.User;
@@ -103,20 +104,14 @@ class UserService {
         throw Error('Not Found User');
       }
 
-      const user_websites = await this.Website.findAll({
-        attributes: ['id', 'site'],
-        where: { user_id: user.id },
-      });
-
       const user_profile = await this.Profile.findOne({
-        attributes: ['id', 'picture', 'description'],
+        attributes: ['id', 'picture', 'description', 'instargram', 'tweeter', 'facebook'],
         where: { user_id: user.id },
       });
 
       return {
         user: user,
         user_profile: user_profile,
-        user_websites: user_websites,
       };
     } catch (err) {
       throw Error(err.toString());
@@ -135,19 +130,14 @@ class UserService {
         throw Error('Not Found User');
       }
 
-      const user_websites = await this.Website.findAll({
-        attributes: ['id', 'site'],
-        where: { user_id: id },
-      });
       const user_profile = await this.Profile.findOne({
-        attributes: ['id', 'picture', 'description'],
+        attributes: ['id', 'picture', 'description', 'instargram', 'tweeter', 'facebook'],
         where: { user_id: id },
       });
 
       return {
         user: user,
         user_profile: user_profile,
-        user_websites: user_websites,
       };
     } catch (err) {
       throw Error(err.toString());
@@ -155,9 +145,9 @@ class UserService {
   }
 
   // 내 유저 데이터 수정
-  async putMyUserInfo(user_id, new_user_desc, new_user_picture, new_user_name) {
+  async putMyUserInfo(user_id, new_user_desc, new_user_picture, new_user_name, instargram, tweeter, facebook) {
     try {
-      const { user, user_profile, user_websites } = await this.getMyUserInfo(
+      const { user, user_profile } = await this.getMyUserInfo(
         user_id
       );
 
@@ -167,10 +157,13 @@ class UserService {
       await user_profile.update({
         picture: new_user_picture,
         description: new_user_desc,
+        instargram: instargram,
+        tweeter: tweeter,
+        facebook: facebook
       });
       await user_profile.save();
 
-      return { user, user_profile, user_websites };
+      return { user, user_profile };
     } catch (err) {
       throw Error(err.toString());
     }
@@ -205,7 +198,6 @@ class UserService {
   async getTopUsers() {
     try {
       const topUsers = [];
-      const profiles = [];
       const users = await db.User.findAll({
         // 판매량순으로 유저 정렬
         order: [
@@ -293,6 +285,15 @@ class UserService {
                   ).catch((err) => {
                     console.error(err);
                   });
+
+                  db.Profile.create({
+                    picture: '',
+                    description: '',
+                    instargram: '',
+                    tweeter: '',
+                    facebook: '',
+                    user_id: userInfo.id
+                  })
                 });
               }
             );
@@ -335,9 +336,8 @@ class UserService {
         throw Error('not authorized');
       } else {
         // 있으면 세션ID 생성
-        console.log(userInfo);
         req.session.user_id = req.body.user_id;
-        req.session.save(function () {});
+        req.session.save(() => {console.log(req.session);});
         console.log(req.session);
       }
     } catch (err) {
