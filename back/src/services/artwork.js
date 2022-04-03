@@ -154,6 +154,9 @@ class ArtworkService {
 
   // 하나의 artwork에 대해 부차적인 정보 가져오기
   async getOneArtworkAdditional(artwork_id, creator_id, owner_id) {
+
+    const hashtags = await this.HashtagServiceInterface.getArtworkTag(artwork_id);
+
     const creator_name = await this.User.findOne({
       attributes: [['name', 'creator_name']],
       where: { id: creator_id },
@@ -176,11 +179,10 @@ class ArtworkService {
       where: { artwork_id: artwork_id },
     });
 
-    return Object.assign({}, creator_name.dataValues, owner_name.dataValues, {
-      like_count,
-      want_count,
-      comment_count,
-    });
+    return Object.assign({}, 
+      creator_name.dataValues, 
+      owner_name.dataValues, 
+      {like_count, want_count, comment_count, hashtags});
   }
 
   // artwork를 만든 creator 정보를 조회
