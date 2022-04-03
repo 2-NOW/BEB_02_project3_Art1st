@@ -65,7 +65,7 @@ function SwapTo({ image, token, value }: SwapToprops) {
         <Typography
           sx={{ color: "rgb(0,0,0)", fontWeight: 500, fontSize: "28px" }}
         >
-          {value == 0 ? "0.0" : token == "AST" ? value * 15 : value / 13}
+          {value == 0 ? "0.0" : token == "AST" ? value * 15 : value / 17}
         </Typography>
         <Button id="basic-button" sx={buttoncss}>
           <img src={image} alt="AST logo" css={imagecss} />
