@@ -63,16 +63,6 @@ router.post('/', async (req, res) => {
     }
 })
 
-// 모든 작품 정보 조회 
-router.get('/getAllArtworks', async (req, res) => {
-    try{
-        const artworks = await ArtworkServiceInstance.getAllArtworks();
-        res.status(200).json(artworks);
-    }
-    catch(err){
-        res.status(404).json(err.toString());
-    }
-});
 
 // 필터링된 작품들 조회
 router.get('/getFilteredArtworks', async (req, res) => {
