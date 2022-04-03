@@ -2,7 +2,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import db from '../models/index.js';
-import ArtworkService from './artwork.js';
 import UserService from './user.js';
 
 import {addAmount, subAmount, isBigger} from './utils/calculateKlay.js';
@@ -11,9 +10,9 @@ import Caver from 'caver-js';
 class OrderService {
     constructor() {
         this.Orderbook = db.Orderbook;
+        this.Artwork = db.Artwork;
         this.DonationTransaction = db.DonationTransaction;
         this.UserServiceInterface = new UserService();
-        this.ArtworkServiceInterface = new ArtworkService;
 
         this.caver = new Caver(process.env.BAOBAB_NETWORK);
     }
@@ -80,7 +79,7 @@ class OrderService {
             })
 
             // 그리고 먼저 DB 처리 부터 해주기 -> user들 잔액(reward_transactions는 살릴지 말지 고민중);
-            await to.update({ // 후원하는 사람
+            await to.update({
                 balance: await addAmount(to.balance, amount)
             });
             await to.save();
@@ -98,7 +97,8 @@ class OrderService {
             const to = await this.UserServiceInterface.getOneUser(to_id); // user_col
 
             // 그리고 아트워크의 정보 가져오기
-            const artwork = await this.ArtworkServiceInterface.getOneArtwork(artwork_id);
+            // const artwork = await this.ArtworkServiceInterface.getOneArtwork(artwork_id);
+            const artwork = await this.Artwork.findOne({where: {id: artwork_id}});
 
             // 아트워크의 소유주 정보 가져오기
             const owner = await this.UserServiceInterface.getOneUserWithID(artwork.owner_id); 
@@ -131,7 +131,7 @@ class OrderService {
 
             // 그리고 먼저 디비 처리 해주기
             // to의 잔액 차감
-            await to.update({ // 후원하는 사람
+            await to.update({ 
                 balance: await subAmount(to.balance, artwork.price)
             });
             await to.save();

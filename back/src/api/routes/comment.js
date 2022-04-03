@@ -28,7 +28,7 @@ router.post('/', async(req, res) => {
         if(user_id === undefined) return res.status(401).json("Error: Unauthorized");
         const success = await CommentServiceInstance.postArtworkComment(artwork_id, content, user_id);
         if(success){
-            return res.status(201).send();
+            return res.status(201).send(true);
         }
         else {
             return res.status(500).json('Unknown Error');

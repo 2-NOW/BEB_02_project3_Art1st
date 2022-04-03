@@ -148,6 +148,47 @@ router.get('/:artwork_id', async (req, res) => {
     }
 });
 
+// nft 1의 판매 등록 
+router.put('/:artwork_id/sale', async (req, res) => {
+    const artwork_id = req.params.artwork_id;
+    const price = req.body.price
+    const user_id = req.session.user_id
+    try{
+        const artwork = await ArtworkServiceInstance.saleArtwork(artwork_id, price, user_id);
+        return res.status(200).json({msg : "success", data : artwork});
+    }
+    catch(err){
+       return res.status(404).json(err.toString());
+    }
+});
+
+// nft 1의 판매 취소 
+router.put('/:artwork_id/cancelSale', async (req, res) => {
+    const artwork_id = req.params.artwork_id;
+    const user_id = req.session.user_id
+
+    try{
+        const artwork =  await ArtworkServiceInstance.cancelSale(artwork_id, user_id);
+        return res.status(200).send({msg : "success", data : artwork});
+    }
+    catch(err){
+       return res.status(404).json(err.toString());
+    }
+});
+
+// nft 1의 판매 구매 
+router.post('/:artwork_id/buy', async (req, res) => {
+    const artwork_id = req.params.artwork_id;
+    const user_id = req.session.user_id;
+    try{
+        const artwork = await ArtworkServiceInstance.buyNft(user_id, artwork_id);
+        return res.status(200).json(artwork);
+    }
+    catch(err){
+       return res.status(404).json(err.toString());
+    }
+});
+
 // nft 1의 정보 수정
 router.put('/:artwork_id', async (req, res) => {
     const artwork_id = req.params.artwork_id;

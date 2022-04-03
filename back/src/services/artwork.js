@@ -5,7 +5,9 @@ import Caver from 'caver-js';
 
 import db from '../models/index.js'
 import HashtagService from './hashtag.js';
+import OrderService from './order.js';
 import Erc721Abi from '../api/abi/erc721abi.js'
+import UserService from './user.js';
 
 class ArtworkService {
     #myErc721Contract;
@@ -18,6 +20,9 @@ class ArtworkService {
         this.Hashtag = db.Hashtag;
         this.ArtworkHashtag = db.ArtworkHashtag;
         this.HashtagServiceInterface = new HashtagService();
+        this.OrderServiceInterface = new OrderService();
+        this.UserServiceInterface = new UserService();
+
 
         this.caver = new Caver(process.env.BAOBAB_NETWORK);
         this.#server = this.caver.klay.accounts.wallet.add(process.env.SERVER_PRIVATEKEY);
@@ -33,6 +38,7 @@ class ArtworkService {
             const creator = await this.User.findOne({ // 세션객체에 저장된 이메일로 artwork creator id, owner id 값으로 추가 할 유저 id 추출 
                 where: { user_id : creator_session} 
             });
+            
 
             // nft 민팅 실행
             const receipt = await this.#myErc721Contract.methods.mintNFT(creator.address, ipfsLink)
@@ -51,13 +57,17 @@ class ArtworkService {
                 desc : desc,
                 creator_id: creator.id,
                 owner_id: creator.id,
+                count_votes : 0,
                 collaboration_id: null,
                 votes: 0
             })
 
+            this.OrderServiceInterface.compensate(creator_session, 3);
+
             // 이후에 hashtag 연결 진행
             const success = await this.HashtagServiceInterface.makeArtworkTag(artwork.id, tags);
             return success;
+
         }
         catch(err){
             throw Error(err.toString());
@@ -137,6 +147,8 @@ class ArtworkService {
 
     // 하나의 artwork에 대해 부차적인 정보 가져오기
     async getOneArtworkAdditional(artwork_id, creator_id, owner_id){
+        const hashtags = await this.HashtagServiceInterface.getArtworkTag(artwork_id);
+
         const creator_name = await this.User.findOne({
             attributes: [['name', 'creator_name']],
             where: {id : creator_id}
@@ -159,7 +171,7 @@ class ArtworkService {
             where : { artwork_id : artwork_id}
         });
 
-        return Object.assign({}, creator_name.dataValues, owner_name.dataValues, {like_count, want_count, comment_count});
+        return Object.assign({}, creator_name.dataValues, owner_name.dataValues, {like_count, want_count, comment_count, hashtags});
 
     }
 
@@ -394,7 +406,76 @@ class ArtworkService {
         }
     }
 
-    //  작품 구매 DB 소유권 업데이트 
+    async buyNft(to_id, artwork_id){ // nft 기준 to. to는 돈을 내는 사람임.
+        try {
+            const result = await this.OrderServiceInterface.purchase(to_id, artwork_id);
+            return result
+        } catch (err){
+            throw Error(err.toString());
+        }
+    }
+
+    async saleArtwork (artwork_id, price, user_id){
+        try{
+            // 우선, 실제 존재하는 유저인지 확인
+            const userId = await this.UserServiceInterface.getOneUser(user_id);
+
+            // 아트워크 가져오기
+            const artwork = await this.Artwork.findOne({where: {id: artwork_id}});
+    
+            // 유효성 검사
+            // 소유주인지 확인
+            if(Number(artwork.owner_id) !== Number(userId.id)){ 
+                throw Error('Not owner of this Artwork');
+            }
+            // 판매중인지 확인 
+            if(artwork.is_selling){
+                throw Error('already on sale');
+            }
+
+            await artwork.update({
+                is_selling: 1, // 구매하면 일단 판매 x?? 구매 후 판매 하려면 다시 판매등록 해야한다고 가정해서 판매x로 일단 했습니다. 
+                price: price
+            });
+            await artwork.save();
+            return artwork;
+        } catch (err){
+            throw Error(err.toString());
+        }
+     
+    }
+
+    async cancelSale (artwork_id, user_id){
+        try {
+            // 우선, 실제 존재하는 유저인지 확인
+            const userId = await this.UserServiceInterface.getOneUser(user_id);
+
+            // 아트워크 가져오기
+            const artwork = await this.Artwork.findOne({where: {id: artwork_id}});
+
+
+            // 유효성 검사
+            // 소유주인지 확인
+            if(Number(artwork.owner_id) !== Number(userId.id)){ 
+                throw Error('Not owner of this Artwork');
+            }
+            // 판매중인지 확인 
+            if(!artwork.is_selling){
+                throw Error('already not on sale');
+            }
+
+            await artwork.update({
+                is_selling: 0, // 구매하면 일단 판매 x?? 구매 후 판매 하려면 다시 판매등록 해야한다고 가정해서 판매x로 일단 했습니다. 
+                price: 0
+            });
+            await artwork.save();
+            return artwork;
+        } catch (err){
+            throw Error(err.toString());
+        }
+    }
+
+    //  작품 구매 DB 소유권 업데이트
     async putBoughtArtworks (user_id, artwork_id){
         try {
 
