@@ -8,7 +8,7 @@ interface TagsProps {
 function Tags({ tags }: TagsProps) {
   return (
     <Box sx={{ mt: '15vh' }}>
-      {tags.map((tag, index) => (
+      {tags?.map((tag, index) => (
         <Chip
           key={index}
           label={tag}

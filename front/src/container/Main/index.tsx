@@ -11,19 +11,19 @@ import { postArtworkComment } from '@/api/artwork/post';
 function index() {
   const { data, isError, isLoading } = useQuery(['main'], getMainData());
 
-  const testId = '4';
-  const testContent = 'test';
-  const testMutation = useMutation(postArtworkComment);
+  // const testId = '4';
+  // const testContent = 'test';
+  // const testMutation = useMutation(postArtworkComment);
 
-  const handleClick = () => {
-    testMutation.mutate({ id: testId, content: testContent });
-  };
+  // const handleClick = () => {
+  //   testMutation.mutate({ id: testId, content: testContent });
+  // };
   if (isLoading) return <div>Loading...</div>;
   // if (!isLoading) console.log(data);
 
   return (
     <Layout>
-      <button onClick={handleClick}>test</button>
+      {/* <button onClick={handleClick}>test</button> */}
       <Banner bannerData={data.banner} />
       <Creators creators={data.creators} />
     </Layout>
