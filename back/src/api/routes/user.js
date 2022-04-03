@@ -220,10 +220,10 @@ router.post('/signup', async (req, res) => {
   // 포스트맨에서 userName, password를 넣으면
   const { user_id, user_pw } = req.body;
   try {
-    const address = await UserServiceInstance.signUp(user_id, user_pw);
-    console.log(address);
-    res.status(201).json(address);
-  } catch (err) {
+    await UserServiceInstance.signUp( user_id, user_pw);
+    res.status(201).json(true);
+  }
+  catch(err){
     res.status(404).json(err.toString());
   }
 });
