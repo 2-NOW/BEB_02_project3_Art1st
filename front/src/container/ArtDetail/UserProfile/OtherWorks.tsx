@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -32,11 +34,15 @@ function OtherWorks({ data }: { data: ICreatedArtworks[] }) {
           return (
             <Grid key={artwork_id} item lg={4}>
               <Card elevation={12}>
-                <CardMedia
-                  sx={{ height: '25vh' }}
-                  component="img"
-                  image={ipfsURI}
-                />
+                <Link href={`/artwork/${artwork_id}`}>
+                  <a>
+                    <CardMedia
+                      sx={{ height: '25vh' }}
+                      component="img"
+                      image={ipfsURI}
+                    />
+                  </a>
+                </Link>
               </Card>
             </Grid>
           );
