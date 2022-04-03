@@ -2,7 +2,6 @@ import express from 'express';
 import main from './routes/main.js';
 import user from './routes/user.js'
 import profile from './routes/profile.js';
-import website from './routes/website.js';
 import artwork from './routes/artwork.js';
 import like from './routes/like.js';
 import want from './routes/want.js';
@@ -25,7 +24,6 @@ router.use('/user/:user_id/profile', (req, res) => {
     req.user_id = req.params.user_id;
     profile(req, res);
 })
-router.use('/user/website', website)
 
 router.use('/artwork', artwork);
 router.use('/artwork/:artwork_id/like', (req, res) => {
@@ -46,7 +44,6 @@ router.use('/artwork/:artwork_id/comment', (req, res) => {
 router.use('/order', order);
 router.use('/klaytn', klaytn);
 router.use('/profile', profile);
-router.use('/website', website);
 router.use('/collaboration', collaboration);
 router.use('/vote', vote);
 
