@@ -4,17 +4,24 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import SendIcon from "@mui/icons-material/Send";
 
-interface ModalProps {
-  open: boolean;
-  setOpen: (value: boolean) => void;
-}
+const sendcss = {
+  position: "absolute",
+  right: "2rem",
+  bottom: "2.5rem",
+  width: "5rem",
+  opacity: "0.5",
+  "&:hover": {
+    opacity: "1",
+  },
+};
 
-function Sell({ open, setOpen }: ModalProps) {
+function Donate() {
+  const [open, setOpen] = useState(false);
   const [price, setPrice] = useState(0);
   const handleClickOpen = () => {
     setOpen(true);
@@ -24,12 +31,16 @@ function Sell({ open, setOpen }: ModalProps) {
     setOpen(false);
   };
 
-  const handleChange = (e: any) => {
+  const handlePrice = (e: any) => {
     setPrice(e.target.value);
   };
 
-  const sellproduct = () => {
-    //API 통신) /artwork/:artwork_id is_selling true, price price
+  const handleMsg = (e: any) => {
+    setPrice(e.target.value);
+  };
+
+  const send = () => {
+    //API 통신) /order/donation
     setOpen(false);
   };
 
@@ -37,10 +48,10 @@ function Sell({ open, setOpen }: ModalProps) {
     <Box>
       <Button
         variant="contained"
-        sx={{ margin: "auto 0 auto auto", position: "relative", bottom: "3vh" }}
+        sx={{ mt: "2rem", width: "100%" }}
         onClick={handleClickOpen}
       >
-        Sell NFT
+        Donate
       </Button>
       <Dialog
         open={open}
@@ -49,33 +60,41 @@ function Sell({ open, setOpen }: ModalProps) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          Enter the price you are willing to sell
+          How much are you willing to donate?
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            {
-              "As you confirm, this piece will now be for sale at the written price. However listed price cannot be edited once the item is listed. You will need to cancel your listing and relist the item with the update."
-            }
-          </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
             type="number"
             variant="standard"
-            placeholder="Price"
-            onChange={handleChange}
-            sx={{ width: "40%" }}
+            placeholder="Amount"
+            onChange={handlePrice}
+            sx={{ width: "50%" }}
           />
           <Typography
-            sx={{ position: "relative", left: "11rem", bottom: "2rem" }}
+            sx={{ position: "relative", left: "7rem", bottom: "2rem" }}
           >
             AST
           </Typography>
+          <TextField
+            fullWidth
+            multiline
+            minRows={4}
+            variant="standard"
+            placeholder="Type your comment here..."
+            onChange={handleMsg}
+          />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={sellproduct} autoFocus>
-            Confirm
+          <Button
+            sx={sendcss}
+            type="submit"
+            variant="contained"
+            endIcon={<SendIcon />}
+            onClick={send}
+          >
+            SEND
           </Button>
         </DialogActions>
       </Dialog>
@@ -83,4 +102,4 @@ function Sell({ open, setOpen }: ModalProps) {
   );
 }
 
-export default Sell;
+export default Donate;
