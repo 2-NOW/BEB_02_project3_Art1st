@@ -1,3 +1,6 @@
+import { useQueryClient, useMutation } from 'react-query';
+import { useSetRecoilState } from 'recoil';
+
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -6,21 +9,44 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-interface ModalProps {
+import { putArtworkCancelSale } from '@/api/artwork/put';
+import { successState, errorState } from '@/store/status';
+
+interface CancleSellModalProps {
+  artworkId: string | string[] | undefined;
   isCancelSellingModalOpen: boolean;
   setIsCancelSellingModalOpen: (value: boolean) => void;
 }
 
 function CancelSell({
+  artworkId,
   isCancelSellingModalOpen,
   setIsCancelSellingModalOpen,
-}: ModalProps) {
+}: CancleSellModalProps) {
+  const queryClient = useQueryClient();
+
+  const setSuccessState = useSetRecoilState(successState);
+  const setErrorState = useSetRecoilState(errorState);
+
+  const { mutate: putArtworkCancelSaleMutate } =
+    useMutation(putArtworkCancelSale);
+
   const handleClose = () => {
     setIsCancelSellingModalOpen(false);
   };
 
-  const unlist = () => {
+  const handleCancelSale = () => {
     //API 통신) /artwork/:artwork_id is_selling false
+    putArtworkCancelSaleMutate(
+      { artwork_id: artworkId },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries(['artwork', artworkId]);
+          setSuccessState(true);
+        },
+        onError: () => setErrorState(true),
+      }
+    );
     setIsCancelSellingModalOpen(false);
   };
 
@@ -44,7 +70,7 @@ function CancelSell({
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={unlist} autoFocus>
+          <Button onClick={handleCancelSale} autoFocus>
             Confirm
           </Button>
         </DialogActions>

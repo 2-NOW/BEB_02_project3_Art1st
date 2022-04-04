@@ -1,13 +1,15 @@
+import { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-
 import InstagramIcon from '@mui/icons-material/Instagram';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import FacebookIcon from '@mui/icons-material/Facebook';
+
+import DonateModal from './DonateModal';
 
 const profileImageCss = {
   position: 'relative',
@@ -28,6 +30,10 @@ function index({
   description,
   websites,
 }: ProfileProps) {
+  const [open, setOpen] = useState(false);
+
+  const handleDonateModal = () => setOpen(true);
+
   return (
     <>
       <Box sx={profileImageCss}>
@@ -78,7 +84,15 @@ function index({
         </IconButton>
       </Box>
 
-      {/* <Donate /> */}
+      <Button
+        variant="contained"
+        sx={{ mt: '2rem', width: '100%' }}
+        onClick={handleDonateModal}
+      >
+        Donate
+      </Button>
+
+      <DonateModal open={open} setOpen={setOpen} userName={userName} />
     </>
   );
 }

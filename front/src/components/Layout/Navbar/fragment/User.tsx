@@ -8,11 +8,12 @@ import Tooltip from '@mui/material/Tooltip';
 import UserMenu from './UserMenu';
 
 interface UserProps {
+  balance?: number;
   picture?: string;
   name?: string;
 }
 
-function User({ picture, name }: UserProps) {
+function User({ name, picture, balance }: UserProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLElement>) => {
@@ -37,7 +38,12 @@ function User({ picture, name }: UserProps) {
         Hi, {name}
       </Typography>
 
-      <UserMenu open={open} anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+      <UserMenu
+        balance={balance}
+        open={open}
+        anchorEl={anchorEl}
+        setAnchorEl={setAnchorEl}
+      />
     </>
   );
 }

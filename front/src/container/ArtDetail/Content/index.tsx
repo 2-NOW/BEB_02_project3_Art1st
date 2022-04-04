@@ -57,6 +57,7 @@ function index({
   return (
     <>
       <Header
+        artworkId={id}
         title={title}
         creator_id={creator_id}
         creator={creator_name}

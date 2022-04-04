@@ -39,7 +39,11 @@ function Form() {
       formData.append('metadata', JSON.stringify(metaData));
 
       uploadArtwork.mutate(formData, {
-        onSuccess: () => queryClient.invalidateQueries(['user', 'create']),
+        onSuccess: () => {
+          queryClient.invalidateQueries(['user', 'create']);
+          queryClient.invalidateQueries(['user', 'collect']);
+          queryClient.invalidateQueries(['user', 'islogin']);
+        },
       });
     }
   };

@@ -13,10 +13,11 @@ import SellModal from './Modal/Sell';
 import CancelSellModal from './Modal/CancelSell';
 
 interface UserMenuProps {
+  artworkId: string | string[] | undefined;
   isSelling: boolean;
 }
 
-export default function LongMenu({ isSelling }: UserMenuProps) {
+function UserMenu({ artworkId, isSelling }: UserMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isSellingModalOpen, setIsSellingModalOpen] = useState(false);
   const [isCancelSellingModalOpen, setIsCancelSellingModalOpen] =
@@ -87,14 +88,18 @@ export default function LongMenu({ isSelling }: UserMenuProps) {
       </Menu>
 
       <SellModal
+        artworkId={artworkId}
         isSellingModalOpen={isSellingModalOpen}
         setIsSellingModalOpen={setIsSellingModalOpen}
       />
 
       <CancelSellModal
+        artworkId={artworkId}
         isCancelSellingModalOpen={isCancelSellingModalOpen}
         setIsCancelSellingModalOpen={setIsCancelSellingModalOpen}
       />
     </Box>
   );
 }
+
+export default UserMenu;
