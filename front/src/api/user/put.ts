@@ -28,6 +28,9 @@ export const putEditUser = ({
     facebook,
   });
 
+export const putUserPfp = ({ user_picture }: { user_picture: string }) =>
+  axios.put(HOST_ADDRESS + '/user', { user_picture });
+
 /////////////
 // user_desc, user_picture, user_name, instargram, tweeter, facebook
 

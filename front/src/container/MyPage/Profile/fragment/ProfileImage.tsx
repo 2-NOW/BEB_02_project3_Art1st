@@ -1,11 +1,5 @@
-import Box from '@mui/material/Box';
-import Image from 'next/image';
-
-const profileImageCss = {
-  position: 'relative',
-  width: '100%',
-  height: '15rem',
-};
+import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
 
 interface ImageProps {
   src: string;
@@ -13,9 +7,9 @@ interface ImageProps {
 
 function ProfileImage({ src }: ImageProps) {
   return (
-    <Box sx={profileImageCss}>
-      <Image src={src} quality={100} layout="fill" objectFit="cover" />
-    </Box>
+    <Card sx={{ height: '15rem' }}>
+      <CardMedia component="img" image={src} />
+    </Card>
   );
 }
 

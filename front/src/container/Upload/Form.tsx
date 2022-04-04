@@ -1,6 +1,10 @@
-import { FormEvent } from 'react';
 import { useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
+import { useRouter } from 'next/router';
+import { useSetRecoilState } from 'recoil';
+
+import { successState } from '@/store/status';
+import { errorState } from '@/store/status';
 
 import Box from '@mui/material/Box';
 
@@ -10,6 +14,7 @@ import Uploadimage from './fragment/UploadImage';
 import InputTags from './fragment/InputTags';
 import UploadButton from './fragment/UploadButton';
 import ForSale from './fragment/ForSale';
+import Loading from '@/components/Loading';
 
 import { postArtworkUpload } from '@/api/artwork/post';
 
@@ -21,6 +26,10 @@ const wrapperCss = {
 
 function Form() {
   const queryClient = useQueryClient();
+  const router = useRouter();
+
+  const setIsSuccess = useSetRecoilState(successState);
+  const setIsError = useSetRecoilState(errorState);
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -29,7 +38,8 @@ function Form() {
   const [forSale, setForSale] = useState(false);
   const [price, setPrice] = useState('');
 
-  const uploadArtwork = useMutation(postArtworkUpload);
+  const { mutate: uploadArtworkMutate, isLoading: uploadArtworkIsLoading } =
+    useMutation(postArtworkUpload);
 
   const handleCreate = () => {
     if (title && description && image) {
@@ -38,15 +48,20 @@ function Form() {
       formData.append('image', image);
       formData.append('metadata', JSON.stringify(metaData));
 
-      uploadArtwork.mutate(formData, {
+      uploadArtworkMutate(formData, {
         onSuccess: () => {
+          router.push('/mypage');
           queryClient.invalidateQueries(['user', 'create']);
           queryClient.invalidateQueries(['user', 'collect']);
           queryClient.invalidateQueries(['user', 'islogin']);
+          setIsSuccess(true);
         },
+        onError: () => setIsError(true),
       });
     }
   };
+
+  if (uploadArtworkIsLoading) return <Loading />;
 
   return (
     <Box sx={wrapperCss}>

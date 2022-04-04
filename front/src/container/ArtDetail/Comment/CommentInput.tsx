@@ -20,6 +20,7 @@ function CommentInput({ id }: { id: string | string[] | undefined }) {
         onSuccess: () => {
           setComment('');
           queryClient.invalidateQueries(['comment', id]);
+          queryClient.invalidateQueries(['user', 'islogin']);
         },
       }
     );
