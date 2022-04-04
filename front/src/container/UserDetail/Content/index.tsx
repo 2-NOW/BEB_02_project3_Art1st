@@ -21,13 +21,19 @@ export default function index({ id }: { id: string | string[] | undefined }) {
     data: collectData,
     isError: collectIsError,
     isLoading: collectIsLoading,
-  } = useQuery(['user', 'collect', id], getUserCreateById(id));
+  } = useQuery(['user', 'collect', id], getUserCreateById(id), {
+    cacheTime: 15 * 60 * 1000,
+    staleTime: 10 * 60 * 1000,
+  });
 
   const {
     data: createData,
     isError: createIsError,
     isLoading: createIsLoading,
-  } = useQuery(['user', 'create', id], getUserCreateById(id));
+  } = useQuery(['user', 'create', id], getUserCreateById(id), {
+    cacheTime: 15 * 60 * 1000,
+    staleTime: 10 * 60 * 1000,
+  });
 
   if (collectIsLoading) return <div>Loading...</div>;
   if (createIsLoading) return <div>Loading...</div>;

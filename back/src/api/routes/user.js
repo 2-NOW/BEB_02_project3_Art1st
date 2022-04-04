@@ -109,11 +109,13 @@ router.get('/islogin', async (req, res) => {
   try {
     if (user_id === undefined) return res.status(200).json(false);
     const user = await UserServiceInstance.getMyUserInfo(user_id);
+    console.log(user);
+    console.log(user.user.id);
     const {
       user_profile: { picture },
-      user: { name },
+      user: { id, name },
     } = user;
-    return res.status(200).json({ picture, name });
+    return res.status(200).json({ id, name, picture });
   } catch (err) {
     return res.status(404).json(err.toString());
   }

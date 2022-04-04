@@ -49,7 +49,6 @@ function index() {
     }
   );
 
-  if (!isLoadingArtworkList) console.log(artworkListData);
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>

@@ -1,6 +1,6 @@
 import { FormEvent } from 'react';
 import { useState } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 
 import Box from '@mui/material/Box';
 
@@ -20,6 +20,8 @@ const wrapperCss = {
 };
 
 function Form() {
+  const queryClient = useQueryClient();
+
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState<File | null>(null);
@@ -36,7 +38,9 @@ function Form() {
       formData.append('image', image);
       formData.append('metadata', JSON.stringify(metaData));
 
-      uploadArtwork.mutate(formData);
+      uploadArtwork.mutate(formData, {
+        onSuccess: () => queryClient.invalidateQueries(['user', 'create']),
+      });
     }
   };
 

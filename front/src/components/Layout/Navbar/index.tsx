@@ -39,7 +39,11 @@ const rightItemsCss = {
 function Navbar() {
   const { data, isError, isLoading } = useQuery(
     ['user', 'islogin'],
-    getUserIslogin()
+    getUserIslogin(),
+    {
+      staleTime: 10 * 60 * 1000,
+      cacheTime: 15 * 60 * 1000,
+    }
   );
 
   return (

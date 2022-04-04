@@ -10,6 +10,7 @@ import ItemList from './ItemList';
 import TabPanel from './TabPanel';
 
 import { getUserCreate, getUserCollect, getUserFavorite } from '@/api/user/get';
+import Loading from '@/components/Loading';
 
 export default function index() {
   const [value, setValue] = useState(0);
@@ -21,21 +22,27 @@ export default function index() {
     data: collectData,
     isLoading: collectIsLoading,
     isError: collectIsError,
-  } = useQuery(['user', 'collect'], getUserCollect());
+  } = useQuery(['user', 'collect'], getUserCollect(), {
+    cacheTime: 15 * 60 * 1000,
+    staleTime: 10 * 60 * 1000,
+  });
   const {
     data: createData,
     isLoading: createIsLoading,
     isError: createIsError,
-  } = useQuery(['user', 'create'], getUserCreate());
+  } = useQuery(['user', 'create'], getUserCreate(), {
+    cacheTime: 15 * 60 * 1000,
+    staleTime: 10 * 60 * 1000,
+  });
   const {
     data: favoriteData,
     isLoading: favoriteIsLoading,
     isError: favoriteIsError,
-  } = useQuery(['user', 'favorite'], getUserFavorite());
+  } = useQuery(['user', 'favorite'], getUserFavorite(), {
+    cacheTime: 15 * 60 * 1000,
+    staleTime: 10 * 60 * 1000,
+  });
 
-  if (collectIsLoading) return <div>Loading...</div>;
-  if (createIsLoading) return <div>Loading...</div>;
-  if (favoriteIsLoading) return <div>Loading...</div>;
   return (
     <Box sx={{ width: '100%' }}>
       <Box>
@@ -62,15 +69,15 @@ export default function index() {
       </Box>
 
       <TabPanel value={value} index={0}>
-        <ItemList data={collectData} />
+        {collectIsLoading ? <Loading /> : <ItemList data={collectData} />}
       </TabPanel>
 
       <TabPanel value={value} index={1}>
-        <ItemList data={createData} />
+        {createIsLoading ? <Loading /> : <ItemList data={createData} />}
       </TabPanel>
 
       <TabPanel value={value} index={2}>
-        <ItemList data={favoriteData} />
+        {favoriteIsLoading ? <Loading /> : <ItemList data={favoriteData} />}
       </TabPanel>
     </Box>
   );

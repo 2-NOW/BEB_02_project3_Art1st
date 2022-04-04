@@ -36,9 +36,6 @@ function index({
   id: string | string[] | undefined;
 }) {
   //todo: price, owner ui 추가
-  const testText =
-    'lorem ipsum  dolor sit amet ipsum dolor sit ametlorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit ametlorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit ametlorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet';
-  const testTags = ['tag1', 'tag2', 'tag3', 'tag4', 'tag5'];
 
   const {
     title,
@@ -61,7 +58,10 @@ function index({
     <>
       <Header
         title={title}
+        creator_id={creator_id}
         creator={creator_name}
+        owner_id={owner_id}
+        owner_name={owner_name}
         views={views}
         created={createdAt}
         is_selling={is_selling}
