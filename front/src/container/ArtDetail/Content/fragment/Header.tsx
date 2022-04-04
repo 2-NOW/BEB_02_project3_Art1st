@@ -21,6 +21,7 @@ interface HeaderProps {
   created: string;
   is_selling: boolean;
   price: number;
+  artImage: string;
 }
 
 function Header({

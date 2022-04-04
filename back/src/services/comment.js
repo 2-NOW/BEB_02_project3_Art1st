@@ -1,11 +1,13 @@
 import db from '../models/index.js'
 import UserService from './user.js';
+import OrderService from './order.js';
 
 class CommentService {
     constructor() {
         this.Comment = db.Comment;
         this.User = db.User;
         this.Profile = db.Profile;
+        this.OrderServiceInterface = new OrderService();
     }
 
     // 작성자의 id number 확인
@@ -64,6 +66,7 @@ class CommentService {
                 user_id: await this.getWriterId(user_id),
                 artwork_id: artwork_id
             })
+            this.OrderServiceInterface.compensate(user_id, 1);
             return true;
         }
         catch(err) {

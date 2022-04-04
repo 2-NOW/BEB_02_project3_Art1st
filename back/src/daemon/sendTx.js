@@ -56,17 +56,7 @@ const startTask = async() => {
         console.log(ids, actions, froms, toes, amounts, tokens);
 
         if(ids.length != 0){
-            try{
-                const gasLimit = await batcherContract.methods.batchTransactions(actions, froms, toes, amounts, tokens)
-                .estimateGas({from: server.address, to: process.env.BATCHER_ADDRESS})
-
-                console.log('estimated Gas Limit: ', gasLimit);
-            }
-            catch(err){
-                console.log('Batcher Error: \n', err);
-                break;
-            }
-
+       
             var txHash; 
             
             batcherContract.methods.batchTransactions(actions, froms, toes, amounts, tokens)

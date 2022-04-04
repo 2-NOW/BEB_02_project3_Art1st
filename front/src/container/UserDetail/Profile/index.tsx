@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Image from 'next/image';
 import Link from 'next/link';
 import Box from '@mui/material/Box';
@@ -21,6 +22,29 @@ interface ProfileProps {
   description: string;
   websites: string[];
 }
+=======
+import Image from "next/image";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+
+import InstagramIcon from "@mui/icons-material/Instagram";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import EmailIcon from "@mui/icons-material/Email";
+
+import Donate from "./Donate";
+import data from "@/data/index";
+
+function index() {
+  const testData = data[41];
+
+  const profileImageCss = {
+    position: "relative",
+    width: "100%",
+    height: "15rem",
+  };
+>>>>>>> 7a8bf30f1b8fea7aaa56073fef220ee3f074866e
 
 function index({
   profileImage,
@@ -38,6 +62,7 @@ function index({
           objectFit="cover"
         />
       </Box>
+<<<<<<< HEAD
       <Typography sx={{ ml: '0.5rem', mt: '2rem' }} variant="h5">
         {userName}
       </Typography>
@@ -55,6 +80,21 @@ function index({
           >
             <InstagramIcon />
           </a>
+=======
+      <Typography sx={{ ml: "0.5rem", mt: "2rem" }} variant="h5">
+        Artist
+      </Typography>
+
+      <Typography sx={{ mt: "1rem" }} variant="subtitle1">
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Impedit natus
+        nisi quos, dolorum corrupti voluptate! Hic dicta quo nihil eligendi?
+        Iure deleniti modi facere ipsum ullam nesciunt quis soluta distinctio.
+      </Typography>
+
+      <Box sx={{ mt: "2rem" }}>
+        <IconButton>
+          <InstagramIcon />
+>>>>>>> 7a8bf30f1b8fea7aaa56073fef220ee3f074866e
         </IconButton>
 
         <IconButton disabled={websites[1] ? false : true}>
@@ -78,9 +118,7 @@ function index({
         </IconButton>
       </Box>
 
-      <Button sx={{ mt: '2rem', width: '100%' }} variant="contained">
-        Donate
-      </Button>
+      <Donate />
     </>
   );
 }
