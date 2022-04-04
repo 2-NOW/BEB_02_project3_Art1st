@@ -14,14 +14,17 @@ const buttoncss = {
 function SwapAST({ account, ASTAmount }) {
   // const caver = new Caver(window.klaytn);
   const swap = async () => {
-    const contractAddress = "0x44c61a776eb3C5e6670C38ffc2C705bed5a049bc";
+    const contractAddress = "0xF1387b4e0Ee7102B2eF9750599A0d304b1FF7427";
     var myContract = new caver.klay.Contract(tokenabi, contractAddress);
     const tx = await myContract.methods
-      .buy("0x924a78d1e170e0c408996ce73e9f9ebf9ec09614")
+      .sell(
+        "0x924a78d1e170e0c408996ce73e9f9ebf9ec09614",
+        caver.utils.toPeb(ASTAmount, "KLAY")
+      ) //API) user db address
       .send({
         type: "SMART_CONTRACT_EXECUTION",
-        from: account,
-        value: caver.utils.toPeb(ASTAmount, "AST"),
+        from: account.toString(),
+        value: caver.utils.toPeb(ASTAmount, "KLAY"),
         gas: 1000000,
       })
       .then((data) => {
