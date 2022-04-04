@@ -122,7 +122,7 @@ function Donate({ userId, userName, open, setOpen }: DonateProps) {
             variant="contained"
             endIcon={<SendIcon />}
             onClick={handleDonateSubmit}
-            disabled={price ? false : true}
+            disabled={price && msg ? false : true}
           >
             SEND
           </Button>
