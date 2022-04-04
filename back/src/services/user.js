@@ -77,7 +77,6 @@ class UserService {
     } catch (err) {
       throw Error(err.toString());
     }
-<<<<<<< HEAD
   }
 
   // 특정 유저 정보(내 정보임)불러오기
@@ -122,42 +121,9 @@ class UserService {
       };
     } catch (err) {
       throw Error(err.toString());
-=======
-
-    // 특정 유저 정보(내 정보임)불러오기
-    async getMyUserInfo(user_id){
-        try {
-            const user = await this.User.findOne({
-                attributes: ['id', 'name', 'user_id', 'balance', 'donation_balance', 'address', 'total_sales'],
-                where : { user_id : user_id}
-            });
-
-            // user.balance = await floating(user.balance);
-            // user.donation_balance = await floating(user.donation_balance);
-            // user.total_sales = await floating(user.total_sales);
-
-            if(user === null){
-                throw Error('Not Found User');
-            }
-    
-            const user_websites = await this.Website.findAll({
-                attributes : ['id', 'site'],
-                where : {user_id : user.id}
-            });
-    
-            const user_profile = await this.Profile.findOne({
-                attributes: ['id', 'picture', 'description'],
-                where : {user_id : user.id}
-            });
-    
-            return { user : user, user_profile : user_profile, user_websites: user_websites};
-        }
-        catch(err) {
-            throw Error(err.toString());
-        }
->>>>>>> 7a8bf30f1b8fea7aaa56073fef220ee3f074866e
     }
   }
+
 
   // 유저 정보 id로 불러오기
   async getOtherUserInfo(id) {
@@ -329,13 +295,12 @@ class UserService {
                       donation_balance: '0',
                       address: address,
                       private_key: prv_key,
-                      total_sales: 0,
+                      total_sales: '0',
                     },
                     {
                       where: {
                         user_id: user_id,
                       },
-<<<<<<< HEAD
                     }
                   ).catch((err) => {
                     console.error(err);
@@ -351,61 +316,6 @@ class UserService {
                     user_id: userInfo.id,
                   });
                 });
-=======
-                        {
-                          where: {
-                            user_id: user_id
-                          }
-                        }
-                      )
-                      .catch(err => {
-                        console.error(err);
-                      })
-                    });
-                  }); 
-                }
-              })
-        }
-        catch(err){
-            throw Error(err.toString());
-        }
-    }
-
-
-    // 유저 로그아웃 세션 삭제
-    async logout(session){
-        try {
-            if (session.user_id) { 
-                session.destroy();
-                return true;
-            } else {
-                throw Error('bad requset');
-            }
-        }
-        catch(err) {
-            throw Error(err.toString());
-        }
-    }
-
-    // 유저 로그인 
-    async login(user_id, user_pw, req){
-        try {
-            console.log(user_id, user_pw);
-            const userInfo = await db.User.findOne({ // DB 아이디 비번일치확인
-                where: { user_id : user_id, password: user_pw }
-              }).catch(err => {
-                console.error(err);
-              });
-              
-              if (!userInfo) {
-                throw Error('not authorized');
-              } else { // 있으면 세션ID 생성 
-                console.log(userInfo);
-                req.session.user_id = req.body.user_id;
-                // req.session.save(function () { 
-                // });
-                console.log(req.session);   
->>>>>>> 7a8bf30f1b8fea7aaa56073fef220ee3f074866e
               }
             );
           }

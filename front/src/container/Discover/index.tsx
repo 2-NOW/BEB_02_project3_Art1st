@@ -13,6 +13,8 @@ function index() {
     isLoading,
   } = useQuery(['user', 'top'], getTopCreators());
 
+  console.log(topUserData);
+
   return (
     <Layout>
       {isLoading ? (

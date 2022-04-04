@@ -51,18 +51,21 @@ class LikeService {
     async postArtworkLike(artwork_id, user_id) {
         try{
             await this.ArtworkServiceInterface.getOneArtwork(artwork_id);
-            // 이전에 좋아요를 누른 적이 있는지 확인
-            if(await this.isLike(artwork_id, user_id)){
-                // 이전에 누른 적이 있음
+            const user = await db.User.findOne({where: {user_id}});
+            console.log(user);
+            if(!user){
+                throw Error('Not Found User');
+            }
+            const like = await this.Like.findOne({where: {artwork_id: artwork_id, user_id: user.id}});
+            if(like){
                 throw Error('Already pressed like');
             }
-            else {
-                // 이전에 누른 적 없음
-                const like = await this.Like.create({
-                    user_id: user_id,
+            else{
+                await this.Like.create({
+                    user_id: user.id,
                     artwork_id: artwork_id
                 });
-                return like;
+                return true;
             }
         }
         catch(err){
@@ -74,16 +77,18 @@ class LikeService {
     async deleteArtworkLike(artwork_id, user_id) {
         try{
             await this.ArtworkServiceInterface.getOneArtwork(artwork_id);
-            // 이전에 좋아요를 누른 적이 있는지 확인
-            if(await this.isLike(artwork_id, user_id)){
-                // 이전에 좋아요를 누른 적이 있음
-                const like = await this.getUserArtworkLike(artwork_id, user_id);
-                this.Like.destroy({where:{artwork_id:artwork_id, user_id: user_id}});
-                return like;
+            const user = await db.User.findOne({where: {user_id}});
+            if(!user){
+                throw Error('Not Found User');
+            }
+
+            const like = await this.Like.findOne({where: {artwork_id: artwork_id, user_id: user.id}});
+            if(!like){
+                throw Error('Have never pressed LIKE before');
             }
             else{
-                // 이전에 누른 적 없음
-                throw Error('Have never pressed like before');
+                await this.Like.destroy({where:{artwork_id: artwork_id, user_id: user.id}});
+                return true;
             }
         }
         catch(err) {

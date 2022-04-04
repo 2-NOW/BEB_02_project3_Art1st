@@ -16,30 +16,31 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const artwork_id = req.artwork_id;
-  const { user_id } = req.session;
+    const artwork_id = req.artwork_id;
+    const { user_id } = req.session;
 
-  try {
-    const like = await LikeServiceInstance.postArtworkLike(artwork_id, user_id);
-    res.status(201).json(like);
-  } catch (err) {
-    res.status(404).json(err.toString());
-  }
-});
+    try{
+        if(!user_id) return res.status(401).json('Nonauthorized');
+        const like = await LikeServiceInstance.postArtworkLike(artwork_id, user_id);
+        res.status(201).json(like);
+    }
+    catch(err) {
+        res.status(404).json(err.toString());
+    }
+})
 
 router.delete('/', async (req, res) => {
-  const artwork_id = req.artwork_id;
-  const { user_id } = req.session;
+    const artwork_id = req.artwork_id;
+    const { user_id } = req.session;
 
-  try {
-    const like = await LikeServiceInstance.deleteArtworkLike(
-      artwork_id,
-      user_id
-    );
-    res.status(201).json(like);
-  } catch (err) {
-    res.status(404).json(err.toString());
-  }
-});
+    try{
+        if(!user_id) return res.status(401).json('Nonauthorized');
+        const like = await LikeServiceInstance.deleteArtworkLike(artwork_id, user_id);
+        res.status(201).json(like);
+    }
+    catch(err) {
+        res.status(404).json(err.toString());
+    }
+})
 
 export default router;

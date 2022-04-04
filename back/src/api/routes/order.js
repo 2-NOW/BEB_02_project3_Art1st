@@ -23,8 +23,9 @@ router.post('/donation', async(req, res) => { // 내가 from
 })
 
 router.post('/compensation', async(req, res) => { // 내가 to
-    const to_id = req.session.user_id; // user_id col
+    // const to_id = req.session.user_id; // user_id col
     const { amount } = req.body;
+    const to_id = 'sss';
 
     try{
         if(amount <= 0) {

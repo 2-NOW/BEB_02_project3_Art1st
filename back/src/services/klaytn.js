@@ -9,6 +9,10 @@ import Erc20Bytecode from '../api/abi/erc20Bytecode.js'
 import Erc721Abi from '../api/abi/erc721abi.js'
 import Erc721Bytecode from '../api/abi/erc721Bytecode.js';
 
+// Collaboration
+import CollaboAbi from '../api/abi/collaborationAbi.js';
+import CollaboBytecode from '../api/abi/collaborationBytecode.js';
+
 // Batcher
 import BatcherAbi from '../api/abi/batcherAbi.js';
 import BatcherBytecode from '../api/abi/batcherBytecode.js';
@@ -20,16 +24,26 @@ import Caver from 'caver-js';
 class KlaytnService {
     #Erc20Bytecode;
     #Erc20Abi;
+
     #Erc721Bytecode;
     #Erc721Abi;
+
+    #CollaboBytecode;
+    #CollaboAbi;
+
     #BatcherBytecode;
     #BatcherAbi;
+
     #server;
+
     #myErc20Contract;
     #myErc721Contract;
+    #myCollaboContract;
     #myBatcherContract;
+
     #Erc20Address;
     #Erc721Address;
+    #CollaboAddress;
     #BatcherAddress;
 
     constructor() {
@@ -40,6 +54,8 @@ class KlaytnService {
         this.#Erc20Abi = Erc20Abi;
         this.#Erc721Bytecode = Erc721Bytecode;
         this.#Erc721Abi = Erc721Abi;
+        this.#CollaboBytecode = CollaboBytecode;
+        this.#CollaboAbi = CollaboAbi;
         this.#BatcherBytecode = BatcherBytecode;
         this.#BatcherAbi = BatcherAbi;
 
@@ -52,13 +68,22 @@ class KlaytnService {
             this.#myErc20Contract = new this.caver.klay.Contract(this.#Erc20Abi);
         }
 
-        if(process.env.ERC721_ADDRESS != ''){ // 이미 배포한 erc20 contract가 있음
+        if(process.env.ERC721_ADDRESS != ''){ // 이미 배포한 erc721 contract가 있음
             console.log('erc721 컨트랙트 배포 완료');
             this.setMyErc721Contract(process.env.ERC721_ADDRESS);
         }
         else {
             console.log('Erc721 컨트랙트 배포 필요')
             this.#myErc721Contract = new this.caver.klay.Contract(this.#Erc721Abi);
+        }
+
+        if(process.env.COLLABO_ADDRESS != ''){ // 이미 배포한 collaboration contract가 있음
+            console.log('Collaboration 컨트랙트 배포 완료');
+            this.setMyCollaboContract(process.env.COLLABO_ADDRESS);
+        }
+        else {
+            console.log('Collaboration 컨트랙트 배포 필요')
+            this.#myCollaboContract = new this.caver.klay.Contract(this.#CollaboAbi);
         }
 
         if(process.env.BATCHER_ADDRESS != '') { // 이미 배포한 batcher contract가 있음
@@ -93,6 +118,19 @@ class KlaytnService {
             this.#myErc721Contract = new this.caver.klay.Contract(this.#Erc721Abi, erc721Addr, {
                 from: this.#server.address // server Addr
             }); 
+            return true;
+        }
+        catch(err){
+            throw Error(err.toString());
+        }
+    }
+
+    setMyCollaboContract(collaboAddr){
+        try{
+            this.#CollaboAddress = collaboAddr;
+            this.#myCollaboContract = new this.caver.klay.Contract(this.#CollaboAbi, collaboAddr, {
+                from: this.#server.address 
+            });
             return true;
         }
         catch(err){
@@ -194,6 +232,36 @@ class KlaytnService {
         }
     }
 
+    async deployCollabo() {
+        if(process.env.COLLABO_ADDRESS != ''){
+            throw Error('COLLABORATION contract already deployed');
+        }
+        let payload = {
+            data: this.#CollaboBytecode,
+            arguments: [this.#Erc20Address]
+        };
+        let parameter = {
+            from: this.#server.address,
+            gas: 20000000,
+            value: 0
+        }
+        var _transactionHash;
+
+        const {_address} = await this.#myCollaboContract.deploy(payload)
+        .send(parameter, (err, transactionHash) => {
+            if(err){
+                throw Error(err.toString);
+            }
+            _transactionHash = transactionHash;
+        });
+
+        if(!this.setMyCollaboContract(_address)){
+            throw Error("setMyCollaboContract: \n", err.toString());
+        };
+
+        return {CollaboContractAddress: _address, CollaboContractTxHash: _transactionHash};
+    }
+
     async deployBatcher() { 
         try{
             if(process.env.BATCHER_ADDRESS != ''){
@@ -202,7 +270,7 @@ class KlaytnService {
             // batcher contract deploy
             let payload = {
                 data: this.#BatcherBytecode,
-                arguments: [this.#Erc20Address, this.#Erc721Address]
+                arguments: [this.#Erc20Address, this.#Erc721Address, this.#CollaboAddress]
             };
             let parameter = {
                 from: this.#server.address,
@@ -220,10 +288,7 @@ class KlaytnService {
             });
 
 
-            // change erc20 contract owner
-            const receipt20 = await this.#myErc20Contract.methods.transferOwnership(_address)
-            .send({from: this.#server.address, to: this.#Erc20Address, gas: 2000000});
-
+            // change contract owner
             const receipt721 = await this.#myErc721Contract.methods.transferOwnership(_address)
             .send({from: this.#server.address, to: this.#Erc721Address, gas: 2000000});
 

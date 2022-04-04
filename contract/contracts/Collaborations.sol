@@ -4,7 +4,7 @@ pragma solidity ^0.8.7;
 
 contract Art1stTokenInterface {
     function vote(address voter) external returns (bool) {}
-    function compensate(address to, uint amount) external returns (bool) {}
+    function deposit(address from, address to, uint amount) external returns (bool) {}
     function burn(uint amount) external returns (bool) {}
 }
 
@@ -31,7 +31,7 @@ contract Collaboration {
     mapping(uint => mapping(uint => address[])) whoVoted; // eventNum => nftId => voterAddr (어떤 사람이 이 nft에 투표했는지)
     mapping(uint => mapping(uint => mapping(address => bool))) isVoted; // address가 해당 token에 투표를 했는지
 
-    mapping(uint => Event) events; // events[0], events[1] ... 식으로 접근 가능
+    mapping(uint => Event) events; // events[1], events[2] ... 식으로 접근 가능
     uint eventLen = 0; // 몇 개의 evnet가 열렸는지
 
     address art1stTokenAddress; 
@@ -45,6 +45,7 @@ contract Collaboration {
 
     // 1. 콜라보레이션 이벤트 생성
     function openNewEvent() public returns(uint eventNum) {
+        eventLen += 1;
         events[eventLen].voteCount = 0;
         events[eventLen].topNfts = [0, 0, 0, 0, 0];
         events[eventLen].eventStatus = EventStatus.STATUS_OPEN;
@@ -52,7 +53,7 @@ contract Collaboration {
         emit OpenNewEvent(eventLen);
 
         eventNum = eventLen;
-        eventLen += 1;
+
     }
     
     // 1-1. 이벤트 닫기
@@ -71,8 +72,10 @@ contract Collaboration {
         uint minCnt = nftVoteCount[eventNum][events[eventNum].topNfts[0]];  // 첫번째 nft의 득표 수로 변경
         uint minIdx = 0;
 
-        // 최소값 찾기
-        for (uint8 i = 1; i<5; i++) {
+        // 최소값 찾기, 만약 이미 안에 포함되어 있는 nft라면 굳이 업데이트 할 필요 X
+        for (uint8 i = 0; i<5; i++) {
+            if(events[eventNum].topNfts[i] == nft) return true;
+
             if(minCnt > nftVoteCount[eventNum][events[eventNum].topNfts[i]]){
                 minCnt = nftVoteCount[eventNum][events[eventNum].topNfts[i]];
                 minIdx = i;
@@ -99,7 +102,7 @@ contract Collaboration {
 
             nftVoteCount[eventNum][nft] += 1; // 해당 nft에 대한 득표수 하나 추가
             whoVoted[eventNum][nft].push(voter); // 해당 nft에 대해 투표한 사람 추가
-            isVoted[eventNum][nft][voter] == true; // 해당 nft에 대해 해당 address가 투표했음을 기록
+            isVoted[eventNum][nft][voter] = true; // 해당 nft에 대해 해당 address가 투표했음을 기록
 
             _isTop(eventNum, nft); // 이번 투표로 인해 top creator가 바뀌었는지 확인
 
@@ -119,7 +122,7 @@ contract Collaboration {
             uint topNft = events[eventNum].topNfts[i];
 
             for(uint j=0; j<whoVoted[eventNum][topNft].length; j++) {
-                Art1stTokenContract.compensate(whoVoted[eventNum][topNft][j], amount);
+                Art1stTokenContract.deposit(address(this), whoVoted[eventNum][topNft][j], amount);
                 emit CompensateForVoting(eventNum, whoVoted[eventNum][topNft][j], amount); 
             }
         }
@@ -147,4 +150,22 @@ contract Collaboration {
         events[eventNum].eventStatus = EventStatus.STATUS_COMPLETE;
         return true;
     }
+
+    // 기타 조회 function
+    function getVoteCount(uint eventNum, uint nftId) view public returns (uint){
+        return nftVoteCount[eventNum][nftId];
+    }
+    function getIsVoted(uint eventNum, uint nftId, address who) view public returns (bool) {
+        return isVoted[eventNum][nftId][who];
+    }
+    function getVoterList(uint eventNum, uint nftId) view public returns (address[] memory){
+        return whoVoted[eventNum][nftId];
+    }
+    function getTopFive(uint eventNum) view public returns (uint[5] memory) {
+        return events[eventNum].topNfts;
+    }
+    function getTotalVotes(uint eventNum) view public returns (uint) {
+        return events[eventNum].voteCount;   
+    }
+
 }

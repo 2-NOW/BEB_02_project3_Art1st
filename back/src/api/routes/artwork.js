@@ -3,13 +3,12 @@ dotenv.config();
 
 import { Router } from 'express';
 import ArtworkService from '../../services/artwork.js';
-import { create } from 'ipfs-http-client';
-
-const ipfsClient = create({
-  host: 'ipfs.infura.io',
-  port: 5001,
-  protocol: 'https',
-});
+// for pinata
+import multer  from 'multer';
+const upload = multer({ dest: 'uploads/' });
+import pinataSDK from '@pinata/sdk';
+const pinata = pinataSDK('984fb1853f9d404653ba', 'fec8d9d2c5db043416c84a919ed62077f19bcc660d7c0bfe81958fdc343d2355');
+import fs from 'fs';
 
 const router = Router();
 const ArtworkServiceInstance = new ArtworkService();
@@ -30,41 +29,29 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/',upload.single('image'), async (req, res) => {
   try {
-    console.log(req);
-    console.log(req.files);
-    const { title, desc, isSelling, price, tags } = JSON.parse(req.body); // price 값 꼭 있어야 함. 정수형으로
-    const { user_id } = req.session;
-    const img = req.files.image;
 
+    const { title, description, forSale, price, tags } = JSON.parse(req.body.metadata); // price 값 꼭 있어야 함. 정수형으로
+    const { user_id } = req.session;
+    const img = req.file;
+
+    var readable = fs.createReadStream(img.path);
     // 유저 찾기
     if (!user_id) {
       // 세션객체 없으면 에러400
       return res.status(404).send('not authorized');
     }
-    // 우선 유저 추출 부분 service 단으로 뺏습니다. 필요하시면 다시 수정하셔도 되요.
 
-    // 우선 image file을 ipfs로 변경
-    const { cid } = await ipfsClient.add(img);
-    const ipfsLink = 'https://ipfs.io/ipfs/' + cid;
-    console.log('new NFT IPFS link: ', ipfsLink);
-
-    // example
-    // let title = "4번 제목 예시";
-    // let desc = "4번 설명 예시";
-    // let isSelling = false;
-    // let price = 0;
-    // let ipfsLink = '3nd NFT link';
-    // let user_id = 'hyobin';
-    // let tags = ['효', '빈'];
+    const {IpfsHash} = await pinata.pinFileToIPFS(readable);
+    const ipfsLink = 'https://gateway.pinata.cloud/ipfs/' + IpfsHash;
 
     // 이후 nft 민팅
     const newArtwork = await ArtworkServiceInstance.mintNewArtwork(
       title,
-      desc,
+      description,
       price,
-      isSelling,
+      forSale,
       ipfsLink,
       tags,
       user_id

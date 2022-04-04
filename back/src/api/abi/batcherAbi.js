@@ -10,6 +10,11 @@ const batcherAbi = [
 				"internalType": "address",
 				"name": "erc721addr",
 				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "coladdr",
+				"type": "address"
 			}
 		],
 		"stateMutability": "nonpayable",
