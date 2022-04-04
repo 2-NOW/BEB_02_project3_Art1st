@@ -7,6 +7,9 @@ const lightTheme = createTheme({
     },
   },
   palette: {
+    primary: {
+      main: '#3f51b5',
+    },
     mode: 'light',
   },
 });

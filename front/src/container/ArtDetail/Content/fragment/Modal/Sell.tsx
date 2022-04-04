@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
+import { useQueryClient, useMutation } from 'react-query';
+import { useSetRecoilState } from 'recoil';
+
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -8,23 +11,45 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 
-interface ModalProps {
+import { putArtworkSale } from '@/api/artwork/put';
+import { successState, errorState } from '@/store/status';
+
+interface SellModalProps {
+  artworkId: string | string[] | undefined;
   isSellingModalOpen: boolean;
   setIsSellingModalOpen: (value: boolean) => void;
 }
 
-function Sell({ isSellingModalOpen, setIsSellingModalOpen }: ModalProps) {
+function Sell({
+  artworkId,
+  isSellingModalOpen,
+  setIsSellingModalOpen,
+}: SellModalProps) {
+  const queryClient = useQueryClient();
+
+  const setSuccessState = useSetRecoilState(successState);
+  const setErrorState = useSetRecoilState(errorState);
+
   const [price, setPrice] = useState(0);
+  const { mutate: orderArtworkMutate } = useMutation(putArtworkSale);
 
-  const handleClose = () => {
-    setIsSellingModalOpen(false);
-  };
+  const handleClose = () => setIsSellingModalOpen(false);
 
-  const handleChange = (e: any) => {
-    setPrice(e.target.value);
-  };
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => setPrice(Number(e.target.value));
 
-  const sellproduct = () => {
+  const handleSaleArtwork = () => {
+    orderArtworkMutate(
+      { artwork_id: artworkId, price },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries(['artwork', artworkId]);
+          setSuccessState(true);
+        },
+        onError: () => setErrorState(true),
+      }
+    );
     setIsSellingModalOpen(false);
   };
 
@@ -45,6 +70,7 @@ function Sell({ isSellingModalOpen, setIsSellingModalOpen }: ModalProps) {
             autoFocus
             margin="dense"
             type="number"
+            value={price}
             variant="standard"
             onChange={handleChange}
             fullWidth
@@ -52,7 +78,7 @@ function Sell({ isSellingModalOpen, setIsSellingModalOpen }: ModalProps) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={sellproduct} autoFocus>
+          <Button onClick={handleSaleArtwork} autoFocus>
             Confirm
           </Button>
         </DialogActions>

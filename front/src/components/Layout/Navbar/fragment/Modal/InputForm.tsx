@@ -11,7 +11,9 @@ import Checkbox from '@mui/material/Checkbox';
 import PwInput from './PwInput';
 
 import { postUserSignup, postUserLogin } from '@/api/user/post';
-import { loginSuccessState, signUpSuccessState } from '@/store/status';
+import { successState, errorState } from '@/store/status';
+
+import Alert from '@/components/Alert';
 
 interface InputFormProps {
   isLogin: boolean;
@@ -30,8 +32,10 @@ function InputForm({ isLogin, setIsLogin, setOpenModal }: InputFormProps) {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [checked, setChecked] = useState(false);
+  const [alertError, setAlertError] = useState(false);
 
-  const setIsSignupState = useSetRecoilState(signUpSuccessState);
+  const setSuccessState = useSetRecoilState(successState);
+  const setErrorState = useSetRecoilState(errorState);
 
   const {
     mutate: signUpMutate,
@@ -57,7 +61,11 @@ function InputForm({ isLogin, setIsLogin, setOpenModal }: InputFormProps) {
         loginMutate(
           { user_id: userId, user_pw: password },
           {
-            onSuccess: () => queryClient.invalidateQueries(['user', 'islogin']),
+            onSuccess: () => {
+              queryClient.invalidateQueries(['user', 'islogin']);
+              setSuccessState(true);
+            },
+            onError: () => setErrorState(true),
           }
         );
       else if (checked)
@@ -69,11 +77,17 @@ function InputForm({ isLogin, setIsLogin, setOpenModal }: InputFormProps) {
               setUserId('');
               setPassword('');
               setChecked(false);
-              setIsSignupState(true);
+              setSuccessState(true);
+            },
+            onError: () => {
+              setUserId('');
+              setPassword('');
+              setChecked(false);
+              setErrorState(true);
             },
           }
         );
-    }
+    } else setAlertError(true);
   };
 
   const handleAgree = (e: ChangeEvent<HTMLInputElement>) =>
@@ -129,6 +143,12 @@ function InputForm({ isLogin, setIsLogin, setOpenModal }: InputFormProps) {
       >
         {isLogin ? 'Create new account?' : 'Already have an account?'}
       </Button>
+      <Alert
+        open={alertError}
+        setOpen={setAlertError}
+        message="check all inputs !"
+        severity="error"
+      />
     </Box>
   );
 }

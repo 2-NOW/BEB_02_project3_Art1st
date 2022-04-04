@@ -55,7 +55,11 @@ function Navbar() {
       <Box sx={rightItemsCss}>
         <Search />
         {data ? (
-          <User picture={data.picture} name={data.name} />
+          <User
+            balance={data.balance}
+            picture={data.picture}
+            name={data.name}
+          />
         ) : (
           <LoginButton />
         )}

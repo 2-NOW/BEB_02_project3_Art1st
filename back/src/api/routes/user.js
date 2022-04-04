@@ -113,9 +113,9 @@ router.get('/islogin', async (req, res) => {
     console.log(user.user.id);
     const {
       user_profile: { picture },
-      user: { id, name },
+      user: { id, name, balance },
     } = user;
-    return res.status(200).json({ id, name, picture });
+    return res.status(200).json({ id, name, picture, balance });
   } catch (err) {
     return res.status(404).json(err.toString());
   }

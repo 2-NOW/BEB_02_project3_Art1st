@@ -1,3 +1,6 @@
+import { useQueryClient, useMutation } from 'react-query';
+import { useSetRecoilState } from 'recoil';
+
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -6,19 +9,45 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-interface ModalProps {
+import { postOrderArtwork } from '@/api/order/post';
+import { successState, errorState } from '@/store/status';
+
+interface BuyModalProps {
+  artworkId: string | string[] | undefined;
   isBuyingModalOpen: boolean;
   setIsBuyingModalOpen: (value: boolean) => void;
   price: number;
 }
 
-function Buy({ isBuyingModalOpen, setIsBuyingModalOpen, price }: ModalProps) {
+function Buy({
+  artworkId,
+  isBuyingModalOpen,
+  setIsBuyingModalOpen,
+  price,
+}: BuyModalProps) {
+  const queryClient = useQueryClient();
+
+  const setSuccessState = useSetRecoilState(successState);
+  const setErrorState = useSetRecoilState(errorState);
+
+  const { mutate: orderArtworkMutate } = useMutation(postOrderArtwork);
+
   const handleClose = () => {
     setIsBuyingModalOpen(false);
   };
 
-  const buyproduct = () => {
+  const handleBuyArtwork = () => {
     // API 통신) /artwork/putBoughtArtworks
+    orderArtworkMutate(
+      { artwork_id: artworkId },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries(['artwork', artworkId]);
+          setSuccessState(true);
+        },
+        onError: () => setErrorState(true),
+      }
+    );
     setIsBuyingModalOpen(false);
   };
 
@@ -38,7 +67,7 @@ function Buy({ isBuyingModalOpen, setIsBuyingModalOpen, price }: ModalProps) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={buyproduct} autoFocus>
+          <Button onClick={handleBuyArtwork} autoFocus>
             Confirm
           </Button>
         </DialogActions>

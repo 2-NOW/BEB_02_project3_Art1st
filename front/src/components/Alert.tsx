@@ -3,9 +3,6 @@ import { useSetRecoilState } from 'recoil';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 
-import { loginSuccessState } from '@/store/status';
-import { signUpSuccessState } from '@/store/status';
-
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -16,25 +13,20 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
 interface SnackbarProps {
   message: string;
   severity: 'success' | 'error' | 'info' | 'warning';
+  open: boolean;
+  setOpen: (value: boolean) => void;
 }
 
-function SnackbarAlert({ message, severity }: SnackbarProps) {
-  const [open, setOpen] = useState(true);
-  // const setIsLoginSuccess = useSetRecoilState(loginSuccessState);
-  const setIsSignUpSuccess = useSetRecoilState(signUpSuccessState);
-
+function SnackbarAlert({ message, severity, open, setOpen }: SnackbarProps) {
   const handleClose = (event?: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpen(false);
-    // setIsLoginSuccess(false);
-    setIsSignUpSuccess(false);
   };
 
   return (
-    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+    <Snackbar open={open} autoHideDuration={1500} onClose={handleClose}>
       <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
         {message}
       </Alert>

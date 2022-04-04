@@ -9,16 +9,19 @@ import Divider from '@mui/material/Divider';
 import Logout from '@mui/icons-material/Logout';
 import UploadIcon from '@mui/icons-material/Upload';
 import PersonIcon from '@mui/icons-material/Person';
+import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip';
 
 import { deleteUserLogout } from '@/api/user/delete';
 
 interface UserMenuProps {
+  balance?: number;
   open: boolean;
   anchorEl: HTMLElement | null;
   setAnchorEl: (anchorEl: HTMLElement | null) => void;
 }
 
-function UserMenu({ open, anchorEl, setAnchorEl }: UserMenuProps) {
+function UserMenu({ balance, open, anchorEl, setAnchorEl }: UserMenuProps) {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { mutate: logoutMutate } = useMutation(deleteUserLogout);
@@ -37,6 +40,7 @@ function UserMenu({ open, anchorEl, setAnchorEl }: UserMenuProps) {
   return (
     <>
       <Menu
+        // sx={{ width: '25rem' }}
         anchorEl={anchorEl}
         id="account-menu"
         open={open}
@@ -71,6 +75,16 @@ function UserMenu({ open, anchorEl, setAnchorEl }: UserMenuProps) {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
+        <MenuItem sx={{ width: '9rem' }}>
+          <ListItemIcon>🎨</ListItemIcon>
+          <Tooltip title={String(balance)}>
+            <Typography variant="inherit" noWrap>
+              {balance ? balance : 0} AST
+            </Typography>
+          </Tooltip>
+        </MenuItem>
+
+        <Divider />
         <Link href="/mypage">
           <MenuItem>
             <ListItemIcon>
@@ -80,8 +94,6 @@ function UserMenu({ open, anchorEl, setAnchorEl }: UserMenuProps) {
           </MenuItem>
         </Link>
 
-        <Divider />
-
         <Link href="/upload">
           <MenuItem>
             <ListItemIcon>
@@ -90,8 +102,6 @@ function UserMenu({ open, anchorEl, setAnchorEl }: UserMenuProps) {
             Upload
           </MenuItem>
         </Link>
-
-        <Divider />
 
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>

@@ -45,7 +45,7 @@ function ItemList({ data }: { data: IData[] }) {
 
   return (
     <Grid container>
-      {data.map((item, index) => {
+      {data?.map((item) => {
         return (
           <Grid key={item.artwork_id} item xl={6} xs={12}>
             <Card elevation={12} sx={imageCss}>
