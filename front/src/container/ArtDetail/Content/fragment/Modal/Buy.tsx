@@ -43,6 +43,8 @@ function Buy({
       {
         onSuccess: () => {
           queryClient.invalidateQueries(['artwork', artworkId]);
+          queryClient.invalidateQueries(['user', 'islogin']);
+          queryClient.invalidateQueries(['user', 'collect']);
           setSuccessState(true);
         },
         onError: () => setErrorState(true),
