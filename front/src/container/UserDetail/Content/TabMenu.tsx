@@ -1,17 +1,18 @@
-import { useState, SyntheticEvent } from 'react';
+import { useState, SyntheticEvent } from "react";
 
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import ItemList from './ItemList';
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
-import TabPanel from './TabPanel';
+import ItemList from "./ItemList";
+import TabPanel from "./TabPanel";
+import Swap from "../Swap/index";
 
 function tabProps(index: number) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
   };
 }
 
@@ -22,7 +23,7 @@ export default function TabMenu() {
     setValue(newValue);
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: "100%" }}>
       <Box>
         <Tabs
           value={value}
@@ -30,15 +31,16 @@ export default function TabMenu() {
           aria-label="basic tabs example"
         >
           <Tab
-            sx={{ p: '0 3rem 0 3rem' }}
+            sx={{ p: "0 3rem 0 3rem" }}
             label={<Typography variant="h5">Collect</Typography>}
             {...tabProps(0)}
           />
           <Tab
-            sx={{ p: '0 3rem 0 3rem' }}
+            sx={{ p: "0 3rem 0 3rem" }}
             label={<Typography variant="h5">Create</Typography>}
             {...tabProps(1)}
           />
+          <Swap />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
