@@ -36,7 +36,7 @@ function NestedModal({ openModal, setOpenModal, title }: NestedModalprops) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose} autoFocus>
+          <Button onClick={apply} autoFocus>
             Apply
           </Button>
         </DialogActions>
