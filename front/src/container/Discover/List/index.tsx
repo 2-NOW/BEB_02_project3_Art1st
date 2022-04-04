@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
+import { useQuery } from 'react-query';
 
 import Typography from '@mui/material/Typography';
 import Checkbox from '@mui/material/Checkbox';
@@ -8,16 +9,45 @@ import Box from '@mui/material/Box';
 import Tags from '@/container/Discover/List/Tags';
 import ItemList from '@/container/Discover/List/ItemList';
 
+import { getMostUsedTags, getArtworkList } from '@/api/artwork/get';
+
 import data from '@/data/index';
+import Loading from '@/components/Loading';
 
 function index() {
-  const testData = [...data];
+  //todo: isSelling, tagId에 따라 새로운 요청이 가는지 확인 필요
 
   const [checked, setChecked] = useState(false);
 
-  const handleCheckboxChange = () => {
+  const [isSelling, setIsSelling] = useState<undefined | 1>(undefined);
+  const [tagId, setTagId] = useState<undefined | number>(undefined);
+
+  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setIsSelling(e.target.checked ? 1 : undefined);
     setChecked(!checked);
   };
+
+  const {
+    data: topTagData,
+    isLoading: tagDataLoading,
+    isError,
+  } = useQuery(['tag', 'top'], getMostUsedTags());
+
+  const {
+    data: artworkListData,
+    isLoading: isLoadingArtworkList,
+    isError: isErrorArtworkList,
+  } = useQuery(
+    ['artwork', 'list', ['tag', tagId], ['isSell', isSelling]],
+    getArtworkList(isSelling, tagId),
+    {
+      onSuccess: () => {
+        setIsSelling(isSelling);
+        setTagId(tagId);
+      },
+      staleTime: 1 * 60 * 1000,
+    }
+  );
 
   return (
     <>
@@ -37,9 +67,13 @@ function index() {
         />
       </Box>
 
-      <Tags />
+      {tagDataLoading ? (
+        <Loading />
+      ) : (
+        <Tags data={topTagData} setTagId={setTagId} />
+      )}
 
-      <ItemList />
+      {isLoadingArtworkList ? <Loading /> : <ItemList data={artworkListData} />}
     </>
   );
 }

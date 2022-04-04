@@ -5,7 +5,13 @@ import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 
-import data from '@/data/index';
+import Link from 'next/link';
+
+interface ICreator {
+  id: number;
+  name: string;
+  picture: string;
+}
 
 const cardCss = {
   width: '10rem',
@@ -17,12 +23,11 @@ const avatarCss = {
   m: '1.5rem auto auto',
 };
 
-function Creators() {
-  const testData = data.slice(0, 24);
+function Creators({ creators }: { creators: ICreator[] }) {
   return (
-    <Box sx={{ width: '80vw', m: '8rem auto' }}>
-      <Grid container rowSpacing={'4rem'}>
-        {testData.map((item, index) => {
+    <Box sx={{ width: '80vw', m: '11rem auto' }}>
+      <Grid container rowSpacing={'3rem'}>
+        {creators.map((creator, index) => {
           return (
             <Grid
               item
@@ -33,16 +38,21 @@ function Creators() {
               md={3}
             >
               <Card sx={cardCss} elevation={5}>
-                <CardActionArea>
-                  <Avatar sx={avatarCss} src={item} />
-                  <Typography
-                    sx={{ m: '1rem auto', textAlign: 'center' }}
-                    variant="h6"
-                    gutterBottom
-                  >
-                    Artist
-                  </Typography>
-                </CardActionArea>
+                <Link href={`/user/${creator.id}`}>
+                  <a>
+                    <CardActionArea>
+                      <Avatar sx={avatarCss} src={creator.picture} />
+
+                      <Typography
+                        sx={{ m: '1rem auto', textAlign: 'center' }}
+                        variant="h6"
+                        gutterBottom
+                      >
+                        {creator.name}
+                      </Typography>
+                    </CardActionArea>
+                  </a>
+                </Link>
               </Card>
             </Grid>
           );

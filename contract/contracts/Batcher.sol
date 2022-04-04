@@ -12,6 +12,10 @@ contract Art1stNftInterface {
     function buyNft(address from, address to, uint256 tokenId, uint256 price) external returns (bool) {}
 }
 
+contract CollaborationInterface {
+    function vote(uint eventNum, address voter, uint nft) public returns(bool) {}
+}
+
 contract Batcher is Ownable {
     address art1stTokenAddress; 
     Art1stTokenInterface Art1stTokenContract;
@@ -19,12 +23,18 @@ contract Batcher is Ownable {
     address art1stNftAddress;
     Art1stNftInterface Art1stNftContract;
 
-    constructor(address erc20addr, address erc721addr) {
+    address collaborationAddress;
+    CollaborationInterface CollaborationContact;
+
+    constructor(address erc20addr, address erc721addr, address coladdr) {
         art1stTokenAddress = erc20addr;
         Art1stTokenContract = Art1stTokenInterface(art1stTokenAddress);
 
         art1stNftAddress = erc721addr;
         Art1stNftContract = Art1stNftInterface(art1stNftAddress);
+
+        collaborationAddress = coladdr;
+        CollaborationContact = CollaborationInterface(collaborationAddress);
     }
 
     function batchTransactions(
@@ -34,12 +44,11 @@ contract Batcher is Ownable {
         uint[] memory amounts,
         uint[] memory nfts
     ) public onlyOwner returns (bool){
-        // actions: compensate-1, donation-2, buyNft-3
+        // actions: compensate-1, donation-2, buyNft-3, vote-4
         for (uint i=0; i<actions.length; i++) {
             bool success; 
 
             if (actions[i] == 1){
-                // compensate
                 success = Art1stTokenContract.compensate(toes[i], amounts[i]);
             }
             else if (actions[i] == 2) {
@@ -52,6 +61,9 @@ contract Batcher is Ownable {
                 else{
                     success = false;
                 }
+            }
+            else if (actions[i] == 4){ // amounts[i]에 들어가있는 값이 eventNum이 된다.
+                success = CollaborationContact.vote(amounts[i], froms[i], nfts[i]);
             }
             
             if (!success) revert("Batcher: transaction failed");

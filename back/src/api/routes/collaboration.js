@@ -41,6 +41,28 @@ router.get('/:collaboration_id/winners', async(req, res) => {
     }
 })
 
+// collaboration Entries 탭에 작품 추가(=> 작품 등록)
+router.post('/:collaboration_id/entries', async (req, res)=> {
+    const collaboration_id = req.params.collaboration_id;
+    const { user_id } = req.session;
+    const {artwork_id} = req.body; // post는 query가 되려나요 ?
+
+    // for test
+    // const user_id = 'ss';
+
+    try{
+        if (user_id === undefined)
+        return res.status(401).json('Error: Unauthorized');
+
+        const success = await CollaborationServiceInstance.postEntriesArtworks(collaboration_id, artwork_id, user_id);
+        res.status(201).json(success);
+    }
+    catch(err){
+        return res.status(404).json(err.toString());
+    }
+
+})
+
 // collaboration Entries 탭 작품들 조회 
 router.get('/:collaboration_id/entries', async(req, res) => {
     const collaboration_id = req.params.collaboration_id;

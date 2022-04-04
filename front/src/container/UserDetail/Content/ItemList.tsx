@@ -1,4 +1,5 @@
-import Box from '@mui/material/Box';
+import Link from 'next/link';
+
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
@@ -6,11 +7,22 @@ import CardContent from '@mui/material/CardContent';
 import CardActionArea from '@mui/material/CardActionArea';
 import Typography from '@mui/material/Typography';
 
-import data from '@/data/index';
+interface IData {
+  artwork_id: number;
+  title: string;
+  ipfsURI: string;
+  is_selling: boolean;
+  price: string;
+  views: number;
+  like_count: number;
+  comment_count: number;
+  creator_name: string;
+  owner_name: string;
+}
 
-function ItemList() {
-  const testData = data.slice(20, 50);
-
+function ItemList({ data }: { data: IData[] }) {
+  // todo: hover 시 표시되는 정보 다른화면과 똑같이 맞추고 작업 필요
+  // todo: user detail, mypage content 부분은 components로 따로 빼는게 좋을듯
   const imageCss = {
     position: 'relative',
     height: '25rem',
@@ -32,31 +44,33 @@ function ItemList() {
   };
   return (
     <Grid container>
-      {testData.map((src, index) => {
+      {data.map((item, index) => {
         return (
-          <Grid key={index} item xl={6} xs={12}>
+          <Grid key={item.artwork_id} item xl={6} xs={12}>
             <Card elevation={12} sx={imageCss}>
               <CardMedia
                 sx={{ position: 'absolute' }}
                 component="img"
                 height="100%"
-                image={src}
+                image={item.ipfsURI}
               />
-              <CardActionArea sx={contentCss}>
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Statue of Liberty
-                  </Typography>
-                  <Typography
-                    sx={{ color: 'white' }}
-                    variant="body2"
-                    color="text.secondary"
-                  >
-                    lorem ipsum dolor sit amet, consectetur adip sap et dolor
-                    sed diam non pro pos
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
+              <Link href={`/artwork/${item.artwork_id}`}>
+                <CardActionArea sx={contentCss}>
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {item.title}
+                    </Typography>
+                    <Typography
+                      sx={{ color: 'white' }}
+                      variant="body2"
+                      color="text.secondary"
+                    >
+                      lorem ipsum dolor sit amet, consectetur adip sap et dolor
+                      sed diam non pro pos
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Link>
             </Card>
           </Grid>
         );

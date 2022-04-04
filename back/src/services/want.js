@@ -51,18 +51,21 @@ class WantService {
     async postArtworkWant(artwork_id, user_id) {
         try{
             await this.ArtworkServiceInterface.getOneArtwork(artwork_id);
+            const user = await db.User.findOne({where: {user_id}});
+            if(!user){
+                throw Error('Not Found User');
+            }
             // 이전에 사고싶어요를 누른 적이 있는지 확인
-            if(await this.isWant(artwork_id, user_id)){
-                // 이전에 누른 적이 있음
+            const want = await this.Want.findOne({where: {artwork_id: artwork_id, user_id: user.id}});
+            if(want) {
                 throw Error('Already pressed want');
             }
             else {
-                // 이전에 누른 적 없음
-                const want = await this.Want.create({
-                    user_id: user_id,
+                await this.Want.create({
+                    user_id: user.id,
                     artwork_id: artwork_id
                 });
-                return want;
+                return true;
             }
         }
         catch(err){
@@ -74,16 +77,18 @@ class WantService {
     async deleteArtworkWant(artwork_id, user_id) {
         try{
             await this.ArtworkServiceInterface.getOneArtwork(artwork_id);
+            const user = await db.User.findOne({where: {user_id}});
+            if(!user){
+                throw Error('Not Found User');
+            }
             // 이전에 사고싶어요를 누른 적이 있는지 확인
-            if(await this.isWant(artwork_id, user_id)){
-                // 이전에 사고싶어요를 누른 적이 있음
-                const want = await this.getUserArtworkWant(artwork_id, user_id);
-                this.Want.destroy({where:{artwork_id:artwork_id, user_id: user_id}});
-                return want;
+            const want = await this.Want.findOne({where: {artwork_id: artwork_id, user_id: user.id}});
+            if(!want){
+                throw Error('Have never pressed WANT before');
             }
             else{
-                // 이전에 누른 적 없음
-                throw Error('Have never pressed want before');
+                await this.Want.destroy({where:{artwork_id: artwork_id, user_id: user.id}});
+                return true;
             }
         }
         catch(err) {

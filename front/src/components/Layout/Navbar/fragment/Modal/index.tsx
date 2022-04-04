@@ -54,7 +54,11 @@ function index({ openModal, setOpenModal }: ModalProps) {
             <Typography sx={{ mt: '1rem' }} variant="subtitle1">
               Welcome to Art1st !
             </Typography>
-            <InputForm isLogin={isLogin} setIsLogin={setIsLogin} />
+            <InputForm
+              isLogin={isLogin}
+              setIsLogin={setIsLogin}
+              setOpenModal={setOpenModal}
+            />
           </Box>
         </Box>
       </Modal>

@@ -6,7 +6,7 @@ export default (Sequelize, DataTypes) => {
           primaryKey: true
         },
         action: {
-          type: DataTypes.ENUM('donate', 'compensate', 'purchace'), // 일단은 이정도 ...
+          type: DataTypes.ENUM('donate', 'compensate', 'purchace', 'vote'), // 일단은 이정도 ...
           allowNull: false
         },
         amount: {

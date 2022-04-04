@@ -12,7 +12,6 @@ import hashtag from './hashtag.js';
 import like from './like.js';
 import profile from './profile.js';
 import want from './want.js';
-import website from './website.js';
 import orderbook from './orderbook.js';
 import collaboration from './collaboration.js';
 import vote from './vote.js';
@@ -36,7 +35,6 @@ db.Hashtag = hashtag(sequelize, Sequelize);
 db.Like = like(sequelize, Sequelize);
 db.Profile = profile(sequelize, Sequelize);
 db.Want = want(sequelize, Sequelize);
-db.Website = website(sequelize, Sequelize);
 db.Collaboration = collaboration(sequelize, Sequelize);
 db.Vote = vote(sequelize, Sequelize);
 
@@ -76,10 +74,6 @@ db.ArtworkHashtag.belongsTo(db.Hashtag, {foreignKey: 'hashtag_id'});
 // profile user_id 외래키 설정
 db.User.hasOne(db.Profile, { foreignKey: 'user_id' });
 db.Profile.belongsTo(db.User, { foreignKey: 'user_id' });
-
-// website user_id 외래키 설정
-db.User.hasOne(db.Website, { foreignKey: 'user_id' });
-db.Website.belongsTo(db.User, { foreignKey: 'user_id' });
 
 // comment user_id 외래키 설정
 db.User.hasMany(db.Comment, {foreignKey: 'user_id',allowNull: false,});

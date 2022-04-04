@@ -40,6 +40,16 @@ router.post('/erc721', async (req, res) => {
     }
 })
 
+router.post('/collabo', async (req, res) => {
+    try{
+        const data = await KlaytnServiceInterface.deployCollabo();
+        res.status(201).json(data);
+    }
+    catch(err) {
+        res.status(500).json(err.toString());
+    }
+})
+
 // batcher 컨트랙트 배포하기
 router.post('/batcher', async (req, res)=> {
     try{

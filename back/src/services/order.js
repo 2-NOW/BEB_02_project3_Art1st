@@ -158,6 +158,23 @@ class OrderService {
             throw Error(err.toString());
         }
     }
+
+    async vote(from_id, collaboration_id, artwork_id){
+        // 이미 이전 로직에서 잔액 처리와 from의 id 추출, artwork 검사까지 끝남
+        // 유저의 잔액까지 이전에 미리 차감해줌
+
+        // orderbook에 주문서 넣어주기
+        const order = await this.Orderbook.create({
+            action: 'vote',
+            amount: String(collaboration_id), // 중요! batch의 구조를 유지하기 위해, amount에 collaboration_id를 넣어줌
+            status: 'before',
+            from_id: from_id,
+            token_id: artwork_id,
+            transaction_hash: '0x0' // 아직 hash 없음
+        })
+
+        return order;
+    }
 }
 
 export default OrderService;
