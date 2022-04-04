@@ -25,6 +25,7 @@ interface HeaderProps {
   created: string;
   is_selling: boolean;
   price: number;
+  artworkImage: string;
 }
 
 function Header({
@@ -38,6 +39,7 @@ function Header({
   created,
   is_selling,
   price,
+  artworkImage,
 }: HeaderProps) {
   const [isBuyingModalOpen, setIsBuyingModalOpen] = useState(false);
 
@@ -69,7 +71,11 @@ function Header({
         ) : (
           <>
             {owner_id === loginUserData.id ? (
-              <UserMenu artworkId={artworkId} isSelling={is_selling} />
+              <UserMenu
+                artworkId={artworkId}
+                artworkImage={artworkImage}
+                isSelling={is_selling}
+              />
             ) : (
               <Box>
                 {is_selling && (
@@ -128,6 +134,20 @@ function Header({
         >
           {views} views
         </Typography>
+
+        {is_selling && (
+          <>
+            <Divider orientation="vertical" flexItem />
+
+            <Typography
+              sx={{ m: '0.1rem 1rem 0.1rem 1rem' }}
+              variant="body1"
+              component="div"
+            >
+              {price} AST
+            </Typography>
+          </>
+        )}
       </Box>
 
       <BuyModal

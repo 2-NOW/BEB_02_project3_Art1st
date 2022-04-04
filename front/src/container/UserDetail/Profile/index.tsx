@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import Image from 'next/image';
 
+import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -11,13 +12,8 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 
 import DonateModal from './DonateModal';
 
-const profileImageCss = {
-  position: 'relative',
-  width: '100%',
-  height: '15rem',
-};
-
 interface ProfileProps {
+  userId: string | string[] | undefined;
   profileImage: string;
   userName: string;
   description: string;
@@ -25,6 +21,7 @@ interface ProfileProps {
 }
 
 function index({
+  userId,
   profileImage,
   userName,
   description,
@@ -36,14 +33,10 @@ function index({
 
   return (
     <>
-      <Box sx={profileImageCss}>
-        <Image
-          src={profileImage}
-          quality={100}
-          layout="fill"
-          objectFit="cover"
-        />
-      </Box>
+      <Card sx={{ height: '15rem' }}>
+        <CardMedia component="img" image={profileImage} />
+      </Card>
+
       <Typography sx={{ ml: '0.5rem', mt: '2rem' }} variant="h5">
         {userName}
       </Typography>
@@ -92,7 +85,12 @@ function index({
         Donate
       </Button>
 
-      <DonateModal open={open} setOpen={setOpen} userName={userName} />
+      <DonateModal
+        open={open}
+        setOpen={setOpen}
+        userName={userName}
+        userId={userId}
+      />
     </>
   );
 }

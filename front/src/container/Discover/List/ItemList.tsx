@@ -87,8 +87,16 @@ function ItemList({ data }: { data: IData[] }) {
                           variant="body1"
                           color="text.secondary"
                         >
-                          {creator_name}
+                          Created by {creator_name}
                         </Typography>
+                        <Typography
+                          sx={{ color: 'white' }}
+                          variant="body1"
+                          color="text.secondary"
+                        >
+                          Owned by {owner_name}
+                        </Typography>
+
                         <Box sx={{ display: 'flex', mt: '3vh' }}>
                           <Favorite sx={iconCss} />
                           <Typography
@@ -116,6 +124,15 @@ function ItemList({ data }: { data: IData[] }) {
                           >
                             {views}
                           </Typography>
+                          {is_selling && (
+                            <Typography
+                              sx={{ m: '0 1rem 0 0.3rem' }}
+                              variant="body2"
+                              component="div"
+                            >
+                              {price} AST
+                            </Typography>
+                          )}
                         </Box>
                       </CardContent>
                     </CardActionArea>

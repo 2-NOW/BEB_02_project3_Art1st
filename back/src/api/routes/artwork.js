@@ -4,10 +4,10 @@ dotenv.config();
 import { Router } from 'express';
 import ArtworkService from '../../services/artwork.js';
 // for pinata
-import multer  from 'multer';
+import multer from 'multer';
 const upload = multer({ dest: 'uploads/' });
 import pinataSDK from '@pinata/sdk';
-const pinata = pinataSDK('984fb1853f9d404653ba', 'fec8d9d2c5db043416c84a919ed62077f19bcc660d7c0bfe81958fdc343d2355');
+const pinata = pinataSDK(process.env.PINATA_KEY, process.env.PINATA_SECRET);
 import fs from 'fs';
 
 const router = Router();
@@ -29,10 +29,11 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/',upload.single('image'), async (req, res) => {
+router.post('/', upload.single('image'), async (req, res) => {
   try {
-
-    const { title, description, forSale, price, tags } = JSON.parse(req.body.metadata); // price 값 꼭 있어야 함. 정수형으로
+    const { title, description, forSale, price, tags } = JSON.parse(
+      req.body.metadata
+    ); // price 값 꼭 있어야 함. 정수형으로
     const { user_id } = req.session;
     const img = req.file;
 
@@ -43,7 +44,7 @@ router.post('/',upload.single('image'), async (req, res) => {
       return res.status(404).send('not authorized');
     }
 
-    const {IpfsHash} = await pinata.pinFileToIPFS(readable);
+    const { IpfsHash } = await pinata.pinFileToIPFS(readable);
     const ipfsLink = 'https://gateway.pinata.cloud/ipfs/' + IpfsHash;
 
     // 이후 nft 민팅
@@ -158,45 +159,49 @@ router.get('/:artwork_id', async (req, res) => {
   }
 });
 
-// nft 1의 판매 등록 
+// nft 1의 판매 등록
 router.put('/:artwork_id/sale', async (req, res) => {
-    const artwork_id = req.params.artwork_id;
-    const price = req.body.price
-    const user_id = req.session.user_id
-    try{
-        const artwork = await ArtworkServiceInstance.saleArtwork(artwork_id, price, user_id);
-        return res.status(200).json({msg : "success", data : artwork});
-    }
-    catch(err){
-       return res.status(404).json(err.toString());
-    }
+  const artwork_id = req.params.artwork_id;
+  const price = req.body.price;
+  const user_id = req.session.user_id;
+  try {
+    const artwork = await ArtworkServiceInstance.saleArtwork(
+      artwork_id,
+      price,
+      user_id
+    );
+    return res.status(200).json({ msg: 'success', data: artwork });
+  } catch (err) {
+    return res.status(404).json(err.toString());
+  }
 });
 
-// nft 1의 판매 취소 
+// nft 1의 판매 취소
 router.put('/:artwork_id/cancelSale', async (req, res) => {
-    const artwork_id = req.params.artwork_id;
-    const user_id = req.session.user_id
+  const artwork_id = req.params.artwork_id;
+  const user_id = req.session.user_id;
 
-    try{
-        const artwork =  await ArtworkServiceInstance.cancelSale(artwork_id, user_id);
-        return res.status(200).send({msg : "success", data : artwork});
-    }
-    catch(err){
-       return res.status(404).json(err.toString());
-    }
+  try {
+    const artwork = await ArtworkServiceInstance.cancelSale(
+      artwork_id,
+      user_id
+    );
+    return res.status(200).send({ msg: 'success', data: artwork });
+  } catch (err) {
+    return res.status(404).json(err.toString());
+  }
 });
 
-// nft 1의 판매 구매 
+// nft 1의 판매 구매
 router.post('/:artwork_id/buy', async (req, res) => {
-    const artwork_id = req.params.artwork_id;
-    const user_id = req.session.user_id;
-    try{
-        const artwork = await ArtworkServiceInstance.buyNft(user_id, artwork_id);
-        return res.status(200).json(artwork);
-    }
-    catch(err){
-       return res.status(404).json(err.toString());
-    }
+  const artwork_id = req.params.artwork_id;
+  const user_id = req.session.user_id;
+  try {
+    const artwork = await ArtworkServiceInstance.buyNft(user_id, artwork_id);
+    return res.status(200).json(artwork);
+  } catch (err) {
+    return res.status(404).json(err.toString());
+  }
 });
 
 // nft 1의 정보 수정

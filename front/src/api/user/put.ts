@@ -28,6 +28,16 @@ export const putEditUser = ({
     facebook,
   });
 
+export const putUserPfp = ({ user_picture }: { user_picture: string }) =>
+  axios.put(HOST_ADDRESS + '/user', { user_picture });
+
+// balance
+export const putUserBalancePlus = ({ balance }: { balance: string }) =>
+  axios.put(HOST_ADDRESS + '/user/balance', { balance, action: 'buy' });
+
+export const putUserBalanceMinus = ({ balance }: { balance: string }) =>
+  axios.put(HOST_ADDRESS + '/user/balance', { balance, action: 'sell' });
+
 /////////////
 // user_desc, user_picture, user_name, instargram, tweeter, facebook
 

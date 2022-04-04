@@ -9,6 +9,7 @@ import Content from './Content/index';
 import Profile from './Profile/index';
 
 import { getUserById } from '@/api/user/get';
+import Loading from '@/components/Loading';
 
 const profileCss = {
   width: '15rem',
@@ -23,7 +24,7 @@ function index() {
   const { id } = useRouter().query;
   const { data, isError, isLoading } = useQuery(['user', id], getUserById(id));
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loading />;
 
   const { user, user_profile, facebook, instagram, tweeter } = data;
   const user_websites = [instagram, tweeter, facebook];
@@ -34,6 +35,7 @@ function index() {
         <Grid item xs={12} xl={4}>
           <Box sx={profileCss}>
             <Profile
+              userId={id}
               profileImage={user_profile.picture}
               userName={user.name}
               description={user.description}

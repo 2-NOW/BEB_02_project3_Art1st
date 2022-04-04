@@ -1,4 +1,8 @@
 import { useState, ChangeEvent } from 'react';
+import { useMutation } from 'react-query';
+import { useQueryClient } from 'react-query';
+import { useSetRecoilState } from 'recoil';
+
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -9,6 +13,11 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import SendIcon from '@mui/icons-material/Send';
 
+import Loading from '@/components/Loading';
+
+import { postOrderDonation } from '@/api/order/post';
+import { successState, errorState } from '@/store/status';
+
 const sendCss = {
   position: 'absolute',
   right: '1.5rem',
@@ -17,16 +26,29 @@ const sendCss = {
 };
 
 interface DonateProps {
+  userId: string | string[] | undefined;
   userName: string;
   open: boolean;
   setOpen: (open: boolean) => void;
 }
 
-function Donate({ userName, open, setOpen }: DonateProps) {
+function Donate({ userId, userName, open, setOpen }: DonateProps) {
+  const queryClient = useQueryClient();
+
   const [price, setPrice] = useState(0);
   const [msg, setMsg] = useState('');
 
-  const handleClose = () => setOpen(false);
+  const setIsSuccess = useSetRecoilState(successState);
+  const setIsError = useSetRecoilState(errorState);
+
+  const { mutate: postOrderDonationMutate, isLoading: donationIsLoading } =
+    useMutation(postOrderDonation);
+
+  const handleClose = () => {
+    setPrice(0);
+    setMsg('');
+    setOpen(false);
+  };
 
   const handlePrice = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -38,9 +60,24 @@ function Donate({ userName, open, setOpen }: DonateProps) {
   const handleDonateSubmit = () => {
     //API 통신) /order/donation
     if (price && msg) {
-      setOpen(false);
+      postOrderDonationMutate(
+        { to_id: userId, amount: price, msg },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries(['user', 'islogin']);
+            setOpen(false);
+            setIsSuccess(true);
+          },
+          onError: () => {
+            setOpen(false);
+            setIsError(true);
+          },
+        }
+      );
     }
   };
+
+  if (donationIsLoading) return <Loading />;
 
   return (
     <Box>

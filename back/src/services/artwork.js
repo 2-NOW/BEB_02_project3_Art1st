@@ -404,6 +404,7 @@ class ArtworkService {
         const additionalInfo = await this.getOneArtworkAdditional(artworkId[i], artworkInfo.dataValues.creator_id, artworkInfo.dataValues.owner_id);
         FavoritedArtworks[i] = Object.assign({}, artworkInfo.dataValues, additionalInfo);
       }
+      return FavoritedArtworks;
     } catch (err) {
         throw Error(err.toString());
       }

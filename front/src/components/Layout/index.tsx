@@ -1,13 +1,10 @@
 import { css } from '@emotion/react';
-import { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 import Navbar from './Navbar/index';
 import Footer from './Footer';
 import Alert from '@/components/Alert';
 import { successState, errorState } from '@/store/status';
-
-import Caver from 'caver-js';
 
 interface LayoutProps {
   children?: React.ReactNode;

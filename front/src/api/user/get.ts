@@ -32,6 +32,12 @@ export const getUserFavorite = () => async () => {
   return data;
 };
 
+// user address balance
+export const getUserAddressBalance = () => async () => {
+  const { data } = await axios.get(HOST_ADDRESS + '/user/balance');
+  return data;
+};
+
 // other user info
 export const getUserById = (id: undefined | string | string[]) => async () => {
   const { data } = await axios.get(HOST_ADDRESS + '/user/' + id);

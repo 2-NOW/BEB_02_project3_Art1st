@@ -6,6 +6,7 @@ const nextConfig = {
       'images.unsplash.com',
       'lh3.googleusercontent.com',
       'i.pinimg.com',
+      'gateway.pinata.cloud',
     ],
   },
   presets: [

@@ -11,17 +11,20 @@ import PersonIcon from '@mui/icons-material/Person';
 
 import SellModal from './Modal/Sell';
 import CancelSellModal from './Modal/CancelSell';
+import SetPfpModal from './Modal/SetPfp';
 
 interface UserMenuProps {
   artworkId: string | string[] | undefined;
+  artworkImage: string;
   isSelling: boolean;
 }
 
-function UserMenu({ artworkId, isSelling }: UserMenuProps) {
+function UserMenu({ artworkId, artworkImage, isSelling }: UserMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isSellingModalOpen, setIsSellingModalOpen] = useState(false);
   const [isCancelSellingModalOpen, setIsCancelSellingModalOpen] =
     useState(false);
+  const [isSetPfpModalOpen, setIsSetPfpModalOpen] = useState(false);
 
   const open = Boolean(anchorEl);
 
@@ -33,6 +36,7 @@ function UserMenu({ artworkId, isSelling }: UserMenuProps) {
 
   const handleSetPfp = () => {
     setAnchorEl(null);
+    setIsSetPfpModalOpen(true);
   };
 
   const handleSelling = () => {
@@ -44,10 +48,6 @@ function UserMenu({ artworkId, isSelling }: UserMenuProps) {
     setIsCancelSellingModalOpen(true);
     setAnchorEl(null);
   };
-
-  // todo: setPfP
-  // todo: Sell
-  // todo: CancelSell
 
   return (
     <Box>
@@ -97,6 +97,12 @@ function UserMenu({ artworkId, isSelling }: UserMenuProps) {
         artworkId={artworkId}
         isCancelSellingModalOpen={isCancelSellingModalOpen}
         setIsCancelSellingModalOpen={setIsCancelSellingModalOpen}
+      />
+
+      <SetPfpModal
+        open={isSetPfpModalOpen}
+        setOpen={setIsSetPfpModalOpen}
+        artworkImage={artworkImage}
       />
     </Box>
   );

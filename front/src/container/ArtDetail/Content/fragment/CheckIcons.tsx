@@ -38,11 +38,17 @@ function CheckIcons({ likeCount, wantCount, id }: CheckIconsProps) {
     setLike(e.target.checked);
     if (e.target.checked) {
       addLikeMutation.mutate(id, {
-        onSuccess: () => queryClient.invalidateQueries(['artwork', id]),
+        onSuccess: () => {
+          queryClient.invalidateQueries(['artwork', id]);
+          queryClient.invalidateQueries(['user', 'favorite']);
+        },
       });
     } else {
       delLikeMutation.mutate(id, {
-        onSuccess: () => queryClient.invalidateQueries(['artwork', id]),
+        onSuccess: () => {
+          queryClient.invalidateQueries(['artwork', id]);
+          queryClient.invalidateQueries(['user', 'favorite']);
+        },
       });
     }
   };

@@ -21,3 +21,5 @@ export const HOST_ADDRESS = 'http://localhost:4000';
 
 // # deployment api domain address
 export const DEPLOYMENT_ADDRESS = 'http://';
+
+export const contractAddress = '0xBFE22bb6F2701623FB1a59Ab9e754A5D725A09fC';

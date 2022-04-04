@@ -19,7 +19,7 @@ interface IArtworkData {
   views: number;
   image: string;
   description: string;
-  tags: string[];
+  hashtags: string[];
   like_count: number;
   want_count: number;
   is_selling: boolean;
@@ -47,7 +47,7 @@ function index({
     views,
     image,
     description,
-    tags,
+    hashtags,
     like_count,
     want_count,
     is_selling,
@@ -67,10 +67,11 @@ function index({
         created={createdAt}
         is_selling={is_selling}
         price={price}
+        artworkImage={image}
       />
       <ArtImage artImage={image} />
       <Description description={description} />
-      <Tags tags={tags} />
+      <Tags tags={hashtags} />
       <CheckIcons id={id} likeCount={like_count} wantCount={want_count} />
     </>
   );

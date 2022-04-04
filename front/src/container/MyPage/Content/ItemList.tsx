@@ -43,6 +43,7 @@ interface IData {
 function ItemList({ data }: { data: IData[] }) {
   //todo: hover 시 표시되는 정보 수정하고 렌더링하는 추가작업 필요
 
+  console.log(data);
   return (
     <Grid container>
       {data?.map((item) => {

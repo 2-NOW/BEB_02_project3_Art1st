@@ -229,7 +229,10 @@ class UserService {
         },
       });
 
+      console.log(users.length);
+
       for (let i = 0; i < users.length; i++) {
+        console.log(i, users[i].id);
         let profile = await db.Profile.findOne({
           // 판매량순으로 정렬된 유저데이터로 프로필 테이블 조회
           where: { user_id: users[i].id },
