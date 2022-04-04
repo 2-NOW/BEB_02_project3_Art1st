@@ -46,10 +46,9 @@ router.get('/balance', async (req, res) => {
 
   try {
     // 스왑 가능한 토큰 잔액을 확인 (db상의 값과 onchain 상의 값 중 min 값 반환)
-    const { exchangable_balance } = await KlaytnServiceInstance.getTokenBalance(
-      user_id
-    );
-    res.status(200).json(exchangable_balance);
+    const { user_address, exchangable_balance } =
+      await KlaytnServiceInstance.getTokenBalance(user_id);
+    res.status(200).json({ user_address, exchangable_balance });
   } catch (err) {
     res.status(500).json(err.toString()); // onchain 상의 토큰 잔액을 불러오지 못하는 경우는 -> server 문제
   }
@@ -113,9 +112,9 @@ router.get('/islogin', async (req, res) => {
     console.log(user.user.id);
     const {
       user_profile: { picture },
-      user: { id, name, balance },
+      user: { id, name, balance, address },
     } = user;
-    return res.status(200).json({ id, name, picture, balance });
+    return res.status(200).json({ id, name, picture, balance, address });
   } catch (err) {
     return res.status(404).json(err.toString());
   }

@@ -1,18 +1,18 @@
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
 const buttoncss = {
-  width: "100%",
+  width: '100%',
   fontWeight: 500,
-  borderRadius: "12px",
-  padding: "12px",
-  marginTop: "1rem",
+  borderRadius: '12px',
+  padding: '12px',
+  marginTop: '1rem',
 };
 
 function ConnectWallet({ setAccount }) {
   const kaikasLogin = async () => {
-    if (typeof window.klaytn !== "undefined") {
-      const provider = window["klaytn"];
+    if (typeof window.klaytn !== 'undefined') {
+      const provider = window['klaytn'];
     }
     try {
       const wallet = await window.klaytn.enable(); //kaikas wallet address
@@ -23,11 +23,11 @@ function ConnectWallet({ setAccount }) {
   };
 
   const connect = () => {
-    if (typeof window.klaytn !== "undefined") {
-      const provider = window["klaytn"];
+    if (typeof window.klaytn !== 'undefined') {
+      const provider = window['klaytn'];
       kaikasLogin();
     } else {
-      console.log("connectwallet else");
+      console.log('connectwallet else');
     }
   };
 

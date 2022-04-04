@@ -10,7 +10,7 @@ import Content from './fragment/Content';
 import Websites from './fragment/Websites';
 import ConfirmModal from './fragment/ConfirmModal';
 import Loading from '@/components/Loading';
-import Alert from '@/components/Alert';
+import Swap from './fragment/Swap';
 
 import { getUser } from '@/api/user/get';
 import { putEditUser } from '@/api/user/put';
@@ -103,6 +103,7 @@ function index() {
       >
         {isEdit ? 'Save Profile' : 'Edit Profile'}
       </Button>
+      <Swap />
 
       <ConfirmModal
         open={open}

@@ -1,0 +1,38 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/app.js",
+    "sendTx": "pm2 start --watch --cron \"*/10 * * * * *\" src/daemon/sendTx.js",
+    "checkTx": "pm2 start --watch --cron \"*/10 * * * * *\" src/daemon/checkTx.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.2",
+    "caver-js": "^1.8.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "eth-lightwallet": "^4.0.0",
+    "express": "^4.17.3",
+    "express-session": "^1.17.2",
+    "ipfs-api": "^26.1.2",
+    "ipfs-http-client": "^56.0.1",
+    "mysql2": "^2.3.3",
+    "nodemon": "^2.0.15",
+    "path": "^0.12.7",
+    "sequelize": "^6.17.0",
+    "sequelize-cli": "^6.4.1",
+    "session-file-store": "^1.5.0",
+    "web3": "^1.7.1",
+    "web3-eth-contract": "^1.7.1"
+  },
+  "type": "module",
+  "devDependencies": {
+    "babel-register": "^6.26.0"
+  }
+}

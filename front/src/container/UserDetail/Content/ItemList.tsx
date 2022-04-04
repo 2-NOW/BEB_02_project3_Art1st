@@ -42,6 +42,9 @@ function ItemList({ data }: { data: IData[] }) {
       opacity: '1',
     },
   };
+
+  console.log(data);
+
   return (
     <Grid container>
       {data.map((item, index) => {
