@@ -10,7 +10,7 @@ export default (Sequelize, DataTypes) => {
           allowNull: false
         },
         amount: {
-          type: DataTypes.INTEGER,
+          type: DataTypes.STRING(100),
           allowNull: false
         },
         transaction_hash: {

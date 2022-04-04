@@ -42,7 +42,7 @@ const startTask = async() => {
             }
             ids.push(orders[j].id);
             actions.push(actionEnum[orders[j].action]);
-            amounts.push(orders[j].amount);
+            amounts.push(caver.utils.toPeb(orders[j].amount, 'KLAY')); // amount값에 10e18 곱해줘야 함.
             tokens.push(orders[j].token_id===null ? 0 : Number(orders[j].token_id));
 
             var {address} = await db.User.findOne({attributes: ['address'], where: {id: orders[j].from_id}});
@@ -56,17 +56,7 @@ const startTask = async() => {
         console.log(ids, actions, froms, toes, amounts, tokens);
 
         if(ids.length != 0){
-            try{
-                const gasLimit = await batcherContract.methods.batchTransactions(actions, froms, toes, amounts, tokens)
-                .estimateGas({from: server.address, to: process.env.BATCHER_ADDRESS})
-
-                console.log('estimated Gas Limit: ', gasLimit);
-            }
-            catch(err){
-                console.log('Batcher Error: \n', err);
-                break;
-            }
-
+       
             var txHash; 
             
             batcherContract.methods.batchTransactions(actions, froms, toes, amounts, tokens)

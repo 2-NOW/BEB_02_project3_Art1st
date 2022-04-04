@@ -21,12 +21,12 @@ export default (Sequelize, DataTypes) => {
             defaultValue: ''
         },
         balance: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING(100),
             allowNull: false,
             defaultValue: 0,
         },
         donation_balance: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING(100),
             allowNull: false,
             defaultValue: 0,
         },
@@ -41,7 +41,7 @@ export default (Sequelize, DataTypes) => {
             defaultValue: ''
         },
         total_sales: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING(100),
             allowNull: false,
             defaultValue: 0,
         },
