@@ -24,7 +24,6 @@ function SwapAST({ account, ASTAmount }) {
       .send({
         type: "SMART_CONTRACT_EXECUTION",
         from: account.toString(),
-        value: caver.utils.toPeb(ASTAmount, "KLAY"),
         gas: 1000000,
       })
       .then((data) => {
