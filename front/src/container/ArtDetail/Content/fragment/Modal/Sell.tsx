@@ -45,6 +45,8 @@ function Sell({
       {
         onSuccess: () => {
           queryClient.invalidateQueries(['artwork', artworkId]);
+          queryClient.invalidateQueries(['user', 'collect']);
+          queryClient.invalidateQueries(['user', 'islogin']);
           setSuccessState(true);
         },
         onError: () => setErrorState(true),

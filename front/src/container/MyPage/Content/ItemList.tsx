@@ -67,8 +67,14 @@ function ItemList({ data }: { data: IData[] }) {
                       variant="body2"
                       color="text.secondary"
                     >
-                      lorem ipsum dolor sit amet, consectetur adip sap et dolor
-                      sed diam non pro pos
+                      Created by {item.creator_name}
+                    </Typography>
+                    <Typography
+                      sx={{ color: 'white' }}
+                      variant="body2"
+                      color="text.secondary"
+                    >
+                      Owned by {item.owner_name}
                     </Typography>
                   </CardContent>
                 </CardActionArea>
